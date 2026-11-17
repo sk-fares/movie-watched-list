@@ -316,3 +316,39 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const session = await getAuthSession();
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const userId = getUserId(session);
+    const { searchParams } = new URL(req.url);
+    const tmdbId = searchParams.get("tmdbId");
+    const contentType = searchParams.get("contentType");
+
+    if (!tmdbId) {
+      return NextResponse.json({ error: "tmdbId is required" }, { status: 400 });
+    }
+
+    const where: any = {
+      userId,
+      tmdbId: Number(tmdbId),
+    };
+    if (contentType) {
+      where.contentType = contentType;
+    }
+
+    await prisma.watchlistItem.deleteMany({ where });
+
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
+    console.error("DELETE /api/watchlist error:", error);
+    return NextResponse.json(
+      { error: error?.message || "Internal server error" },
+      { status: 500 }
+    );
+  }
+}

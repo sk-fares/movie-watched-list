@@ -72,6 +72,41 @@ export default function DiscoverPage() {
   const [searchResults, setSearchResults] = React.useState<any[]>([]);
   const [genreResults, setGenreResults] = React.useState<any[]>([]);
 
+  // User watch & watchlist status
+  const [watchedIds, setWatchedIds] = React.useState<Set<number>>(new Set());
+  const [watchlistIds, setWatchlistIds] = React.useState<Set<number>>(new Set());
+
+  // Load user watch status
+  React.useEffect(() => {
+    Promise.all([
+      fetch("/api/watched?limit=1000").then((r) => (r.ok ? r.json() : { items: [] })),
+      fetch("/api/watchlist?limit=1000").then((r) => (r.ok ? r.json() : { items: [] })),
+    ])
+      .then(([watchedData, watchlistData]) => {
+        setWatchedIds(new Set((watchedData.items || []).map((i: any) => Number(i.tmdbId))));
+        setWatchlistIds(new Set((watchlistData.items || []).map((i: any) => Number(i.tmdbId))));
+      })
+      .catch((e) => console.error("Error loading user status in discover:", e));
+  }, []);
+
+  const handleWatchedChange = (itemId: number, isWatched: boolean) => {
+    setWatchedIds((prev) => {
+      const next = new Set(prev);
+      if (isWatched) next.add(itemId);
+      else next.delete(itemId);
+      return next;
+    });
+  };
+
+  const handleWatchlistChange = (itemId: number, inList: boolean) => {
+    setWatchlistIds((prev) => {
+      const next = new Set(prev);
+      if (inList) next.add(itemId);
+      else next.delete(itemId);
+      return next;
+    });
+  };
+
   // Loading States
   const [isLoadingTrending, setIsLoadingTrending] = React.useState(true);
   const [isLoadingPopular, setIsLoadingPopular] = React.useState(true);
@@ -424,7 +459,14 @@ export default function DiscoverPage() {
                   }
                   className="cursor-pointer"
                 >
-                  <MovieCard item={item} variant="grid" />
+                  <MovieCard
+                    item={item}
+                    variant="grid"
+                    isWatched={watchedIds.has(item.id)}
+                    isWatchlisted={watchlistIds.has(item.id)}
+                    onWatchedChange={(watched) => handleWatchedChange(item.id, watched)}
+                    onWatchlistChange={(inList) => handleWatchlistChange(item.id, inList)}
+                  />
                 </div>
               ))}
             </div>
@@ -512,7 +554,14 @@ export default function DiscoverPage() {
                     }
                     className="cursor-pointer"
                   >
-                    <MovieCard item={item} variant="grid" />
+                    <MovieCard
+                    item={item}
+                    variant="grid"
+                    isWatched={watchedIds.has(item.id)}
+                    isWatchlisted={watchlistIds.has(item.id)}
+                    onWatchedChange={(watched) => handleWatchedChange(item.id, watched)}
+                    onWatchlistChange={(inList) => handleWatchlistChange(item.id, inList)}
+                  />
                   </div>
                 ))}
               </div>
@@ -565,7 +614,14 @@ export default function DiscoverPage() {
                     }
                     className="cursor-pointer"
                   >
-                    <MovieCard item={item} variant="grid" />
+                    <MovieCard
+                    item={item}
+                    variant="grid"
+                    isWatched={watchedIds.has(item.id)}
+                    isWatchlisted={watchlistIds.has(item.id)}
+                    onWatchedChange={(watched) => handleWatchedChange(item.id, watched)}
+                    onWatchlistChange={(inList) => handleWatchlistChange(item.id, inList)}
+                  />
                   </div>
                 ))}
               </div>
@@ -620,7 +676,14 @@ export default function DiscoverPage() {
                     }
                     className="cursor-pointer"
                   >
-                    <MovieCard item={item} variant="grid" />
+                    <MovieCard
+                    item={item}
+                    variant="grid"
+                    isWatched={watchedIds.has(item.id)}
+                    isWatchlisted={watchlistIds.has(item.id)}
+                    onWatchedChange={(watched) => handleWatchedChange(item.id, watched)}
+                    onWatchlistChange={(inList) => handleWatchlistChange(item.id, inList)}
+                  />
                   </div>
                 ))}
               </div>

@@ -482,25 +482,23 @@ export const MovieCard = React.forwardRef<HTMLDivElement, MovieCardProps>(
               </span>
             )}
 
-            {/* Rating badge */}
-            {voteAverage !== null && voteAverage > 0 && (
-              <div className="pointer-events-auto">
+            {/* Right Badges: Watched & Rating */}
+            <div className="flex items-center gap-1.5 pointer-events-auto">
+              {isWatched && (
+                <span className="inline-flex items-center gap-1 rounded-md bg-green-600/90 backdrop-blur-md px-2 py-0.5 text-[10px] font-bold text-white shadow-md">
+                  <Check className="h-2.5 w-2.5 stroke-[3]" />
+                  <span>WATCHED</span>
+                </span>
+              )}
+              {voteAverage !== null && voteAverage > 0 && (
                 <RatingStars
                   rating={voteAverage}
                   variant="badge"
                   size="xs"
                 />
-              </div>
-            )}
-          </div>
-
-          {/* Watched Banner Indicator */}
-          {isWatched && (
-            <div className="absolute top-2 right-2 z-10 flex items-center gap-1 rounded-md bg-green-600/90 text-white px-1.5 py-0.5 text-[10px] font-bold shadow-md">
-              <Check className="h-3 w-3 stroke-[3]" />
-              <span>WATCHED</span>
+              )}
             </div>
-          )}
+          </div>
 
           {/* Hover Overlay with Quick Action Buttons */}
           {showActions && (

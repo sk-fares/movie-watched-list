@@ -564,3 +564,57 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const session = await getAuthSession();
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const userId = getUserId(session);
+    const { searchParams } = new URL(req.url);
+    const tmdbId = searchParams.get("tmdbId");
+    const contentType = searchParams.get("contentType");
+
+    if (!tmdbId) {
+      return NextResponse.json({ error: "tmdbId is required" }, { status: 400 });
+    }
+
+    const where: any = {
+      userId,
+      tmdbId: Number(tmdbId),
+    };
+    if (contentType) {
+      where.contentType = contentType;
+    }
+
+    // Also update any matching franchise entry to watched: false
+    const watchedItems = await prisma.watchedItem.findMany({ where });
+    for (const w of watchedItems) {
+      if (w.franchiseId) {
+        await prisma.franchiseEntry.updateMany({
+          where: {
+            franchiseId: w.franchiseId,
+            tmdbId: w.tmdbId,
+            userId,
+          },
+          data: {
+            watched: false,
+            watchedDate: null,
+          },
+        });
+      }
+    }
+
+    await prisma.watchedItem.deleteMany({ where });
+
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
+    console.error("DELETE /api/watched error:", error);
+    return NextResponse.json(
+      { error: error?.message || "Internal server error" },
+      { status: 500 }
+    );
+  }
+}

@@ -14,7 +14,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Sparkles,
-  Calendar,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -41,8 +42,13 @@ const TV_GENRES = [
   { id: 99, name: "Documentary" },
   { id: 18, name: "Drama" },
   { id: 10751, name: "Family" },
+  { id: 10762, name: "Kids" },
   { id: 9648, name: "Mystery" },
+  { id: 10763, name: "News" },
+  { id: 10764, name: "Reality" },
   { id: 10765, name: "Sci-Fi & Fantasy" },
+  { id: 10766, name: "Soap" },
+  { id: 10767, name: "Talk" },
   { id: 10768, name: "War & Politics" },
   { id: 37, name: "Western" },
 ];
@@ -61,6 +67,11 @@ function SeriesPageContent() {
   const [sortBy, setSortBy] = React.useState<string>("popularity.desc");
   const [searchQuery, setSearchQuery] = React.useState<string>("");
 
+  // User watch status & preference
+  const [watchedIds, setWatchedIds] = React.useState<Set<number>>(new Set());
+  const [watchlistIds, setWatchlistIds] = React.useState<Set<number>>(new Set());
+  const [hideWatched, setHideWatched] = React.useState<boolean>(true);
+
   const [seriesList, setSeriesList] = React.useState<any[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [selectedSeriesId, setSelectedSeriesId] = React.useState<number | null>(null);
@@ -72,6 +83,32 @@ function SeriesPageContent() {
       setPage(1);
     }
   }, [tabParam]);
+
+  // Load user's watched TV series and watchlist items
+  const fetchUserStatus = React.useCallback(async () => {
+    try {
+      const [watchedRes, watchlistRes] = await Promise.all([
+        fetch("/api/watched?contentType=tvshow&limit=1000"),
+        fetch("/api/watchlist?contentType=tvshow&limit=1000"),
+      ]);
+      if (watchedRes.ok) {
+        const data = await watchedRes.json();
+        const ids = new Set<number>((data.items || []).map((i: any) => Number(i.tmdbId)));
+        setWatchedIds(ids);
+      }
+      if (watchlistRes.ok) {
+        const data = await watchlistRes.json();
+        const ids = new Set<number>((data.items || []).map((i: any) => Number(i.tmdbId)));
+        setWatchlistIds(ids);
+      }
+    } catch (err) {
+      console.error("Failed to load user series watched/watchlist status:", err);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    fetchUserStatus();
+  }, [fetchUserStatus]);
 
   // Fetch TV shows based on current tab, filters, page
   const fetchSeries = React.useCallback(async () => {
@@ -100,11 +137,37 @@ function SeriesPageContent() {
       if (!res.ok) throw new Error("Failed to fetch TV series");
 
       const data = await res.json();
-      const results = (data.results || []).map((t: any) => ({
+      let results = (data.results || []).map((t: any) => ({
         ...t,
         media_type: "tv",
         contentType: "tvshow",
       }));
+
+      // ─── FILTERING LOGIC ───
+      // If browsing (no search query) and hideWatched is true:
+      // Filter out watched TV series so user only sees unwatched series!
+      if (!trimmedQuery && hideWatched) {
+        results = results.filter((t: any) => !watchedIds.has(t.id));
+
+        // If filtering removed series, replenish from next page
+        if (results.length < 18 && page < (data.total_pages || 1)) {
+          const nextUrl = url.includes("page=")
+            ? url.replace(/page=\d+/, `page=${page + 1}`)
+            : `${url}&page=${page + 1}`;
+          try {
+            const nextRes = await fetch(nextUrl);
+            if (nextRes.ok) {
+              const nextData = await nextRes.json();
+              const nextResults = (nextData.results || [])
+                .map((t: any) => ({ ...t, media_type: "tv", contentType: "tvshow" }))
+                .filter((t: any) => !watchedIds.has(t.id));
+              results = [...results, ...nextResults];
+            }
+          } catch (e) {
+            // Non-critical fallback
+          }
+        }
+      }
 
       setSeriesList(results);
       setTotalPages(Math.min(data.total_pages || 1, 500));
@@ -114,11 +177,43 @@ function SeriesPageContent() {
     } finally {
       setIsLoading(false);
     }
-  }, [activeTab, page, selectedGenreId, sortBy, searchQuery]);
+  }, [activeTab, page, selectedGenreId, sortBy, searchQuery, hideWatched, watchedIds]);
 
   React.useEffect(() => {
     fetchSeries();
   }, [fetchSeries]);
+
+  // Handle watched toggle on TV series card
+  const handleWatchedChange = (seriesId: number, isWatched: boolean) => {
+    setWatchedIds((prev) => {
+      const next = new Set(prev);
+      if (isWatched) {
+        next.add(seriesId);
+      } else {
+        next.delete(seriesId);
+      }
+      return next;
+    });
+
+    // If browsing (no search query) and hideWatched is enabled:
+    // When marked watched, remove from view immediately so new series take its place!
+    if (isWatched && !searchQuery.trim() && hideWatched) {
+      setSeriesList((prev) => prev.filter((s) => s.id !== seriesId));
+    }
+  };
+
+  // Handle watchlist toggle
+  const handleWatchlistChange = (seriesId: number, inWatchlist: boolean) => {
+    setWatchlistIds((prev) => {
+      const next = new Set(prev);
+      if (inWatchlist) {
+        next.add(seriesId);
+      } else {
+        next.delete(seriesId);
+      }
+      return next;
+    });
+  };
 
   // Page change handler
   const handlePageChange = (newPage: number) => {
@@ -139,17 +234,29 @@ function SeriesPageContent() {
   return (
     <div className="space-y-8 animate-fade-in pb-16">
       {/* ─── Header ─── */}
-      <div className="border-b border-border/40 pb-6">
-        <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-purple-400 mb-1">
-          <Tv className="h-4 w-4" />
-          <span>Television & Series Catalog</span>
+      <div className="border-b border-border/40 pb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-purple-400 mb-1">
+            <Tv className="h-4 w-4" />
+            <span>Television & Series Catalog</span>
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+            Browse TV Series
+          </h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            {hideWatched && !searchQuery.trim()
+              ? "Showing unwatched TV series. Series you've watched are hidden from discovery."
+              : "Discover binge-worthy television shows, trending series, and award-winning dramas."}
+          </p>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
-          Browse TV Series
-        </h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Discover episodic sagas, acclaimed drama, miniseries, and binge-worthy TV.
-        </p>
+
+        {/* Watched Count Badge */}
+        {watchedIds.size > 0 && (
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-950/40 border border-purple-500/30 text-purple-300 text-xs font-semibold shrink-0">
+            <span className="h-2 w-2 rounded-full bg-purple-400 animate-pulse" />
+            <span>{watchedIds.size} Watched in Vault</span>
+          </div>
+        )}
       </div>
 
       {/* ─── Category Tabs ─── */}
@@ -188,7 +295,7 @@ function SeriesPageContent() {
                 setSearchQuery(e.target.value);
                 setPage(1);
               }}
-              placeholder="Search TV shows by name..."
+              placeholder="Search any TV series (including watched)..."
               className="w-full rounded-xl bg-background/80 border border-border/80 pl-10 pr-10 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-purple-500"
             />
             {searchQuery && (
@@ -205,19 +312,45 @@ function SeriesPageContent() {
             )}
           </div>
 
-          {/* Sort selector */}
-          <div className="flex items-center gap-2.5 shrink-0">
+          {/* Filters: Hide Watched Toggle & Sort */}
+          <div className="flex items-center gap-2.5 shrink-0 flex-wrap sm:flex-nowrap">
+            {/* Hide/Show Watched Toggle Button */}
+            {!searchQuery.trim() && (
+              <button
+                onClick={() => setHideWatched((prev) => !prev)}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all border shrink-0",
+                  hideWatched
+                    ? "bg-purple-600/20 border-purple-500/50 text-purple-300 hover:bg-purple-600/30 shadow-sm"
+                    : "bg-background/80 border-border/80 text-muted-foreground hover:text-white"
+                )}
+                title={
+                  hideWatched
+                    ? "Currently hiding watched series. Click to show all."
+                    : "Currently showing all. Click to hide watched."
+                }
+              >
+                {hideWatched ? (
+                  <EyeOff className="h-3.5 w-3.5 text-purple-400" />
+                ) : (
+                  <Eye className="h-3.5 w-3.5" />
+                )}
+                <span>{hideWatched ? "Hiding Watched" : "Show All"}</span>
+              </button>
+            )}
+
+            {/* Sort Dropdown */}
             <select
               value={sortBy}
               onChange={(e) => {
                 setSortBy(e.target.value);
                 setPage(1);
               }}
-              className="rounded-xl bg-background/80 border border-border/80 px-3 py-2.5 text-xs font-medium text-foreground focus:outline-none focus:border-purple-500"
+              className="rounded-xl bg-background/80 border border-border/80 px-3 py-2 text-xs font-medium text-foreground focus:outline-none focus:border-purple-500"
             >
               <option value="popularity.desc">Most Popular</option>
               <option value="vote_average.desc">Highest Rated</option>
-              <option value="first_air_date.desc">Newest Air Date</option>
+              <option value="first_air_date.desc">Newest Release</option>
             </select>
           </div>
         </div>
@@ -260,27 +393,48 @@ function SeriesPageContent() {
         </div>
       ) : seriesList.length > 0 ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
-          {seriesList.map((series) => (
-            <div
-              key={series.id}
-              onClick={() => setSelectedSeriesId(series.id)}
-              className="cursor-pointer"
-            >
-              <MovieCard item={series} variant="grid" />
-            </div>
-          ))}
+          {seriesList.map((series) => {
+            const isSeriesWatched = watchedIds.has(series.id);
+            const isSeriesWatchlisted = watchlistIds.has(series.id);
+
+            return (
+              <div
+                key={series.id}
+                onClick={() => setSelectedSeriesId(series.id)}
+                className="cursor-pointer"
+              >
+                <MovieCard
+                  item={series}
+                  variant="grid"
+                  isWatched={isSeriesWatched}
+                  isWatchlisted={isSeriesWatchlisted}
+                  onWatchedChange={(watched) => handleWatchedChange(series.id, watched)}
+                  onWatchlistChange={(inList) => handleWatchlistChange(series.id, inList)}
+                />
+              </div>
+            );
+          })}
         </div>
       ) : (
         <EmptyState
           preset="search"
-          title="No TV series found"
-          description="We couldn't find any TV series matching the selected filters. Try clearing your search or changing the genre."
+          title={searchQuery ? "No TV series found" : "All TV series watched in this category!"}
+          description={
+            searchQuery
+              ? "We couldn't find any TV series matching the selected search. Try another title."
+              : "You've watched the top series here! Click 'Hiding Watched' to view them, or check another genre."
+          }
           action={{
-            label: "Reset Filters",
+            label: searchQuery ? "Clear Search" : (hideWatched ? "Show Watched Series" : "Reset Filters"),
             onClick: () => {
-              setSelectedGenreId(0);
-              setSearchQuery("");
-              setPage(1);
+              if (searchQuery) {
+                setSearchQuery("");
+              } else if (hideWatched) {
+                setHideWatched(false);
+              } else {
+                setSelectedGenreId(0);
+                setPage(1);
+              }
             },
           }}
         />
@@ -346,17 +500,27 @@ function SeriesPageContent() {
           isOpen={Boolean(selectedSeriesId)}
           onClose={() => setSelectedSeriesId(null)}
           tmdbId={selectedSeriesId}
-          contentType="tv"
+          contentType="tvshow"
         />
       )}
     </div>
   );
 }
 
-
 export default function SeriesPage() {
   return (
-    <Suspense fallback={<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">{[1,2,3,4,5,6,7,8,9,10,11,12].map(i => <div key={i} className="aspect-[2/3] rounded-2xl bg-card border border-border/40 animate-pulse" />)}</div>}>
+    <Suspense
+      fallback={
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((i) => (
+            <div
+              key={i}
+              className="aspect-[2/3] rounded-2xl bg-card border border-border/40 animate-pulse"
+            />
+          ))}
+        </div>
+      }
+    >
       <SeriesPageContent />
     </Suspense>
   );

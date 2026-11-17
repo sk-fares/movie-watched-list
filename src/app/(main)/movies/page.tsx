@@ -15,6 +15,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Sparkles,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -80,6 +82,11 @@ function MoviesPageContent() {
   const [sortBy, setSortBy] = React.useState<string>("popularity.desc");
   const [searchQuery, setSearchQuery] = React.useState<string>("");
 
+  // User watch status & preference
+  const [watchedIds, setWatchedIds] = React.useState<Set<number>>(new Set());
+  const [watchlistIds, setWatchlistIds] = React.useState<Set<number>>(new Set());
+  const [hideWatched, setHideWatched] = React.useState<boolean>(true);
+
   const [movies, setMovies] = React.useState<any[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [selectedMovieId, setSelectedMovieId] = React.useState<number | null>(null);
@@ -92,6 +99,32 @@ function MoviesPageContent() {
     }
   }, [tabParam]);
 
+  // Load user's watched items and watchlist items
+  const fetchUserStatus = React.useCallback(async () => {
+    try {
+      const [watchedRes, watchlistRes] = await Promise.all([
+        fetch("/api/watched?contentType=movie&limit=1000"),
+        fetch("/api/watchlist?contentType=movie&limit=1000"),
+      ]);
+      if (watchedRes.ok) {
+        const data = await watchedRes.json();
+        const ids = new Set<number>((data.items || []).map((i: any) => Number(i.tmdbId)));
+        setWatchedIds(ids);
+      }
+      if (watchlistRes.ok) {
+        const data = await watchlistRes.json();
+        const ids = new Set<number>((data.items || []).map((i: any) => Number(i.tmdbId)));
+        setWatchlistIds(ids);
+      }
+    } catch (err) {
+      console.error("Failed to load user watched/watchlist status:", err);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    fetchUserStatus();
+  }, [fetchUserStatus]);
+
   // Fetch movies based on current tab, filters, page
   const fetchMovies = React.useCallback(async () => {
     setIsLoading(true);
@@ -100,6 +133,7 @@ function MoviesPageContent() {
       const trimmedQuery = searchQuery.trim();
 
       if (trimmedQuery) {
+        // When searching, query TMDB search directly
         url = `/api/tmdb/search?q=${encodeURIComponent(trimmedQuery)}&type=movie&page=${page}`;
       } else if (activeTab === "trending") {
         url = `/api/tmdb/trending?type=movie&timeWindow=week`;
@@ -124,10 +158,36 @@ function MoviesPageContent() {
       if (!res.ok) throw new Error("Failed to fetch movies");
 
       const data = await res.json();
-      const results = (data.results || []).map((m: any) => ({
+      let results = (data.results || []).map((m: any) => ({
         ...m,
         media_type: "movie",
       }));
+
+      // ─── FILTERING LOGIC ───
+      // If user is NOT searching and hideWatched is true:
+      // Filter out watched movies so the user discovers fresh, unwatched movies!
+      if (!trimmedQuery && hideWatched) {
+        results = results.filter((m: any) => !watchedIds.has(m.id));
+
+        // If filtering removed movies and we have few left, replenish from the next page
+        if (results.length < 18 && page < (data.total_pages || 1)) {
+          const nextUrl = url.includes("page=")
+            ? url.replace(/page=\d+/, `page=${page + 1}`)
+            : `${url}&page=${page + 1}`;
+          try {
+            const nextRes = await fetch(nextUrl);
+            if (nextRes.ok) {
+              const nextData = await nextRes.json();
+              const nextResults = (nextData.results || [])
+                .map((m: any) => ({ ...m, media_type: "movie" }))
+                .filter((m: any) => !watchedIds.has(m.id));
+              results = [...results, ...nextResults];
+            }
+          } catch (e) {
+            // Non-critical fallback
+          }
+        }
+      }
 
       setMovies(results);
       setTotalPages(Math.min(data.total_pages || 1, 500));
@@ -137,11 +197,43 @@ function MoviesPageContent() {
     } finally {
       setIsLoading(false);
     }
-  }, [activeTab, page, selectedGenreId, selectedYear, sortBy, searchQuery]);
+  }, [activeTab, page, selectedGenreId, selectedYear, sortBy, searchQuery, hideWatched, watchedIds]);
 
   React.useEffect(() => {
     fetchMovies();
   }, [fetchMovies]);
+
+  // Handle watched status toggle on a movie card
+  const handleWatchedChange = (movieId: number, isWatched: boolean) => {
+    setWatchedIds((prev) => {
+      const next = new Set(prev);
+      if (isWatched) {
+        next.add(movieId);
+      } else {
+        next.delete(movieId);
+      }
+      return next;
+    });
+
+    // If browsing (no search query) and hideWatched is enabled:
+    // When marked watched, immediately remove it from view so new movies take its place!
+    if (isWatched && !searchQuery.trim() && hideWatched) {
+      setMovies((prev) => prev.filter((m) => m.id !== movieId));
+    }
+  };
+
+  // Handle watchlist status toggle
+  const handleWatchlistChange = (movieId: number, inWatchlist: boolean) => {
+    setWatchlistIds((prev) => {
+      const next = new Set(prev);
+      if (inWatchlist) {
+        next.add(movieId);
+      } else {
+        next.delete(movieId);
+      }
+      return next;
+    });
+  };
 
   // Page change handler
   const handlePageChange = (newPage: number) => {
@@ -162,17 +254,29 @@ function MoviesPageContent() {
   return (
     <div className="space-y-8 animate-fade-in pb-16">
       {/* ─── Header ─── */}
-      <div className="border-b border-border/40 pb-6">
-        <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-purple-400 mb-1">
-          <Film className="h-4 w-4" />
-          <span>Feature Films Catalog</span>
+      <div className="border-b border-border/40 pb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-purple-400 mb-1">
+            <Film className="h-4 w-4" />
+            <span>Feature Films Catalog</span>
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+            Browse Movies
+          </h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            {hideWatched && !searchQuery.trim()
+              ? "Showing unwatched movies. Movies you've watched are hidden from discovery."
+              : "Explore thousands of movies, box office hits, and hidden gems."}
+          </p>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
-          Browse Movies
-        </h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Explore thousands of movies, box office hits, and hidden gems.
-        </p>
+
+        {/* Watched Count Badge */}
+        {watchedIds.size > 0 && (
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-950/40 border border-purple-500/30 text-purple-300 text-xs font-semibold shrink-0">
+            <span className="h-2 w-2 rounded-full bg-purple-400 animate-pulse" />
+            <span>{watchedIds.size} Watched in Vault</span>
+          </div>
+        )}
       </div>
 
       {/* ─── Category Tabs ─── */}
@@ -211,7 +315,7 @@ function MoviesPageContent() {
                 setSearchQuery(e.target.value);
                 setPage(1);
               }}
-              placeholder="Search movies by title..."
+              placeholder="Search any movie (including watched)..."
               className="w-full rounded-xl bg-background/80 border border-border/80 pl-10 pr-10 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-purple-500"
             />
             {searchQuery && (
@@ -228,8 +332,33 @@ function MoviesPageContent() {
             )}
           </div>
 
-          {/* Filters: Sort & Year */}
-          <div className="flex items-center gap-2.5 shrink-0">
+          {/* Filters: Hide Watched Toggle, Sort & Year */}
+          <div className="flex items-center gap-2.5 shrink-0 flex-wrap sm:flex-nowrap">
+            {/* Hide/Show Watched Toggle Button */}
+            {!searchQuery.trim() && (
+              <button
+                onClick={() => setHideWatched((prev) => !prev)}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all border shrink-0",
+                  hideWatched
+                    ? "bg-purple-600/20 border-purple-500/50 text-purple-300 hover:bg-purple-600/30 shadow-sm"
+                    : "bg-background/80 border-border/80 text-muted-foreground hover:text-white"
+                )}
+                title={
+                  hideWatched
+                    ? "Currently hiding watched movies. Click to show all."
+                    : "Currently showing all. Click to hide watched."
+                }
+              >
+                {hideWatched ? (
+                  <EyeOff className="h-3.5 w-3.5 text-purple-400" />
+                ) : (
+                  <Eye className="h-3.5 w-3.5" />
+                )}
+                <span>{hideWatched ? "Hiding Watched" : "Show All"}</span>
+              </button>
+            )}
+
             {/* Year Dropdown */}
             <select
               value={selectedYear}
@@ -237,7 +366,7 @@ function MoviesPageContent() {
                 setSelectedYear(e.target.value);
                 setPage(1);
               }}
-              className="rounded-xl bg-background/80 border border-border/80 px-3 py-2.5 text-xs font-medium text-foreground focus:outline-none focus:border-purple-500"
+              className="rounded-xl bg-background/80 border border-border/80 px-3 py-2 text-xs font-medium text-foreground focus:outline-none focus:border-purple-500"
             >
               {YEARS.map((y) => (
                 <option key={y.value} value={y.value}>
@@ -253,7 +382,7 @@ function MoviesPageContent() {
                 setSortBy(e.target.value);
                 setPage(1);
               }}
-              className="rounded-xl bg-background/80 border border-border/80 px-3 py-2.5 text-xs font-medium text-foreground focus:outline-none focus:border-purple-500"
+              className="rounded-xl bg-background/80 border border-border/80 px-3 py-2 text-xs font-medium text-foreground focus:outline-none focus:border-purple-500"
             >
               <option value="popularity.desc">Most Popular</option>
               <option value="vote_average.desc">Highest Rated</option>
@@ -301,28 +430,49 @@ function MoviesPageContent() {
         </div>
       ) : movies.length > 0 ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
-          {movies.map((movie) => (
-            <div
-              key={movie.id}
-              onClick={() => setSelectedMovieId(movie.id)}
-              className="cursor-pointer"
-            >
-              <MovieCard item={movie} variant="grid" />
-            </div>
-          ))}
+          {movies.map((movie) => {
+            const isMovieWatched = watchedIds.has(movie.id);
+            const isMovieWatchlisted = watchlistIds.has(movie.id);
+
+            return (
+              <div
+                key={movie.id}
+                onClick={() => setSelectedMovieId(movie.id)}
+                className="cursor-pointer"
+              >
+                <MovieCard
+                  item={movie}
+                  variant="grid"
+                  isWatched={isMovieWatched}
+                  isWatchlisted={isMovieWatchlisted}
+                  onWatchedChange={(watched) => handleWatchedChange(movie.id, watched)}
+                  onWatchlistChange={(inList) => handleWatchlistChange(movie.id, inList)}
+                />
+              </div>
+            );
+          })}
         </div>
       ) : (
         <EmptyState
           preset="search"
-          title="No movies found"
-          description="We couldn't find any movies matching the selected filters. Try clearing your search or changing the genre."
+          title={searchQuery ? "No movies found" : "All movies watched in this category!"}
+          description={
+            searchQuery
+              ? "We couldn't find any movies matching your search. Try another title."
+              : "You've watched the top movies here! Click 'Hiding Watched' to view them, or check another genre."
+          }
           action={{
-            label: "Reset Filters",
+            label: searchQuery ? "Clear Search" : (hideWatched ? "Show Watched Movies" : "Reset Filters"),
             onClick: () => {
-              setSelectedGenreId(0);
-              setSelectedYear("");
-              setSearchQuery("");
-              setPage(1);
+              if (searchQuery) {
+                setSearchQuery("");
+              } else if (hideWatched) {
+                setHideWatched(false);
+              } else {
+                setSelectedGenreId(0);
+                setSelectedYear("");
+                setPage(1);
+              }
             },
           }}
         />
@@ -395,10 +545,20 @@ function MoviesPageContent() {
   );
 }
 
-
 export default function MoviesPage() {
   return (
-    <Suspense fallback={<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">{[1,2,3,4,5,6,7,8,9,10,11,12].map(i => <div key={i} className="aspect-[2/3] rounded-2xl bg-card border border-border/40 animate-pulse" />)}</div>}>
+    <Suspense
+      fallback={
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((i) => (
+            <div
+              key={i}
+              className="aspect-[2/3] rounded-2xl bg-card border border-border/40 animate-pulse"
+            />
+          ))}
+        </div>
+      }
+    >
       <MoviesPageContent />
     </Suspense>
   );
