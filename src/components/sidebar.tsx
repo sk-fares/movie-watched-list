@@ -71,7 +71,7 @@ const NAV_ITEMS: NavItem[] = [
     icon: History,
   },
   {
-    label: "Franchises",
+    label: "Universes",
     href: "/franchises",
     icon: Layers,
     badge: "Key",
