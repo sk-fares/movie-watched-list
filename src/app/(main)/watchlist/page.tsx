@@ -1184,7 +1184,7 @@ export default function WatchlistPage() {
               Vault Randomizer
             </DialogTitle>
             <DialogDescription className="text-xs text-center text-muted-foreground">
-              Can't decide what to watch tonight? Let the ReelVault decide your destiny.
+              Can't decide what to watch tonight? Let the Movie Watched List decide your destiny.
             </DialogDescription>
           </DialogHeader>
 

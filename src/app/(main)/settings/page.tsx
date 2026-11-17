@@ -216,7 +216,7 @@ export default function SettingsPage() {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `reelvault-export-${new Date().toISOString().split("T")[0]}.${format}`;
+      a.download = `movie-watched-list-export-${new Date().toISOString().split("T")[0]}.${format}`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
@@ -467,7 +467,7 @@ export default function SettingsPage() {
             <CardHeader>
               <CardTitle className="text-lg font-bold text-white">Cinematic Atmosphere</CardTitle>
               <CardDescription className="text-xs text-muted-foreground">
-                Customize the visual tone and contrast of ReelVault's dark cinematic experience.
+                Customize the visual tone and contrast of Movie Watched List's dark cinematic experience.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -584,7 +584,7 @@ export default function SettingsPage() {
               {/* Account Sign Out / Danger Zone */}
               <div className="pt-6 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
-                  <span className="text-sm font-bold text-white block">Sign Out of ReelVault</span>
+                  <span className="text-sm font-bold text-white block">Sign Out of Movie Watched List</span>
                   <p className="text-xs text-muted-foreground">
                     End your active session securely on this browser.
                   </p>

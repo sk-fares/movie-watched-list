@@ -232,7 +232,7 @@ export function Sidebar({ className, isMobileOpen, onMobileClose }: SidebarProps
             {!isCollapsed && (
               <div className="flex flex-col">
                 <span className="font-extrabold text-base tracking-tight text-white bg-clip-text text-transparent bg-gradient-to-r from-purple-200 via-purple-400 to-indigo-300">
-                  ReelVault
+                  Movie Watched List
                 </span>
                 <span className="text-[10px] uppercase font-mono tracking-widest text-muted-foreground font-semibold">
                   Universe Tracker
@@ -332,7 +332,7 @@ export function Sidebar({ className, isMobileOpen, onMobileClose }: SidebarProps
                     {user?.name || "Movie Fan"}
                   </span>
                   <span className="text-[11px] text-muted-foreground truncate">
-                    {user?.email || "viewer@reelvault.app"}
+                    {user?.email || "viewer@moviewatchedlist.app"}
                   </span>
                 </div>
               )}

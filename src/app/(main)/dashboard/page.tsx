@@ -154,7 +154,7 @@ export default function DashboardPage() {
             <span>Cinematic Dashboard</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
-            Welcome to ReelVault
+            Welcome to Movie Watched List
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
             Track your film journey, discover masterpieces, and conquer franchises.

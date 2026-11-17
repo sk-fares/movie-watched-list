@@ -28,7 +28,7 @@ export function Providers({ children, session }: ProvidersProps) {
             containerClassName="!z-[99999]"
             toastOptions={{
               duration: 3500,
-              className: "reelvault-toast",
+              className: "movie-watched-list-toast",
               style: {
                 background: "#0d0d12",
                 color: "#f3f4f6",

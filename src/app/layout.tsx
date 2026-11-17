@@ -4,8 +4,8 @@ import { Providers } from "@/components/providers";
 
 export const metadata: Metadata = {
   title: {
-    default: "ReelVault | Cinematic Universe Tracker & Watchlist",
-    template: "%s | ReelVault",
+    default: "Movie Watched List | Cinematic Universe Tracker & Watchlist",
+    template: "%s | Movie Watched List",
   },
   description:
     "Your ultimate cinematic universe tracker. Curate watchlists, trace chronological watch history, follow franchise storylines sequentially, and discover movie magic.",
@@ -18,21 +18,21 @@ export const metadata: Metadata = {
     "movie tracker",
     "TMDB",
     "cinematic universe",
-    "ReelVault",
+    "Movie Watched List",
   ],
-  authors: [{ name: "ReelVault Team" }],
-  creator: "ReelVault",
+  authors: [{ name: "Movie Watched List Team" }],
+  creator: "Movie Watched List",
   icons: {
     icon: "/favicon.ico",
   },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://reelvault.app",
-    title: "ReelVault | Cinematic Universe Tracker & Watchlist",
+    url: "https://moviewatchedlist.app",
+    title: "Movie Watched List | Cinematic Universe Tracker & Watchlist",
     description:
       "Manage watchlists, track chronological watch history, and explore movie franchises with ease.",
-    siteName: "ReelVault",
+    siteName: "Movie Watched List",
   },
 };
 

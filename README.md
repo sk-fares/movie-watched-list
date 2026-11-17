@@ -1,4 +1,4 @@
-# ReelVault - Movie & Series Watchlist Application
+# Movie Watched List - Movie & Series Watchlist Application
 
 ## Quick Start
 

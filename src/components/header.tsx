@@ -61,7 +61,7 @@ export function Header({ onMenuClick, className }: HeaderProps) {
           href="/dashboard"
           className="md:hidden flex items-center gap-1.5 font-bold text-base tracking-tight text-white bg-clip-text text-transparent bg-gradient-to-r from-purple-300 to-indigo-300"
         >
-          <span>ReelVault</span>
+          <span>Movie Watched List</span>
         </Link>
       </div>
 
@@ -127,7 +127,7 @@ export function Header({ onMenuClick, className }: HeaderProps) {
                   {user?.name || "Viewer"}
                 </p>
                 <p className="text-xs text-muted-foreground truncate">
-                  {user?.email || "viewer@reelvault.app"}
+                  {user?.email || "viewer@moviewatchedlist.app"}
                 </p>
               </div>
 

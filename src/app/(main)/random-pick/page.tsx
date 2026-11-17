@@ -249,7 +249,7 @@ export default function RandomPickPage() {
           Random <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-violet-300 to-indigo-400">Vault Pick</span>
         </h1>
         <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-          Can’t decide what to watch tonight? Let the ReelVault algorithm roll a high-priority title from your personal watchlist or uncover a hidden gem.
+          Can’t decide what to watch tonight? Let the Movie Watched List algorithm roll a high-priority title from your personal watchlist or uncover a hidden gem.
         </p>
       </div>
 

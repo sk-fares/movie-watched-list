@@ -71,7 +71,7 @@ export async function GET(req: NextRequest) {
     if (format === "json") {
       const exportData = {
         metadata: {
-          application: "ReelVault",
+          application: "Movie Watched List",
           version: "1.0.0",
           exportDate: new Date().toISOString(),
           user: {
@@ -149,7 +149,7 @@ export async function GET(req: NextRequest) {
         status: 200,
         headers: {
           "Content-Type": "application/json; charset=utf-8",
-          "Content-Disposition": `attachment; filename="reelvault-export-${dateStamp}.json"`,
+          "Content-Disposition": `attachment; filename="movie-watched-list-export-${dateStamp}.json"`,
         },
       });
     }
@@ -250,7 +250,7 @@ export async function GET(req: NextRequest) {
       status: 200,
       headers: {
         "Content-Type": "text/csv; charset=utf-8",
-        "Content-Disposition": `attachment; filename="reelvault-export-${dateStamp}.csv"`,
+        "Content-Disposition": `attachment; filename="movie-watched-list-export-${dateStamp}.csv"`,
       },
     });
   } catch (error: any) {

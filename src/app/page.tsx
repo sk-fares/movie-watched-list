@@ -209,18 +209,18 @@ export default function LandingPage() {
   const faqs = [
     {
       q: "How does the Franchise & Sequential tracking system work?",
-      a: "ReelVault connects related movies and TV series into curated cinematic universes (like Marvel, Star Wars, or Tolkien). You can switch between strictly in-universe Chronological order or theatrical Release order. Every entry tracks its sequence number, completion date, and automatically highlights your next film.",
+      a: "Movie Watched List connects related movies and TV series into curated cinematic universes (like Marvel, Star Wars, or Tolkien). You can switch between strictly in-universe Chronological order or theatrical Release order. Every entry tracks its sequence number, completion date, and automatically highlights your next film.",
     },
     {
-      q: "What makes ReelVault different from standard watchlist apps?",
-      a: "Most watchlist tools give you a giant, unorganized pile of titles. ReelVault organizes movies and shows by chronological storylines, franchise universes, priority tiers, and includes an animated Random Picker roulette to eliminate decision paralysis.",
+      q: "What makes Movie Watched List different from standard watchlist apps?",
+      a: "Most watchlist tools give you a giant, unorganized pile of titles. Movie Watched List organizes movies and shows by chronological storylines, franchise universes, priority tiers, and includes an animated Random Picker roulette to eliminate decision paralysis.",
     },
     {
-      q: "Is ReelVault free to use?",
+      q: "Is Movie Watched List free to use?",
       a: "Yes! 100% free with unlimited watchlist items, full franchise collections, rating histories, and analytics. You can sign in with your Google account or standard email.",
     },
     {
-      q: "Where does ReelVault get movie metadata and posters?",
+      q: "Where does Movie Watched List get movie metadata and posters?",
       a: "All metadata, 4K posters, cast details, ratings, and trailers are powered by The Movie Database (TMDB) API, ensuring accurate, real-time data for over 1,000,000 titles worldwide.",
     },
   ];
@@ -251,7 +251,7 @@ export default function LandingPage() {
             </div>
             <div className="flex flex-col">
               <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white via-purple-100 to-purple-300 bg-clip-text text-transparent">
-                ReelVault
+                Movie Watched List
               </span>
             </div>
             <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
@@ -740,7 +740,7 @@ export default function LandingPage() {
               </div>
               <h3 className="text-lg font-bold text-white mb-2">Granular TV & Series Tracking</h3>
               <p className="text-sm text-zinc-400 leading-relaxed">
-                Track full series, individual seasons, or specific episodes. ReelVault keeps tabs on
+                Track full series, individual seasons, or specific episodes. Movie Watched List keeps tabs on
                 where you left off with one-click next episode markers.
               </p>
             </div>
@@ -777,10 +777,10 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              Why Cinephiles Switch to ReelVault
+              Why Cinephiles Switch to Movie Watched List
             </h2>
             <p className="mt-2 text-zinc-400 text-sm">
-              See how ReelVault compares to traditional tracking apps and spreadsheets.
+              See how Movie Watched List compares to traditional tracking apps and spreadsheets.
             </p>
           </div>
 
@@ -790,7 +790,7 @@ export default function LandingPage() {
                 <thead>
                   <tr className="border-b border-zinc-800 bg-zinc-950/80 text-zinc-400">
                     <th className="py-4 px-6 font-semibold">Capability</th>
-                    <th className="py-4 px-6 font-bold text-purple-400">ReelVault</th>
+                    <th className="py-4 px-6 font-bold text-purple-400">Movie Watched List</th>
                     <th className="py-4 px-6 font-medium text-zinc-500">Generic Watchlist Apps</th>
                     <th className="py-4 px-6 font-medium text-zinc-500">Spreadsheets / Notes</th>
                   </tr>
@@ -851,7 +851,7 @@ export default function LandingPage() {
               Frequently Asked Questions
             </h2>
             <p className="mt-2 text-zinc-400 text-sm">
-              Everything you need to know about ReelVault.
+              Everything you need to know about Movie Watched List.
             </p>
           </div>
 
@@ -939,7 +939,7 @@ export default function LandingPage() {
               <Clapperboard className="w-3.5 h-3.5 text-white" />
             </div>
             <span className="text-base font-bold bg-gradient-to-r from-white via-purple-100 to-purple-300 bg-clip-text text-transparent">
-              ReelVault
+              Movie Watched List
             </span>
             <span className="text-xs text-zinc-500">© {new Date().getFullYear()}</span>
           </div>

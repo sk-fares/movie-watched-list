@@ -136,7 +136,7 @@ export const PosterImage = React.forwardRef<HTMLDivElement, PosterImageProps>(
               {alt || "No image available"}
             </p>
             <span className="mt-2 text-[10px] uppercase tracking-wider text-muted-foreground/40 font-mono">
-              ReelVault
+              Movie Watched List
             </span>
           </div>
         )}

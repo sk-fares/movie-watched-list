@@ -203,7 +203,7 @@ function RegisterForm() {
               <Clapperboard className="w-4 h-4 text-white" />
             </div>
             <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-purple-100 to-purple-300 bg-clip-text text-transparent">
-              ReelVault
+              Movie Watched List
             </span>
           </Link>
 
@@ -505,7 +505,7 @@ function RegisterForm() {
             href="/"
             className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors inline-flex items-center gap-1.5"
           >
-            <span>← Back to ReelVault overview</span>
+            <span>← Back to Movie Watched List overview</span>
           </Link>
         </div>
       </motion.div>
