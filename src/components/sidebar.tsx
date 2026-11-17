@@ -56,9 +56,14 @@ const NAV_ITEMS: NavItem[] = [
     icon: Film,
   },
   {
-    label: "TV Series",
+    label: "Web Series",
     href: "/series",
     icon: Tv,
+  },
+  {
+    label: "Animation & Anime",
+    href: "/animation",
+    icon: Sparkles,
   },
   {
     label: "Watchlist",

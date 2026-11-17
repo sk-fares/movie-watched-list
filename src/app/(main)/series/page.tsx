@@ -36,7 +36,6 @@ const TABS: { id: SeriesTab; label: string; icon: React.ElementType }[] = [
 const TV_GENRES = [
   { id: 0, name: "All Genres" },
   { id: 10759, name: "Action & Adventure" },
-  { id: 16, name: "Animation" },
   { id: 35, name: "Comedy" },
   { id: 80, name: "Crime" },
   { id: 99, name: "Documentary" },
@@ -122,30 +121,33 @@ function SeriesPageContent() {
       } else if (activeTab === "trending") {
         url = `/api/tmdb/trending?type=tv&timeWindow=week`;
       } else if (activeTab === "top_rated") {
-        url = `/api/tmdb/discover?type=tv&sort_by=vote_average.desc&vote_count_gte=250&page=${page}`;
+        url = `/api/tmdb/discover?type=tv&sort_by=vote_average.desc&vote_count_gte=250&without_genres=16&page=${page}`;
         if (selectedGenreId > 0) url += `&with_genres=${selectedGenreId}`;
       } else if (activeTab === "on_the_air") {
-        url = `/api/tmdb/discover?type=tv&sort_by=popularity.desc&page=${page}`;
+        url = `/api/tmdb/discover?type=tv&sort_by=popularity.desc&without_genres=16&page=${page}`;
         if (selectedGenreId > 0) url += `&with_genres=${selectedGenreId}`;
       } else {
         // Popular
-        url = `/api/tmdb/discover?type=tv&sort_by=${sortBy}&page=${page}`;
+        url = `/api/tmdb/discover?type=tv&sort_by=${sortBy}&without_genres=16&page=${page}`;
         if (selectedGenreId > 0) url += `&with_genres=${selectedGenreId}`;
       }
 
       const res = await fetch(url);
-      if (!res.ok) throw new Error("Failed to fetch TV series");
+      if (!res.ok) throw new Error("Failed to fetch web series");
 
       const data = await res.json();
-      let results = (data.results || []).map((t: any) => ({
-        ...t,
-        media_type: "tv",
-        contentType: "tvshow",
-      }));
+      // Ensure all animation (genre 16) is excluded from live-action Web Series
+      let results = (data.results || [])
+        .filter((t: any) => !t.genre_ids?.includes(16))
+        .map((t: any) => ({
+          ...t,
+          media_type: "tv",
+          contentType: "tvshow",
+        }));
 
       // ─── FILTERING LOGIC ───
       // If browsing (no search query) and hideWatched is true:
-      // Filter out watched TV series so user only sees unwatched series!
+      // Filter out watched series so user only sees unwatched series!
       if (!trimmedQuery && hideWatched) {
         results = results.filter((t: any) => !watchedIds.has(t.id));
 
@@ -159,6 +161,7 @@ function SeriesPageContent() {
             if (nextRes.ok) {
               const nextData = await nextRes.json();
               const nextResults = (nextData.results || [])
+                .filter((t: any) => !t.genre_ids?.includes(16))
                 .map((t: any) => ({ ...t, media_type: "tv", contentType: "tvshow" }))
                 .filter((t: any) => !watchedIds.has(t.id));
               results = [...results, ...nextResults];
@@ -238,15 +241,15 @@ function SeriesPageContent() {
         <div>
           <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-purple-400 mb-1">
             <Tv className="h-4 w-4" />
-            <span>Television & Series Catalog</span>
+            <span>Web Series & Shows Catalog</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
-            Browse TV Series
+            Browse Web Series
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
             {hideWatched && !searchQuery.trim()
-              ? "Showing unwatched TV series. Series you've watched are hidden from discovery."
-              : "Discover binge-worthy television shows, trending series, and award-winning dramas."}
+              ? "Showing unwatched web series. Series you've watched are hidden from discovery."
+              : "Discover binge-worthy web series, streaming shows, and critically acclaimed dramas."}
           </p>
         </div>
 
@@ -295,7 +298,7 @@ function SeriesPageContent() {
                 setSearchQuery(e.target.value);
                 setPage(1);
               }}
-              placeholder="Search any TV series (including watched)..."
+              placeholder="Search web series (including watched)..."
               className="w-full rounded-xl bg-background/80 border border-border/80 pl-10 pr-10 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-purple-500"
             />
             {searchQuery && (
@@ -418,10 +421,10 @@ function SeriesPageContent() {
       ) : (
         <EmptyState
           preset="search"
-          title={searchQuery ? "No TV series found" : "All TV series watched in this category!"}
+          title={searchQuery ? "No web series found" : "All web series watched in this category!"}
           description={
             searchQuery
-              ? "We couldn't find any TV series matching the selected search. Try another title."
+              ? "We couldn't find any web series matching the selected search. Try another title."
               : "You've watched the top series here! Click 'Hiding Watched' to view them, or check another genre."
           }
           action={{

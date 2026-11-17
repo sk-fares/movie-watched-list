@@ -39,7 +39,6 @@ const MOVIE_GENRES = [
   { id: 0, name: "All Genres" },
   { id: 28, name: "Action" },
   { id: 12, name: "Adventure" },
-  { id: 16, name: "Animation" },
   { id: 35, name: "Comedy" },
   { id: 80, name: "Crime" },
   { id: 99, name: "Documentary" },
@@ -138,18 +137,18 @@ function MoviesPageContent() {
       } else if (activeTab === "trending") {
         url = `/api/tmdb/trending?type=movie&timeWindow=week`;
       } else if (activeTab === "top_rated") {
-        url = `/api/tmdb/discover?type=movie&sort_by=vote_average.desc&vote_count_gte=350&page=${page}`;
+        url = `/api/tmdb/discover?type=movie&sort_by=vote_average.desc&vote_count_gte=350&without_genres=16&page=${page}`;
         if (selectedGenreId > 0) url += `&with_genres=${selectedGenreId}`;
         if (selectedYear) url += `&year=${selectedYear}`;
       } else if (activeTab === "now_playing") {
-        url = `/api/tmdb/discover?type=movie&sort_by=primary_release_date.desc&page=${page}`;
+        url = `/api/tmdb/discover?type=movie&sort_by=primary_release_date.desc&without_genres=16&page=${page}`;
         if (selectedGenreId > 0) url += `&with_genres=${selectedGenreId}`;
       } else if (activeTab === "upcoming") {
-        url = `/api/tmdb/discover?type=movie&sort_by=popularity.desc&page=${page}`;
+        url = `/api/tmdb/discover?type=movie&sort_by=popularity.desc&without_genres=16&page=${page}`;
         if (selectedGenreId > 0) url += `&with_genres=${selectedGenreId}`;
       } else {
         // Popular
-        url = `/api/tmdb/discover?type=movie&sort_by=${sortBy}&page=${page}`;
+        url = `/api/tmdb/discover?type=movie&sort_by=${sortBy}&without_genres=16&page=${page}`;
         if (selectedGenreId > 0) url += `&with_genres=${selectedGenreId}`;
         if (selectedYear) url += `&year=${selectedYear}`;
       }
@@ -158,10 +157,13 @@ function MoviesPageContent() {
       if (!res.ok) throw new Error("Failed to fetch movies");
 
       const data = await res.json();
-      let results = (data.results || []).map((m: any) => ({
-        ...m,
-        media_type: "movie",
-      }));
+      // Ensure all animation (genre 16) is excluded from live-action Movies
+      let results = (data.results || [])
+        .filter((m: any) => !m.genre_ids?.includes(16))
+        .map((m: any) => ({
+          ...m,
+          media_type: "movie",
+        }));
 
       // ─── FILTERING LOGIC ───
       // If user is NOT searching and hideWatched is true:
@@ -179,6 +181,7 @@ function MoviesPageContent() {
             if (nextRes.ok) {
               const nextData = await nextRes.json();
               const nextResults = (nextData.results || [])
+                .filter((m: any) => !m.genre_ids?.includes(16))
                 .map((m: any) => ({ ...m, media_type: "movie" }))
                 .filter((m: any) => !watchedIds.has(m.id));
               results = [...results, ...nextResults];

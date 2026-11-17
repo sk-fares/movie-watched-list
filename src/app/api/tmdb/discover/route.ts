@@ -14,6 +14,9 @@ export async function GET(request: NextRequest) {
     const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10) || 1);
     const sortBy = searchParams.get("sort_by") || "popularity.desc";
     const withGenres = searchParams.get("with_genres") || "";
+    const withoutGenres = searchParams.get("without_genres") || "";
+    const withOriginalLanguage = searchParams.get("with_original_language") || "";
+    const withoutOriginalLanguage = searchParams.get("without_original_language") || "";
     const year = searchParams.get("year") || "";
     const voteAverageGte = searchParams.get("vote_average_gte") || "";
     const voteCountGte = searchParams.get("vote_count_gte") || "";
@@ -24,6 +27,9 @@ export async function GET(request: NextRequest) {
     };
 
     if (withGenres) tmdbParams.with_genres = withGenres;
+    if (withoutGenres) tmdbParams.without_genres = withoutGenres;
+    if (withOriginalLanguage) tmdbParams.with_original_language = withOriginalLanguage;
+    if (withoutOriginalLanguage) tmdbParams.without_original_language = withoutOriginalLanguage;
     if (voteAverageGte) tmdbParams["vote_average.gte"] = voteAverageGte;
     if (voteCountGte) tmdbParams["vote_count.gte"] = voteCountGte;
 
