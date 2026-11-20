@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import {
   LayoutDashboard,
-  Compass,
   Film,
   Tv,
   Bookmark,
@@ -44,11 +43,6 @@ const NAV_ITEMS: NavItem[] = [
     label: "Dashboard",
     href: "/dashboard",
     icon: LayoutDashboard,
-  },
-  {
-    label: "Discover",
-    href: "/discover",
-    icon: Compass,
   },
   {
     label: "Movies",

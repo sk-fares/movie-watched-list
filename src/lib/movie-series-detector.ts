@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { getCollection } from "@/lib/tmdb";
+import { getCollection, getMovieDetails } from "@/lib/tmdb";
 
 export interface SeriesMovieEntry {
   sequenceNumber: number;
@@ -204,6 +204,269 @@ export const CURATED_FRANCHISE_PRESETS = [
     posterPath: "/p4UebmvvgdnJz9pT4yY2vHkL3Z.jpg",
   },
 ];
+
+export interface AutoLinkSeriesResult {
+  franchiseId: string | null;
+  franchiseSeq: number | null;
+  franchiseName?: string | null;
+}
+
+/**
+ * Automatically detects whether a newly added/watched movie belongs to a movie series
+ * (either from curated presets or TMDB collection). If it does, creates that franchise template,
+ * fetches & sequences all parts in chronological order (#1, #2, ...), and scans the user's
+ * watched list to automatically link and mark all related movies!
+ */
+export async function autoLinkMovieToSeries(
+  userId: string,
+  tmdbId: number,
+  fallbackData?: {
+    title?: string;
+    releaseDate?: string | null;
+    posterPath?: string | null;
+    collectionId?: number | null;
+    collectionName?: string | null;
+  }
+): Promise<AutoLinkSeriesResult> {
+  try {
+    // 1. Fetch user's watched items map for contentType: "movie"
+    const userWatched = await prisma.watchedItem.findMany({
+      where: { userId, contentType: "movie" },
+      select: { tmdbId: true, watchedDate: true },
+    });
+    const watchedMap = new Map<number, Date>();
+    userWatched.forEach((w) => watchedMap.set(w.tmdbId, w.watchedDate));
+    if (!watchedMap.has(tmdbId)) {
+      watchedMap.set(tmdbId, new Date());
+    }
+
+    // 2. Check curated presets first
+    for (const preset of CURATED_FRANCHISE_PRESETS) {
+      const matchCustom = preset.customParts?.some((p) => p.tmdbId === tmdbId);
+      const matchColId = preset.tmdbCollectionId && fallbackData?.collectionId === preset.tmdbCollectionId;
+
+      if (matchCustom || matchColId) {
+        let franchise = await prisma.franchise.findFirst({
+          where: {
+            userId,
+            OR: [
+              preset.tmdbCollectionId ? { tmdbCollectionId: preset.tmdbCollectionId } : {},
+              { name: { equals: preset.name, mode: "insensitive" } },
+            ],
+          },
+        });
+
+        if (!franchise) {
+          franchise = await prisma.franchise.create({
+            data: {
+              userId,
+              name: preset.name,
+              tmdbCollectionId: preset.tmdbCollectionId || null,
+              overview: preset.overview || null,
+              posterPath: preset.posterPath || fallbackData?.posterPath || null,
+            },
+          });
+        }
+
+        let parts: any[] = preset.customParts ? [...preset.customParts] : [];
+        if (parts.length === 0 && preset.tmdbCollectionId) {
+          try {
+            const col = await getCollection(preset.tmdbCollectionId);
+            if (col?.parts) {
+              parts = col.parts.map((p: any) => ({
+                tmdbId: p.id,
+                title: p.title || p.original_title,
+                releaseDate: p.release_date || null,
+                posterPath: p.poster_path || null,
+              }));
+            }
+          } catch (e) {
+            console.warn(`Could not fetch TMDB collection ${preset.tmdbCollectionId}:`, e);
+          }
+        }
+
+        // Sort chronologically ascending
+        parts.sort((a, b) => {
+          const dateA = a.releaseDate || "9999-99-99";
+          const dateB = b.releaseDate || "9999-99-99";
+          return dateA.localeCompare(dateB);
+        });
+
+        let currentSeq: number | null = null;
+        for (let i = 0; i < parts.length; i++) {
+          const part = parts[i];
+          const seq = i + 1;
+          if (part.tmdbId === tmdbId) currentSeq = seq;
+          const isWatched = watchedMap.has(part.tmdbId);
+          const wDate = watchedMap.get(part.tmdbId);
+
+          await prisma.franchiseEntry.upsert({
+            where: {
+              franchiseId_sequenceNumber: {
+                franchiseId: franchise.id,
+                sequenceNumber: seq,
+              },
+            },
+            update: {
+              title: part.title,
+              releaseDate: part.releaseDate,
+              posterPath: part.posterPath,
+              watched: isWatched,
+              watchedDate: isWatched ? wDate || new Date() : null,
+            },
+            create: {
+              franchiseId: franchise.id,
+              sequenceNumber: seq,
+              tmdbId: part.tmdbId,
+              title: part.title,
+              releaseDate: part.releaseDate,
+              posterPath: part.posterPath,
+              watched: isWatched,
+              watchedDate: isWatched ? wDate || new Date() : null,
+              userId,
+            },
+          });
+
+          if (isWatched) {
+            await prisma.watchedItem.updateMany({
+              where: { userId, tmdbId: part.tmdbId, contentType: "movie" },
+              data: { franchiseId: franchise.id, franchiseSeq: seq },
+            });
+          }
+        }
+
+        return {
+          franchiseId: franchise.id,
+          franchiseSeq: currentSeq,
+          franchiseName: franchise.name,
+        };
+      }
+    }
+
+    // 3. If not in curated preset, check TMDB collection
+    let colId = fallbackData?.collectionId;
+    let colName = fallbackData?.collectionName;
+    let colPoster = fallbackData?.posterPath;
+    let colBackdrop: string | null = null;
+    let colOverview: string | null = null;
+
+    if (!colId) {
+      const existingMovie = await prisma.movie.findUnique({
+        where: { tmdbId },
+        select: { collectionId: true, collectionName: true },
+      });
+      if (existingMovie?.collectionId) {
+        colId = existingMovie.collectionId;
+        colName = existingMovie.collectionName || undefined;
+      } else {
+        try {
+          const details = await getMovieDetails(tmdbId);
+          if (details?.belongs_to_collection) {
+            colId = details.belongs_to_collection.id;
+            colName = details.belongs_to_collection.name;
+            colPoster = details.belongs_to_collection.poster_path;
+            colBackdrop = details.belongs_to_collection.backdrop_path;
+            await prisma.movie.updateMany({
+              where: { tmdbId },
+              data: {
+                collectionId: colId,
+                collectionName: colName,
+              },
+            });
+          }
+        } catch (e) {
+          console.warn(`TMDB getMovieDetails failed for tmdbId ${tmdbId}:`, e);
+        }
+      }
+    }
+
+    if (colId) {
+      const col = await getCollection(colId);
+      if (col && col.parts && col.parts.length > 0) {
+        const sortedParts = [...col.parts].sort((a: any, b: any) =>
+          (a.release_date || "9999").localeCompare(b.release_date || "9999")
+        );
+
+        let franchise = await prisma.franchise.findFirst({
+          where: {
+            userId,
+            OR: [
+              { tmdbCollectionId: col.id },
+              { name: { equals: col.name, mode: "insensitive" } },
+            ],
+          },
+        });
+
+        if (!franchise) {
+          franchise = await prisma.franchise.create({
+            data: {
+              userId,
+              name: col.name,
+              tmdbCollectionId: col.id,
+              overview: col.overview || colOverview || null,
+              posterPath: col.poster_path || colPoster || null,
+              backdropPath: col.backdrop_path || colBackdrop || null,
+            },
+          });
+        }
+
+        let currentSeq: number | null = null;
+        for (let i = 0; i < sortedParts.length; i++) {
+          const part = sortedParts[i];
+          const seq = i + 1;
+          if (part.id === tmdbId) currentSeq = seq;
+          const isWatched = watchedMap.has(part.id);
+          const wDate = watchedMap.get(part.id);
+
+          await prisma.franchiseEntry.upsert({
+            where: {
+              franchiseId_sequenceNumber: {
+                franchiseId: franchise.id,
+                sequenceNumber: seq,
+              },
+            },
+            update: {
+              title: part.title || part.original_title,
+              releaseDate: part.release_date || null,
+              posterPath: part.poster_path || null,
+              watched: isWatched,
+              watchedDate: isWatched ? wDate || new Date() : null,
+            },
+            create: {
+              franchiseId: franchise.id,
+              sequenceNumber: seq,
+              tmdbId: part.id,
+              title: part.title || part.original_title,
+              releaseDate: part.release_date || null,
+              posterPath: part.poster_path || null,
+              watched: isWatched,
+              watchedDate: isWatched ? wDate || new Date() : null,
+              userId,
+            },
+          });
+
+          if (isWatched) {
+            await prisma.watchedItem.updateMany({
+              where: { userId, tmdbId: part.id, contentType: "movie" },
+              data: { franchiseId: franchise.id, franchiseSeq: seq },
+            });
+          }
+        }
+
+        return {
+          franchiseId: franchise.id,
+          franchiseSeq: currentSeq,
+          franchiseName: franchise.name,
+        };
+      }
+    }
+
+    return { franchiseId: null, franchiseSeq: null };
+  } catch (error) {
+    console.error("autoLinkMovieToSeries failed:", error);
+    return { franchiseId: null, franchiseSeq: null };
+  }
+}
 
 /**
  * Syncs and sequences all movie series from the user's watched items.

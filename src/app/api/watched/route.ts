@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthSession, getUserId } from "@/lib/session";
 import prisma from "@/lib/prisma";
+import { autoLinkMovieToSeries } from "@/lib/movie-series-detector";
 
 export async function GET(req: NextRequest) {
   try {
@@ -345,45 +346,59 @@ export async function POST(req: NextRequest) {
       tvShowId = tvShow.id;
     }
 
-    // 3. Check for franchise entry matching this item
+    // 3. Auto-detect Movie Series template and link related movies from watched history
     let resolvedFranchiseId = franchiseId || null;
     let resolvedFranchiseSeq = franchiseSeq ? Number(franchiseSeq) : null;
 
-    const franchiseEntry = await prisma.franchiseEntry.findFirst({
-      where: {
-        tmdbId: numericTmdbId,
-        userId,
-      },
-      include: {
-        franchise: true,
-      },
-    });
+    if (validContentType === "movie") {
+      try {
+        const autoLink = await autoLinkMovieToSeries(userId, numericTmdbId, {
+          title,
+          releaseDate,
+          posterPath,
+          collectionId: collectionId ? Number(collectionId) : null,
+          collectionName,
+        });
+        if (autoLink.franchiseId) {
+          resolvedFranchiseId = autoLink.franchiseId;
+          resolvedFranchiseSeq = autoLink.franchiseSeq;
+        }
+      } catch (linkErr) {
+        console.error("autoLinkMovieToSeries non-fatal error:", linkErr);
+      }
+    }
 
-    if (franchiseEntry) {
-      if (!resolvedFranchiseId) {
-        resolvedFranchiseId = franchiseEntry.franchiseId;
-      }
-      if (!resolvedFranchiseSeq) {
-        resolvedFranchiseSeq = franchiseEntry.sequenceNumber;
-      }
-      // Update franchise entry watched status
-      await prisma.franchiseEntry.update({
-        where: { id: franchiseEntry.id },
-        data: {
-          watched: true,
-          watchedDate: parsedWatchedDate,
-        },
-      });
-    } else if (collectionId && !resolvedFranchiseId) {
-      // Check if a franchise exists for this TMDB collection
-      const existingFranchise = await prisma.franchise.findFirst({
+    if (!resolvedFranchiseId) {
+      const franchiseEntry = await prisma.franchiseEntry.findFirst({
         where: {
-          tmdbCollectionId: Number(collectionId),
+          tmdbId: numericTmdbId,
           userId,
         },
+        include: {
+          franchise: true,
+        },
       });
-      if (existingFranchise) {
-        resolvedFranchiseId = existingFranchise.id;
+
+      if (franchiseEntry) {
+        resolvedFranchiseId = franchiseEntry.franchiseId;
+        resolvedFranchiseSeq = franchiseEntry.sequenceNumber;
+        await prisma.franchiseEntry.update({
+          where: { id: franchiseEntry.id },
+          data: {
+            watched: true,
+            watchedDate: parsedWatchedDate,
+          },
+        });
+      } else if (collectionId) {
+        const existingFranchise = await prisma.franchise.findFirst({
+          where: {
+            tmdbCollectionId: Number(collectionId),
+            userId,
+          },
+        });
+        if (existingFranchise) {
+          resolvedFranchiseId = existingFranchise.id;
+        }
       }
     }
 

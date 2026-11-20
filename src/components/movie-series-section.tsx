@@ -45,17 +45,21 @@ export function MovieSeriesSection({
   const [expandedSeriesIds, setExpandedSeriesIds] = React.useState<Set<string>>(new Set());
   const [isSyncing, setIsSyncing] = React.useState(false);
   const [togglingEntryId, setTogglingEntryId] = React.useState<number | null>(null);
+  const hasInitializedRef = React.useRef(false);
 
-  // Automatically expand the first 3 franchises by default
+  // Automatically expand only the first franchise on initial data load
   React.useEffect(() => {
-    if (seriesList.length > 0 && expandedSeriesIds.size === 0) {
+    if (seriesList.length > 0 && !hasInitializedRef.current) {
+      hasInitializedRef.current = true;
       const initialIds = new Set<string>();
-      seriesList.slice(0, 4).forEach((s) => initialIds.add(s.id));
+      if (seriesList[0]) {
+        initialIds.add(seriesList[0].id);
+      }
       setExpandedSeriesIds(initialIds);
     }
-  }, [seriesList, expandedSeriesIds.size]);
+  }, [seriesList]);
 
-  const toggleExpand = (id: string) => {
+  const toggleExpand = React.useCallback((id: string) => {
     setExpandedSeriesIds((prev) => {
       const next = new Set(prev);
       if (next.has(id)) {
@@ -65,16 +69,16 @@ export function MovieSeriesSection({
       }
       return next;
     });
-  };
+  }, []);
 
-  const handleExpandAll = () => {
+  const handleExpandAll = React.useCallback(() => {
     const allIds = new Set(seriesList.map((s) => s.id));
     setExpandedSeriesIds(allIds);
-  };
+  }, [seriesList]);
 
-  const handleCollapseAll = () => {
+  const handleCollapseAll = React.useCallback(() => {
     setExpandedSeriesIds(new Set());
-  };
+  }, []);
 
   const handleManualSync = async () => {
     setIsSyncing(true);
@@ -256,7 +260,6 @@ export function MovieSeriesSection({
             return (
               <motion.div
                 key={series.id}
-                layout
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 className={cn(
@@ -268,7 +271,15 @@ export function MovieSeriesSection({
               >
                 {/* ── Franchise Header Card ── */}
                 <div
+                  role="button"
+                  tabIndex={0}
                   onClick={() => toggleExpand(series.id)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      toggleExpand(series.id);
+                    }
+                  }}
                   className="p-5 sm:p-6 cursor-pointer select-none bg-gradient-to-r from-purple-950/40 via-card to-card hover:bg-purple-900/10 transition-colors"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
