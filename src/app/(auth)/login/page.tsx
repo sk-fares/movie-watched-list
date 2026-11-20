@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, Suspense } from "react";
+import React, { useState, Suspense, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import toast, { Toaster } from "react-hot-toast";
 import {
   Film,
@@ -18,31 +18,63 @@ import {
   Clapperboard,
   AlertCircle,
   CheckCircle2,
+  KeyRound,
+  RotateCcw,
+  Check,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { OtpInput } from "@/components/otp-input";
+import { cn } from "@/lib/utils";
 
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
   const urlError = searchParams.get("error");
+  const wasVerified = searchParams.get("verified");
 
+  const [authMethod, setAuthMethod] = useState<"password" | "otp">("password");
+
+  // Form states
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+
+  // OTP login states
+  const [otpStep, setOtpStep] = useState<"request" | "verify">("request");
+  const [otp, setOtp] = useState("");
+  const [devOtp, setDevOtp] = useState<string | null>(null);
+  const [resendCooldown, setResendCooldown] = useState(0);
+
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(
     urlError === "OAuthSignin" || urlError === "OAuthCallback"
-      ? "Error connecting with Google. Please try again."
+      ? "Google OAuth is not configured yet. Please sign in with Email or OTP."
       : urlError === "CredentialsSignin"
       ? "Invalid email or password."
       : ""
   );
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  useEffect(() => {
+    if (wasVerified) {
+      toast.success("Account verified! You can now sign in.", { icon: "✅" });
+    }
+  }, [wasVerified]);
+
+  // Resend cooldown timer
+  useEffect(() => {
+    if (resendCooldown <= 0) return;
+    const timer = setInterval(() => {
+      setResendCooldown((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [resendCooldown]);
+
+  // Handle Standard Password Login
+  const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage("");
 
@@ -78,12 +110,91 @@ function LoginForm() {
         setTimeout(() => {
           router.push(callbackUrl);
           router.refresh();
-        }, 800);
+        }, 600);
       }
     } catch (err: any) {
       console.error("Login submission error:", err);
       setErrorMessage("An unexpected error occurred. Please try again.");
       toast.error("Something went wrong. Please try again.");
+      setIsLoading(false);
+    }
+  };
+
+  // Handle Requesting OTP for Sign In
+  const handleRequestOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMessage("");
+
+    if (!email.trim()) {
+      setErrorMessage("Please enter your email address.");
+      toast.error("Email is required.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("/api/auth/otp/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: email.trim().toLowerCase(),
+          type: "signin",
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to send verification code.");
+      }
+
+      if (data.devOtp) setDevOtp(data.devOtp);
+      setOtpStep("verify");
+      setResendCooldown(60);
+      toast.success(`Verification code sent to ${email}`, { icon: "✉️" });
+    } catch (err: any) {
+      console.error("Request OTP error:", err);
+      setErrorMessage(err.message || "Failed to send code.");
+      toast.error(err.message || "Failed to send code.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Handle Verifying OTP and Signing In
+  const handleVerifyOtpSubmit = async (codeToVerify?: string) => {
+    const finalOtp = codeToVerify || otp;
+    if (finalOtp.length !== 6) {
+      toast.error("Please enter the complete 6-digit verification code.");
+      return;
+    }
+
+    setIsLoading(true);
+    setErrorMessage("");
+
+    try {
+      const result = await signIn("credentials", {
+        redirect: false,
+        email: email.trim().toLowerCase(),
+        otp: finalOtp,
+      });
+
+      if (result?.error) {
+        setErrorMessage(result.error);
+        toast.error("Invalid or expired verification code.");
+        setIsLoading(false);
+      } else if (result?.ok) {
+        toast.success("Welcome back! Redirecting to your Vault...", { icon: "🎬" });
+        setTimeout(() => {
+          router.push(callbackUrl);
+          router.refresh();
+        }, 600);
+      }
+    } catch (err: any) {
+      console.error("OTP login failed:", err);
+      setErrorMessage(err.message || "Verification failed. Please try again.");
+      toast.error(err.message || "Failed to verify code.");
       setIsLoading(false);
     }
   };
@@ -95,7 +206,7 @@ function LoginForm() {
       await signIn("google", { callbackUrl });
     } catch (err) {
       console.error("Google sign in error:", err);
-      toast.error("Failed to initiate Google sign in.");
+      toast.error("Google OAuth is currently not active. Please sign in with Password or Email OTP code.");
       setIsGoogleLoading(false);
     }
   };
@@ -109,7 +220,6 @@ function LoginForm() {
         <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-[140px]" />
         <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-indigo-600/20 rounded-full blur-[140px]" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-violet-900/10 rounded-full blur-[180px]" />
-        {/* Subtle grid pattern overlay */}
         <div
           className="absolute inset-0 opacity-[0.03]"
           style={{
@@ -137,16 +247,13 @@ function LoginForm() {
             <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-purple-100 to-purple-300 bg-clip-text text-transparent">
               Movie Watched List
             </span>
-            <span className="text-xs px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-medium">
-              v2.0
-            </span>
           </Link>
 
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
             Welcome back
           </h1>
-          <p className="text-sm text-zinc-400 mt-2">
-            Sign in to track your franchises, watchlist, and ratings
+          <p className="text-sm text-zinc-400 mt-1.5">
+            Log in to manage your universes, history & watchlist
           </p>
         </div>
 
@@ -202,132 +309,290 @@ function LoginForm() {
               <div className="w-full border-t border-zinc-800" />
             </div>
             <span className="relative px-3 bg-zinc-900 text-xs font-medium uppercase tracking-wider text-zinc-500">
-              Or continue with email
+              Or sign in with email
             </span>
           </div>
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2"
-              >
-                Email Address
-              </label>
-              <div className="relative">
-                <Mail className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                <Input
-                  id="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  placeholder="cinephile@moviewatchedlist.app"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  disabled={isLoading || isGoogleLoading}
-                  className="pl-10 h-11 bg-zinc-950/60 border-zinc-800 focus:border-purple-500 focus:ring-purple-500/20 text-white rounded-xl placeholder:text-zinc-600 transition-all"
-                />
-              </div>
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <label
-                  htmlFor="password"
-                  className="text-xs font-semibold text-zinc-300 uppercase tracking-wider"
-                >
-                  Password
-                </label>
-                <Link
-                  href="/forgot-password"
-                  className="text-xs text-purple-400 hover:text-purple-300 hover:underline transition-colors"
-                >
-                  Forgot password?
-                </Link>
-              </div>
-              <div className="relative">
-                <Lock className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  autoComplete="current-password"
-                  required
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  disabled={isLoading || isGoogleLoading}
-                  className="pl-10 pr-10 h-11 bg-zinc-950/60 border-zinc-800 focus:border-purple-500 focus:ring-purple-500/20 text-white rounded-xl placeholder:text-zinc-600 transition-all"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 transition-colors p-1"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                >
-                  {showPassword ? (
-                    <EyeOff className="w-4 h-4" />
-                  ) : (
-                    <Eye className="w-4 h-4" />
-                  )}
-                </button>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between pt-1">
-              <label className="flex items-center gap-2 cursor-pointer select-none">
-                <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className="w-4 h-4 rounded border-zinc-700 bg-zinc-950 text-purple-600 focus:ring-purple-500/30 focus:ring-offset-0 transition-colors"
-                />
-                <span className="text-xs text-zinc-400">Remember this device</span>
-              </label>
-            </div>
-
-            <Button
-              type="submit"
-              disabled={isLoading || isGoogleLoading}
-              className="w-full h-11 bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-xl shadow-lg shadow-purple-600/30 flex items-center justify-center gap-2 transition-all mt-2 group"
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Signing in...</span>
-                </>
-              ) : (
-                <>
-                  <span>Sign In</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                </>
+          {/* Method Selector Tabs: Password vs Email OTP */}
+          <div className="grid grid-cols-2 p-1 mb-5 rounded-xl bg-zinc-950/80 border border-zinc-800">
+            <button
+              type="button"
+              onClick={() => {
+                setAuthMethod("password");
+                setErrorMessage("");
+              }}
+              className={cn(
+                "py-2 text-xs font-semibold rounded-lg transition-all",
+                authMethod === "password"
+                  ? "bg-purple-600 text-white shadow-md shadow-purple-900/30"
+                  : "text-zinc-400 hover:text-white"
               )}
-            </Button>
-          </form>
-
-          {/* Register Link */}
-          <div className="mt-6 pt-5 border-t border-zinc-800 text-center">
-            <p className="text-sm text-zinc-400">
-              Don&apos;t have an account?{" "}
-              <Link
-                href="/register"
-                className="text-purple-400 hover:text-purple-300 font-semibold hover:underline transition-colors"
-              >
-                Create one now
-              </Link>
-            </p>
+            >
+              Password Login
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setAuthMethod("otp");
+                setErrorMessage("");
+              }}
+              className={cn(
+                "py-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5",
+                authMethod === "otp"
+                  ? "bg-purple-600 text-white shadow-md shadow-purple-900/30"
+                  : "text-zinc-400 hover:text-white"
+              )}
+            >
+              <KeyRound className="w-3.5 h-3.5" />
+              <span>Email OTP Code</span>
+            </button>
           </div>
+
+          <AnimatePresence mode="wait">
+            {/* ─── TAB 1: Password Login Form ─── */}
+            {authMethod === "password" ? (
+              <motion.form
+                key="form-password"
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 10 }}
+                onSubmit={handlePasswordSubmit}
+                className="space-y-4"
+              >
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2"
+                  >
+                    Email Address
+                  </label>
+                  <div className="relative">
+                    <Mail className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <Input
+                      id="email"
+                      type="email"
+                      autoComplete="email"
+                      required
+                      placeholder="you@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      disabled={isLoading || isGoogleLoading}
+                      className="pl-10 h-11 bg-zinc-950/60 border-zinc-800 focus:border-purple-500 focus:ring-purple-500/20 text-white rounded-xl placeholder:text-zinc-600 transition-all"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <label
+                      htmlFor="password"
+                      className="text-xs font-semibold text-zinc-300 uppercase tracking-wider"
+                    >
+                      Password
+                    </label>
+                    <Link
+                      href="/forgot-password"
+                      className="text-xs text-purple-400 hover:text-purple-300 hover:underline transition-colors"
+                    >
+                      Forgot password?
+                    </Link>
+                  </div>
+                  <div className="relative">
+                    <Lock className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <Input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      autoComplete="current-password"
+                      required
+                      placeholder="••••••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      disabled={isLoading || isGoogleLoading}
+                      className="pl-10 pr-10 h-11 bg-zinc-950/60 border-zinc-800 focus:border-purple-500 focus:ring-purple-500/20 text-white rounded-xl placeholder:text-zinc-600 transition-all"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 transition-colors"
+                    >
+                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Remember Me */}
+                <div className="flex items-center justify-between pt-1">
+                  <label className="flex items-center gap-2 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={rememberMe}
+                      onChange={(e) => setRememberMe(e.target.checked)}
+                      className="h-4 w-4 rounded border-zinc-800 bg-zinc-950 text-purple-600 focus:ring-purple-500/40 focus:ring-offset-0"
+                    />
+                    <span className="text-xs text-zinc-400">Remember me</span>
+                  </label>
+                </div>
+
+                {/* Submit */}
+                <Button
+                  type="submit"
+                  disabled={isLoading || isGoogleLoading}
+                  className="w-full h-11 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 transition-all hover:shadow-purple-600/50 mt-2"
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Signing In...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Sign In with Password</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </Button>
+              </motion.form>
+            ) : (
+              /* ─── TAB 2: Email OTP Login ─── */
+              <motion.div
+                key="form-otp"
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -10 }}
+                className="space-y-4"
+              >
+                {otpStep === "request" ? (
+                  <form onSubmit={handleRequestOtp} className="space-y-4">
+                    <div>
+                      <label
+                        htmlFor="otp-email"
+                        className="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2"
+                      >
+                        Enter Your Email Address
+                      </label>
+                      <div className="relative">
+                        <Mail className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                        <Input
+                          id="otp-email"
+                          type="email"
+                          required
+                          placeholder="you@example.com"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          disabled={isLoading}
+                          className="pl-10 h-11 bg-zinc-950/60 border-zinc-800 focus:border-purple-500 focus:ring-purple-500/20 text-white rounded-xl placeholder:text-zinc-600 transition-all"
+                        />
+                      </div>
+                      <p className="text-[11px] text-zinc-500 mt-1.5">
+                        We will send a 6-digit login verification code directly to your email.
+                      </p>
+                    </div>
+
+                    <Button
+                      type="submit"
+                      disabled={isLoading}
+                      className="w-full h-11 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 transition-all hover:shadow-purple-600/50"
+                    >
+                      {isLoading ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>Sending Code...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Send Verification Code</span>
+                          <ArrowRight className="w-4 h-4" />
+                        </>
+                      )}
+                    </Button>
+                  </form>
+                ) : (
+                  <div className="space-y-4 text-center">
+                    <div className="w-10 h-10 rounded-xl bg-purple-950/60 border border-purple-500/40 text-purple-300 flex items-center justify-center mx-auto shadow-md">
+                      <KeyRound className="w-5 h-5 text-purple-400" />
+                    </div>
+
+                    <div>
+                      <h4 className="text-sm font-bold text-white mb-0.5">Enter 6-Digit Code</h4>
+                      <p className="text-xs text-zinc-400">
+                        Sent to <span className="text-purple-300 font-semibold">{email}</span>
+                      </p>
+                    </div>
+
+                    {devOtp && (
+                      <div className="p-2.5 rounded-xl bg-purple-950/50 border border-purple-500/40 text-xs text-purple-200">
+                        <span className="text-zinc-400">Dev Test Code:</span>{" "}
+                        <span className="font-mono font-bold text-sm text-purple-300 tracking-widest">{devOtp}</span>
+                      </div>
+                    )}
+
+                    <div className="py-2">
+                      <OtpInput
+                        value={otp}
+                        onChange={setOtp}
+                        disabled={isLoading}
+                        onComplete={(code) => handleVerifyOtpSubmit(code)}
+                      />
+                    </div>
+
+                    <Button
+                      type="button"
+                      onClick={() => handleVerifyOtpSubmit()}
+                      disabled={otp.length !== 6 || isLoading}
+                      className="w-full h-11 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 transition-all hover:shadow-purple-600/50"
+                    >
+                      {isLoading ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>Verifying & Signing In...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Check className="w-4 h-4 stroke-[3]" />
+                          <span>Verify & Sign In</span>
+                        </>
+                      )}
+                    </Button>
+
+                    <div className="flex items-center justify-between text-xs pt-2 border-t border-zinc-800">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setOtpStep("request");
+                          setOtp("");
+                        }}
+                        className="text-zinc-400 hover:text-white transition-colors"
+                      >
+                        ← Back
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={handleRequestOtp}
+                        disabled={resendCooldown > 0 || isLoading}
+                        className="text-purple-400 hover:text-purple-300 font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
+                      >
+                        <RotateCcw className="w-3.5 h-3.5" />
+                        <span>{resendCooldown > 0 ? `Resend in ${resendCooldown}s` : "Resend Code"}</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
-        {/* Back to landing */}
-        <div className="mt-6 text-center">
+        {/* Footer Link */}
+        <p className="text-center text-xs text-zinc-500 mt-6">
+          Don&apos;t have an account?{" "}
           <Link
-            href="/"
-            className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors inline-flex items-center gap-1.5"
+            href="/register"
+            className="text-purple-400 hover:text-purple-300 font-semibold hover:underline transition-colors"
           >
-            <span>← Back to Movie Watched List overview</span>
+            Create an account
           </Link>
-        </div>
+        </p>
       </motion.div>
     </div>
   );
@@ -337,8 +602,8 @@ export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-black flex items-center justify-center text-zinc-400">
-          <Loader2 className="w-8 h-8 animate-spin text-purple-500" />
+        <div className="min-h-screen w-full flex items-center justify-center bg-black text-purple-400">
+          <Loader2 className="w-8 h-8 animate-spin" />
         </div>
       }
     >
