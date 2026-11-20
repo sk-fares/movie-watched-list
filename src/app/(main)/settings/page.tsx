@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { useTheme } from "next-themes";
 import { motion } from "framer-motion";
@@ -25,6 +26,10 @@ import {
   FileSpreadsheet,
   AlertTriangle,
   Info,
+  Layers,
+  RefreshCw,
+  ArrowRight,
+  CheckCircle2,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -91,6 +96,24 @@ export default function SettingsPage() {
   const [favoriteGenres, setFavoriteGenres] = useState<string[]>([]);
   const [enableNotifications, setEnableNotifications] = useState<boolean>(true);
   const [isSavingPreferences, setIsSavingPreferences] = useState<boolean>(false);
+  const [isSyncingFranchises, setIsSyncingFranchises] = useState<boolean>(false);
+
+  const handleSyncMovieSeries = async () => {
+    setIsSyncingFranchises(true);
+    try {
+      const res = await fetch("/api/movie-series/sync", { method: "POST" });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        toast.success(`Synced ${data.totalSeries} movie series in chronological sequence!`, { icon: "🎬" });
+      } else {
+        throw new Error(data.error || "Failed to sync");
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Failed to sync movie series");
+    } finally {
+      setIsSyncingFranchises(false);
+    }
+  };
 
   // Appearance State
   const [selectedThemeStyle, setSelectedThemeStyle] = useState<string>("dark");
@@ -351,12 +374,123 @@ export default function SettingsPage() {
         <TabsContent value="preferences">
           <Card className="bg-card/80 border-border/60 backdrop-blur-xl">
             <CardHeader>
-              <CardTitle className="text-lg font-bold text-white">Discovery & Watch Preferences</CardTitle>
+              <CardTitle className="text-lg font-bold text-white">Dashboard Options & Watch Preferences</CardTitle>
               <CardDescription className="text-xs text-muted-foreground">
-                Fine-tune algorithmic recommendations, default view filters, and genre prioritization.
+                Quickly access and configure the 4 core sections of your Cinematic Dashboard.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6 max-w-2xl">
+              {/* ─── 4 MAIN DASHBOARD OPTIONS ─── */}
+              <div className="space-y-3 p-4 rounded-2xl bg-purple-950/20 border border-purple-500/30">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-purple-400" />
+                      <span>4 Main Dashboard Options</span>
+                    </h4>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      Your dashboard contains 4 dedicated sections. Click any option to open it immediately:
+                    </p>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleSyncMovieSeries}
+                    disabled={isSyncingFranchises}
+                    className="text-xs gap-1.5 bg-purple-950/40 border-purple-500/40 text-purple-300 hover:text-white shrink-0"
+                  >
+                    <RefreshCw className={cn("w-3.5 h-3.5", isSyncingFranchises && "animate-spin")} />
+                    <span>{isSyncingFranchises ? "Syncing..." : "Sync Series Sequence"}</span>
+                  </Button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
+                  {/* 1st Option */}
+                  <Link
+                    href="/dashboard?tab=movies"
+                    className="flex items-center justify-between p-3 rounded-xl bg-card/80 border border-purple-500/30 hover:border-purple-500 hover:bg-purple-950/30 transition-all group"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-lg bg-purple-600/20 text-purple-400 flex items-center justify-center border border-purple-500/30">
+                        <Film className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-white group-hover:text-purple-300 transition-colors">
+                          1st: Watched Movies
+                        </div>
+                        <div className="text-[10px] text-muted-foreground">
+                          Year-wise (anime & series removed)
+                        </div>
+                      </div>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-purple-400 group-hover:translate-x-0.5 transition-all" />
+                  </Link>
+
+                  {/* 2nd Option */}
+                  <Link
+                    href="/dashboard?tab=series"
+                    className="flex items-center justify-between p-3 rounded-xl bg-card/80 border border-blue-500/30 hover:border-blue-500 hover:bg-blue-950/30 transition-all group"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-lg bg-blue-600/20 text-blue-400 flex items-center justify-center border border-blue-500/30">
+                        <Tv className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-white group-hover:text-blue-300 transition-colors">
+                          2nd: Watched Series
+                        </div>
+                        <div className="text-[10px] text-muted-foreground">
+                          Year-wise with season tracker
+                        </div>
+                      </div>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-blue-400 group-hover:translate-x-0.5 transition-all" />
+                  </Link>
+
+                  {/* 3rd Option */}
+                  <Link
+                    href="/dashboard?tab=animes"
+                    className="flex items-center justify-between p-3 rounded-xl bg-card/80 border border-rose-500/30 hover:border-rose-500 hover:bg-rose-950/30 transition-all group"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-lg bg-rose-600/20 text-rose-400 flex items-center justify-center border border-rose-500/30">
+                        <Sparkles className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-white group-hover:text-rose-300 transition-colors">
+                          3rd: Watched Animes
+                        </div>
+                        <div className="text-[10px] text-muted-foreground">
+                          Anime series & movies by year
+                        </div>
+                      </div>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-rose-400 group-hover:translate-x-0.5 transition-all" />
+                  </Link>
+
+                  {/* 4th Option */}
+                  <Link
+                    href="/dashboard?tab=movie_series"
+                    className="flex items-center justify-between p-3 rounded-xl bg-card/80 border border-indigo-500/30 hover:border-indigo-500 hover:bg-indigo-950/30 transition-all group"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-lg bg-indigo-600/20 text-indigo-400 flex items-center justify-center border border-indigo-500/30">
+                        <Layers className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-white group-hover:text-indigo-300 transition-colors">
+                          4th: Watched Movie Series
+                        </div>
+                        <div className="text-[10px] text-muted-foreground">
+                          Sequenced in release order (#1, #2...)
+                        </div>
+                      </div>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-indigo-400 group-hover:translate-x-0.5 transition-all" />
+                  </Link>
+                </div>
+              </div>
+
               {/* Default Content Type */}
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-muted-foreground">

@@ -1,8 +1,10 @@
 "use client";
 
 import * as React from "react";
+import { Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useSearchParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Film,
@@ -24,16 +26,27 @@ import {
   X,
   Filter,
   Check,
+  Flame,
+  Clapperboard,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
 import { cn, formatYear, formatRuntime, getRatingColor, getImageUrl } from "@/lib/utils";
+import {
+  isAnimeItem,
+  isPureMovie,
+  isPureSeries,
+  isAnimeSeries,
+  isAnimeMovie,
+} from "@/lib/anime-detector";
 import { Button } from "@/components/ui/button";
 import { MovieCard } from "@/components/movie-card";
 import { EmptyState } from "@/components/empty-state";
 import { MovieDetailModal } from "@/components/movie-detail-modal";
 import { SeasonSelectModal, WatchedSeriesItem } from "@/components/season-select-modal";
+import { MovieSeriesSection } from "@/components/movie-series-section";
 import type { DashboardStats } from "@/types";
+import type { MovieSeriesData, SeriesMovieEntry } from "@/lib/movie-series-detector";
 
 interface YearGroup<T> {
   year: string;
@@ -57,22 +70,45 @@ function parseWatchedSeasons(notes?: string | null): number[] {
   return [];
 }
 
-export default function DashboardPage() {
+type ActiveSection = "movies" | "series" | "animes" | "movie_series";
+
+function DashboardPageContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
   const [stats, setStats] = React.useState<DashboardStats | null>(null);
   const [extraStats, setExtraStats] = React.useState<any>(null);
   const [isLoading, setIsLoading] = React.useState(true);
 
-  // Active section: "movies" (Movie Watched) or "series" (Watched Series)
-  const [activeSection, setActiveSection] = React.useState<"movies" | "series">("movies");
+  // 4 Main Options: "movies" (Watched Movies), "series" (Watched Series), "animes" (Watched Animes), "movie_series" (Watched Movie Series)
+  const [activeSection, setActiveSection] = React.useState<ActiveSection>("movies");
 
-  // Watched lists
-  const [watchedMovies, setWatchedMovies] = React.useState<any[]>([]);
-  const [watchedSeries, setWatchedSeries] = React.useState<any[]>([]);
+  // Sync tab with URL search parameter (?tab=movies | series | animes | movie_series)
+  React.useEffect(() => {
+    const tabParam = searchParams.get("tab") as ActiveSection;
+    if (tabParam && ["movies", "series", "animes", "movie_series"].includes(tabParam)) {
+      setActiveSection(tabParam);
+    }
+  }, [searchParams]);
+
+  const handleSelectSection = (section: ActiveSection) => {
+    setActiveSection(section);
+    setSelectedYear("all");
+    setSearchFilter("");
+    router.push(`/dashboard?tab=${section}`, { scroll: false });
+  };
+
+  // Raw watched lists from database
+  const [rawWatchedMovies, setRawWatchedMovies] = React.useState<any[]>([]);
+  const [rawWatchedSeries, setRawWatchedSeries] = React.useState<any[]>([]);
+  const [movieSeriesList, setMovieSeriesList] = React.useState<MovieSeriesData[]>([]);
   const [isLoadingContent, setIsLoadingContent] = React.useState(true);
+  const [isLoadingSeriesList, setIsLoadingSeriesList] = React.useState(true);
 
-  // Filter & Search state within watched lists
+  // Filter & Search state within active list
   const [searchFilter, setSearchFilter] = React.useState<string>("");
   const [selectedYear, setSelectedYear] = React.useState<string>("all");
+  const [animeSubFilter, setAnimeSubFilter] = React.useState<"all" | "series" | "movies">("all");
 
   // Season Selection Modal state
   const [selectedSeriesForSeasons, setSelectedSeriesForSeasons] =
@@ -110,7 +146,7 @@ export default function DashboardPage() {
     }
   }, []);
 
-  // Fetch full watched lists for movies and series
+  // Fetch watched movies and series
   const fetchWatchedLists = React.useCallback(async () => {
     setIsLoadingContent(true);
     try {
@@ -121,11 +157,11 @@ export default function DashboardPage() {
 
       if (moviesRes.ok) {
         const mData = await moviesRes.json();
-        setWatchedMovies(mData.items || []);
+        setRawWatchedMovies(mData.items || []);
       }
       if (seriesRes.ok) {
         const sData = await seriesRes.json();
-        setWatchedSeries(sData.items || []);
+        setRawWatchedSeries(sData.items || []);
       }
     } catch (err) {
       console.error("Failed to load watched items:", err);
@@ -134,15 +170,51 @@ export default function DashboardPage() {
     }
   }, []);
 
+  // Fetch movie series (Option 4)
+  const fetchMovieSeries = React.useCallback(async () => {
+    setIsLoadingSeriesList(true);
+    try {
+      const res = await fetch("/api/movie-series");
+      if (res.ok) {
+        const data = await res.json();
+        setMovieSeriesList(data.series || []);
+      }
+    } catch (err) {
+      console.error("Failed to load movie series:", err);
+    } finally {
+      setIsLoadingSeriesList(false);
+    }
+  }, []);
+
   React.useEffect(() => {
     fetchStats();
     fetchWatchedLists();
-  }, [fetchStats, fetchWatchedLists]);
+    fetchMovieSeries();
+  }, [fetchStats, fetchWatchedLists, fetchMovieSeries]);
+
+  // ─── CLASSIFIED CONTENT LISTS ──────────────────────────────────────────
+
+  // 1st Option: Pure Movies (Removed any anime or series mistakenly listed there)
+  const watchedMovies = React.useMemo(() => {
+    return rawWatchedMovies.filter((m) => isPureMovie(m));
+  }, [rawWatchedMovies]);
+
+  // 2nd Option: Pure Web Series (Excluded anime series)
+  const watchedSeries = React.useMemo(() => {
+    return rawWatchedSeries.filter((s) => isPureSeries(s));
+  }, [rawWatchedSeries]);
+
+  // 3rd Option: Watched Animes (Both anime series and anime movies combined)
+  const watchedAnimes = React.useMemo(() => {
+    const fromMovies = rawWatchedMovies.filter((m) => isAnimeItem(m));
+    const fromSeries = rawWatchedSeries.filter((s) => isAnimeItem(s));
+    return [...fromMovies, ...fromSeries];
+  }, [rawWatchedMovies, rawWatchedSeries]);
 
   // Handle season updates from SeasonSelectModal
   const handleSeasonChange = (tmdbId: number, updatedSeasons: number[]) => {
-    setWatchedSeries((prev) =>
-      prev.map((item) => {
+    const updateNotes = (items: any[]) =>
+      items.map((item) => {
         if (item.tmdbId === tmdbId) {
           return {
             ...item,
@@ -153,12 +225,16 @@ export default function DashboardPage() {
           };
         }
         return item;
-      })
-    );
+      });
+
+    setRawWatchedSeries(updateNotes);
+    fetchStats();
   };
 
   // Group items by release year (sorted from latest year at top down to oldest at bottom)
-  const groupItemsYearWise = <T extends { releaseDate?: string | null; firstAirDate?: string | null; title?: string }>(
+  const groupItemsYearWise = <
+    T extends { releaseDate?: string | null; firstAirDate?: string | null; title?: string }
+  >(
     items: T[]
   ): YearGroup<T>[] => {
     const map = new Map<string, T[]>();
@@ -190,7 +266,7 @@ export default function DashboardPage() {
       groups.push({ year, numericYear, items: groupItems });
     });
 
-    // Sort year groups: latest year (e.g. 2025, 2024...) on top, down to oldest (e.g. 1990...) at bottom
+    // Sort year groups: latest year (e.g. 2026, 2025, 2024...) on top, down to oldest at bottom
     groups.sort((a, b) => {
       if (a.numericYear === -1) return 1;
       if (b.numericYear === -1) return -1;
@@ -232,19 +308,41 @@ export default function DashboardPage() {
     return list;
   }, [watchedSeries, searchFilter, selectedYear]);
 
+  // Filtered watched animes
+  const filteredAnimes = React.useMemo(() => {
+    let list = watchedAnimes;
+    if (animeSubFilter === "series") {
+      list = list.filter((a) => isAnimeSeries(a));
+    } else if (animeSubFilter === "movies") {
+      list = list.filter((a) => isAnimeMovie(a));
+    }
+
+    if (searchFilter.trim()) {
+      const q = searchFilter.toLowerCase();
+      list = list.filter((a) => a.title?.toLowerCase().includes(q));
+    }
+    if (selectedYear !== "all") {
+      list = list.filter((a) => {
+        const raw = a.releaseDate;
+        return raw && String(raw).startsWith(selectedYear);
+      });
+    }
+    return list;
+  }, [watchedAnimes, animeSubFilter, searchFilter, selectedYear]);
+
   // Year groups for active section
-  const movieYearGroups = React.useMemo(
-    () => groupItemsYearWise(filteredMovies),
-    [filteredMovies]
-  );
-  const seriesYearGroups = React.useMemo(
-    () => groupItemsYearWise(filteredSeries),
-    [filteredSeries]
-  );
+  const movieYearGroups = React.useMemo(() => groupItemsYearWise(filteredMovies), [filteredMovies]);
+  const seriesYearGroups = React.useMemo(() => groupItemsYearWise(filteredSeries), [filteredSeries]);
+  const animeYearGroups = React.useMemo(() => groupItemsYearWise(filteredAnimes), [filteredAnimes]);
 
   // Available unique years for quick pills
   const availableYears = React.useMemo(() => {
-    const rawList = activeSection === "movies" ? watchedMovies : watchedSeries;
+    let rawList: any[] = [];
+    if (activeSection === "movies") rawList = watchedMovies;
+    else if (activeSection === "series") rawList = watchedSeries;
+    else if (activeSection === "animes") rawList = watchedAnimes;
+    else return [];
+
     const set = new Set<string>();
     rawList.forEach((item) => {
       const raw = item.releaseDate;
@@ -254,7 +352,39 @@ export default function DashboardPage() {
       }
     });
     return Array.from(set).sort((a, b) => Number(b) - Number(a));
-  }, [activeSection, watchedMovies, watchedSeries]);
+  }, [activeSection, watchedMovies, watchedSeries, watchedAnimes]);
+
+  // Handle 1-click watch toggle in Option 4 Movie Series
+  const handleToggleWatchMovieSeriesEntry = async (
+    entry: SeriesMovieEntry,
+    franchiseId: string
+  ) => {
+    try {
+      const res = await fetch("/api/watched", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tmdbId: entry.tmdbId,
+          contentType: "movie",
+          title: entry.title,
+          posterPath: entry.posterPath,
+          releaseDate: entry.releaseDate,
+          franchiseId,
+          franchiseSeq: entry.sequenceNumber,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Failed to record watched film");
+      toast.success(`Marked #${entry.sequenceNumber} ${entry.title} as watched!`, { icon: "✅" });
+
+      // Refresh data
+      fetchWatchedLists();
+      fetchMovieSeries();
+      fetchStats();
+    } catch {
+      toast.error("Failed to update film status");
+    }
+  };
 
   // Handle Random Pick with Spin Animation
   const handleRandomPick = async () => {
@@ -333,7 +463,7 @@ export default function DashboardPage() {
             Welcome to Movie Watched List
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Track your movies and web series year-wise, explore seasons, and conquer franchises.
+            Track your watched movies, web series seasons, animes, and sequenced movie franchises.
           </p>
         </div>
 
@@ -344,12 +474,16 @@ export default function DashboardPage() {
             onClick={() => {
               fetchStats();
               fetchWatchedLists();
+              fetchMovieSeries();
             }}
-            disabled={isLoading || isLoadingContent}
+            disabled={isLoading || isLoadingContent || isLoadingSeriesList}
             className="gap-2 bg-card/60 backdrop-blur-sm border-border/60 hover:bg-purple-950/30"
           >
             <RefreshCw
-              className={cn("h-3.5 w-3.5", (isLoading || isLoadingContent) && "animate-spin")}
+              className={cn(
+                "h-3.5 w-3.5",
+                (isLoading || isLoadingContent || isLoadingSeriesList) && "animate-spin"
+              )}
             />
             <span>Refresh</span>
           </Button>
@@ -364,17 +498,14 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* ─── Stats Cards Grid ─── */}
+      {/* ─── Top 4 Stats Cards Grid ─── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {/* Total Movies Watched */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          onClick={() => {
-            setActiveSection("movies");
-            setSelectedYear("all");
-          }}
+          onClick={() => handleSelectSection("movies")}
           className={cn(
             "relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-950/40 via-card to-card border p-5 shadow-lg cursor-pointer transition-all duration-300 group",
             activeSection === "movies"
@@ -384,7 +515,7 @@ export default function DashboardPage() {
         >
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              Movies Watched
+              Watched Movies
             </span>
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-purple-600/20 text-purple-400 border border-purple-500/30">
               <Film className="h-4 w-4" />
@@ -400,7 +531,7 @@ export default function DashboardPage() {
             </div>
             <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
               <TrendingUp className="h-3 w-3 text-emerald-400" />
-              <span>Click to view year-wise</span>
+              <span>Year-wise release order</span>
             </p>
           </div>
         </motion.div>
@@ -410,10 +541,7 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.05 }}
-          onClick={() => {
-            setActiveSection("series");
-            setSelectedYear("all");
-          }}
+          onClick={() => handleSelectSection("series")}
           className={cn(
             "relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-950/40 via-card to-card border p-5 shadow-lg cursor-pointer transition-all duration-300 group",
             activeSection === "series"
@@ -439,107 +567,115 @@ export default function DashboardPage() {
             </div>
             <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
               <TrendingUp className="h-3 w-3 text-emerald-400" />
-              <span>With season-by-season tracking</span>
+              <span>Season-by-season tracking</span>
             </p>
           </div>
         </motion.div>
 
-        {/* Watchlist Count */}
+        {/* Watched Animes */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.1 }}
-          className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-950/40 via-card to-card border border-indigo-800/30 p-5 shadow-lg group hover:border-indigo-600/50 transition-all duration-300"
+          onClick={() => handleSelectSection("animes")}
+          className={cn(
+            "relative overflow-hidden rounded-2xl bg-gradient-to-br from-rose-950/40 via-card to-card border p-5 shadow-lg cursor-pointer transition-all duration-300 group",
+            activeSection === "animes"
+              ? "border-rose-500 shadow-rose-950/50 ring-1 ring-rose-500"
+              : "border-rose-800/30 hover:border-rose-600/50"
+          )}
         >
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              In Watchlist
+              Watched Animes
             </span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30">
-              <Bookmark className="h-4 w-4" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-rose-600/20 text-rose-400 border border-rose-500/30">
+              <Sparkles className="h-4 w-4" />
             </div>
           </div>
           <div className="mt-4">
             <div className="text-3xl font-extrabold text-white">
-              {isLoading ? (
+              {isLoadingContent ? (
                 <div className="h-8 w-16 bg-muted/60 animate-pulse rounded" />
               ) : (
-                stats?.totalWatchlistItems ?? 0
+                watchedAnimes.length
               )}
             </div>
-            <Link
-              href="/watchlist"
-              className="text-xs text-purple-400 hover:text-purple-300 mt-1 inline-flex items-center gap-1"
-            >
-              <span>View watchlist</span>
-              <ArrowRight className="h-3 w-3" />
-            </Link>
+            <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+              <Flame className="h-3 w-3 text-rose-400" />
+              <span>Series & movies by year</span>
+            </p>
           </div>
         </motion.div>
 
-        {/* Watch Time */}
+        {/* Watched Movie Series */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.15 }}
-          className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-violet-950/40 via-card to-card border border-violet-800/30 p-5 shadow-lg group hover:border-violet-600/50 transition-all duration-300"
+          onClick={() => handleSelectSection("movie_series")}
+          className={cn(
+            "relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-950/40 via-card to-card border p-5 shadow-lg cursor-pointer transition-all duration-300 group",
+            activeSection === "movie_series"
+              ? "border-indigo-500 shadow-indigo-950/50 ring-1 ring-indigo-500"
+              : "border-indigo-800/30 hover:border-indigo-600/50"
+          )}
         >
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              Total Watch Time
+              Watched Movie Series
             </span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-600/20 text-violet-400 border border-violet-500/30">
-              <Clock className="h-4 w-4" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30">
+              <Layers className="h-4 w-4" />
             </div>
           </div>
           <div className="mt-4">
             <div className="text-3xl font-extrabold text-white">
-              {isLoading ? (
-                <div className="h-8 w-24 bg-muted/60 animate-pulse rounded" />
+              {isLoadingSeriesList ? (
+                <div className="h-8 w-16 bg-muted/60 animate-pulse rounded" />
               ) : (
-                formatWatchTimeDisplay(stats?.totalWatchTime ?? 0)
+                movieSeriesList.length
               )}
             </div>
-            <p className="text-xs text-muted-foreground mt-1">Dedicated to the screen</p>
+            <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+              <CheckCircle2 className="h-3 w-3 text-emerald-400" />
+              <span>Sequenced in release order</span>
+            </p>
           </div>
         </motion.div>
       </div>
 
-      {/* ─── DUAL OPTIONS: Movie Watched & Watched Series ─── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {/* Option 1: Movie Watched */}
+      {/* ─── 4 MAIN OPTIONS SELECTOR GRID ─── */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Option 1: Watched Movies */}
         <button
-          onClick={() => {
-            setActiveSection("movies");
-            setSelectedYear("all");
-            setSearchFilter("");
-          }}
+          onClick={() => handleSelectSection("movies")}
           className={cn(
-            "relative flex items-center justify-between p-5 rounded-2xl border text-left transition-all duration-300 group shadow-md",
+            "relative flex items-center justify-between p-4 sm:p-5 rounded-2xl border text-left transition-all duration-300 group shadow-md",
             activeSection === "movies"
-              ? "bg-gradient-to-r from-purple-950/70 via-purple-900/30 to-card border-purple-500 shadow-purple-950/50 ring-1 ring-purple-500/60"
+              ? "bg-gradient-to-r from-purple-950/80 via-purple-900/40 to-card border-purple-500 shadow-purple-950/60 ring-2 ring-purple-500/60"
               : "bg-card/60 backdrop-blur-sm border-border/60 hover:bg-card hover:border-purple-500/40"
           )}
         >
-          <div className="flex items-center gap-4 min-w-0">
+          <div className="flex items-center gap-3.5 min-w-0">
             <div
               className={cn(
-                "flex h-12 w-12 items-center justify-center rounded-2xl border transition-all shrink-0",
+                "flex h-11 w-11 items-center justify-center rounded-2xl border transition-all shrink-0",
                 activeSection === "movies"
                   ? "bg-purple-600 text-white border-purple-400 shadow-md shadow-purple-900/50"
                   : "bg-purple-600/20 text-purple-400 border-purple-500/30 group-hover:scale-105"
               )}
             >
-              <Film className="h-6 w-6" />
+              <Film className="h-5 w-5" />
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <h3 className="text-lg font-extrabold text-white group-hover:text-purple-300 transition-colors">
-                  Movie Watched
+                <h3 className="text-base font-extrabold text-white group-hover:text-purple-300 transition-colors">
+                  Watched Movies
                 </h3>
                 <span
                   className={cn(
-                    "text-xs px-2.5 py-0.5 rounded-full font-bold",
+                    "text-[10px] px-2 py-0.5 rounded-full font-bold",
                     activeSection === "movies"
                       ? "bg-purple-500 text-white"
                       : "bg-purple-500/20 text-purple-300 border border-purple-500/30"
@@ -548,57 +684,48 @@ export default function DashboardPage() {
                   {watchedMovies.length}
                 </span>
               </div>
-              <p className="text-xs text-muted-foreground mt-0.5 truncate">
-                Feature films arranged year-wise (latest on top to oldest)
+              <p className="text-[11px] text-muted-foreground mt-0.5 truncate">
+                Feature films arranged year-wise
               </p>
             </div>
           </div>
-
-          <div
+          <ChevronRight
             className={cn(
-              "h-8 w-8 rounded-full flex items-center justify-center shrink-0 transition-transform",
-              activeSection === "movies"
-                ? "bg-purple-500 text-white"
-                : "text-muted-foreground group-hover:text-white"
+              "h-5 w-5 shrink-0 transition-transform",
+              activeSection === "movies" ? "text-purple-400 translate-x-0.5" : "text-muted-foreground"
             )}
-          >
-            <ChevronRight className="h-5 w-5" />
-          </div>
+          />
         </button>
 
         {/* Option 2: Watched Series */}
         <button
-          onClick={() => {
-            setActiveSection("series");
-            setSelectedYear("all");
-            setSearchFilter("");
-          }}
+          onClick={() => handleSelectSection("series")}
           className={cn(
-            "relative flex items-center justify-between p-5 rounded-2xl border text-left transition-all duration-300 group shadow-md",
+            "relative flex items-center justify-between p-4 sm:p-5 rounded-2xl border text-left transition-all duration-300 group shadow-md",
             activeSection === "series"
-              ? "bg-gradient-to-r from-blue-950/70 via-indigo-900/30 to-card border-blue-500 shadow-blue-950/50 ring-1 ring-blue-500/60"
+              ? "bg-gradient-to-r from-blue-950/80 via-blue-900/40 to-card border-blue-500 shadow-blue-950/60 ring-2 ring-blue-500/60"
               : "bg-card/60 backdrop-blur-sm border-border/60 hover:bg-card hover:border-blue-500/40"
           )}
         >
-          <div className="flex items-center gap-4 min-w-0">
+          <div className="flex items-center gap-3.5 min-w-0">
             <div
               className={cn(
-                "flex h-12 w-12 items-center justify-center rounded-2xl border transition-all shrink-0",
+                "flex h-11 w-11 items-center justify-center rounded-2xl border transition-all shrink-0",
                 activeSection === "series"
                   ? "bg-blue-600 text-white border-blue-400 shadow-md shadow-blue-900/50"
                   : "bg-blue-600/20 text-blue-400 border-blue-500/30 group-hover:scale-105"
               )}
             >
-              <Tv className="h-6 w-6" />
+              <Tv className="h-5 w-5" />
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <h3 className="text-lg font-extrabold text-white group-hover:text-blue-300 transition-colors">
+                <h3 className="text-base font-extrabold text-white group-hover:text-blue-300 transition-colors">
                   Watched Series
                 </h3>
                 <span
                   className={cn(
-                    "text-xs px-2.5 py-0.5 rounded-full font-bold",
+                    "text-[10px] px-2 py-0.5 rounded-full font-bold",
                     activeSection === "series"
                       ? "bg-blue-500 text-white"
                       : "bg-blue-500/20 text-blue-300 border border-blue-500/30"
@@ -607,123 +734,264 @@ export default function DashboardPage() {
                   {watchedSeries.length}
                 </span>
               </div>
-              <p className="text-xs text-muted-foreground mt-0.5 truncate">
-                Web series year-wise with season-by-season selection
+              <p className="text-[11px] text-muted-foreground mt-0.5 truncate">
+                Web series with season tracker
               </p>
             </div>
           </div>
-
-          <div
+          <ChevronRight
             className={cn(
-              "h-8 w-8 rounded-full flex items-center justify-center shrink-0 transition-transform",
-              activeSection === "series"
-                ? "bg-blue-500 text-white"
-                : "text-muted-foreground group-hover:text-white"
+              "h-5 w-5 shrink-0 transition-transform",
+              activeSection === "series" ? "text-blue-400 translate-x-0.5" : "text-muted-foreground"
             )}
-          >
-            <ChevronRight className="h-5 w-5" />
+          />
+        </button>
+
+        {/* Option 3: Watched Animes */}
+        <button
+          onClick={() => {
+            handleSelectSection("animes");
+            setAnimeSubFilter("all");
+          }}
+          className={cn(
+            "relative flex items-center justify-between p-4 sm:p-5 rounded-2xl border text-left transition-all duration-300 group shadow-md",
+            activeSection === "animes"
+              ? "bg-gradient-to-r from-rose-950/80 via-rose-900/40 to-card border-rose-500 shadow-rose-950/60 ring-2 ring-rose-500/60"
+              : "bg-card/60 backdrop-blur-sm border-border/60 hover:bg-card hover:border-rose-500/40"
+          )}
+        >
+          <div className="flex items-center gap-3.5 min-w-0">
+            <div
+              className={cn(
+                "flex h-11 w-11 items-center justify-center rounded-2xl border transition-all shrink-0",
+                activeSection === "animes"
+                  ? "bg-rose-600 text-white border-rose-400 shadow-md shadow-rose-900/50"
+                  : "bg-rose-600/20 text-rose-400 border-rose-500/30 group-hover:scale-105"
+              )}
+            >
+              <Sparkles className="h-5 w-5" />
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <h3 className="text-base font-extrabold text-white group-hover:text-rose-300 transition-colors">
+                  Watched Animes
+                </h3>
+                <span
+                  className={cn(
+                    "text-[10px] px-2 py-0.5 rounded-full font-bold",
+                    activeSection === "animes"
+                      ? "bg-rose-500 text-white"
+                      : "bg-rose-500/20 text-rose-300 border border-rose-500/30"
+                  )}
+                >
+                  {watchedAnimes.length}
+                </span>
+              </div>
+              <p className="text-[11px] text-muted-foreground mt-0.5 truncate">
+                Anime series & movies by year
+              </p>
+            </div>
           </div>
+          <ChevronRight
+            className={cn(
+              "h-5 w-5 shrink-0 transition-transform",
+              activeSection === "animes" ? "text-rose-400 translate-x-0.5" : "text-muted-foreground"
+            )}
+          />
+        </button>
+
+        {/* Option 4: Watched Movie Series */}
+        <button
+          onClick={() => handleSelectSection("movie_series")}
+          className={cn(
+            "relative flex items-center justify-between p-4 sm:p-5 rounded-2xl border text-left transition-all duration-300 group shadow-md",
+            activeSection === "movie_series"
+              ? "bg-gradient-to-r from-indigo-950/80 via-indigo-900/40 to-card border-indigo-500 shadow-indigo-950/60 ring-2 ring-indigo-500/60"
+              : "bg-card/60 backdrop-blur-sm border-border/60 hover:bg-card hover:border-indigo-500/40"
+          )}
+        >
+          <div className="flex items-center gap-3.5 min-w-0">
+            <div
+              className={cn(
+                "flex h-11 w-11 items-center justify-center rounded-2xl border transition-all shrink-0",
+                activeSection === "movie_series"
+                  ? "bg-indigo-600 text-white border-indigo-400 shadow-md shadow-indigo-900/50"
+                  : "bg-indigo-600/20 text-indigo-400 border-indigo-500/30 group-hover:scale-105"
+              )}
+            >
+              <Layers className="h-5 w-5" />
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <h3 className="text-base font-extrabold text-white group-hover:text-indigo-300 transition-colors">
+                  Movie Series
+                </h3>
+                <span
+                  className={cn(
+                    "text-[10px] px-2 py-0.5 rounded-full font-bold",
+                    activeSection === "movie_series"
+                      ? "bg-indigo-500 text-white"
+                      : "bg-indigo-500/20 text-indigo-300 border border-indigo-500/30"
+                  )}
+                >
+                  {movieSeriesList.length}
+                </span>
+              </div>
+              <p className="text-[11px] text-muted-foreground mt-0.5 truncate">
+                Sequenced franchises in order
+              </p>
+            </div>
+          </div>
+          <ChevronRight
+            className={cn(
+              "h-5 w-5 shrink-0 transition-transform",
+              activeSection === "movie_series" ? "text-indigo-400 translate-x-0.5" : "text-muted-foreground"
+            )}
+          />
         </button>
       </div>
 
-      {/* ─── Search & Year Filters Bar for Active Watched Section ─── */}
-      <div className="rounded-2xl bg-card/60 backdrop-blur-md border border-border/60 p-4 sm:p-5 shadow-lg space-y-4">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-          {/* Search input */}
-          <div className="relative flex-1">
-            <Search className="absolute left-3.5 top-3 h-4 w-4 text-muted-foreground" />
-            <input
-              type="text"
-              value={searchFilter}
-              onChange={(e) => setSearchFilter(e.target.value)}
-              placeholder={
-                activeSection === "movies"
-                  ? "Filter your watched movies..."
-                  : "Filter your watched web series..."
-              }
-              className="w-full rounded-xl bg-background/80 border border-border/80 pl-10 pr-10 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-purple-500"
-            />
-            {searchFilter && (
-              <button
-                onClick={() => setSearchFilter("")}
-                className="absolute right-3.5 top-3 text-muted-foreground hover:text-white"
-                aria-label="Clear search"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            )}
-          </div>
-
-          {/* Catalog count badge */}
-          <div className="flex items-center gap-2 shrink-0">
-            <span className="text-xs font-semibold text-muted-foreground">
-              {activeSection === "movies"
-                ? `${filteredMovies.length} of ${watchedMovies.length} Movies`
-                : `${filteredSeries.length} of ${watchedSeries.length} Series`}
-            </span>
-          </div>
-        </div>
-
-        {/* Year jump selector pills */}
-        {availableYears.length > 0 && (
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-1 scrollbar-none">
-            <span className="text-xs font-semibold text-muted-foreground shrink-0 mr-1 flex items-center gap-1">
-              <Calendar className="h-3 w-3 text-purple-400" />
-              Year:
-            </span>
-
-            <button
-              onClick={() => setSelectedYear("all")}
-              className={cn(
-                "px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-all border shrink-0",
-                selectedYear === "all"
-                  ? "bg-purple-600 border-purple-500 text-white shadow-md shadow-purple-900/40"
-                  : "bg-background/60 border-border/60 text-muted-foreground hover:text-white"
-              )}
-            >
-              All Years ({activeSection === "movies" ? watchedMovies.length : watchedSeries.length})
-            </button>
-
-            {availableYears.map((yr) => {
-              const count = (activeSection === "movies" ? watchedMovies : watchedSeries).filter(
-                (item) => item.releaseDate && String(item.releaseDate).startsWith(yr)
-              ).length;
-
-              return (
+      {/* ─── Search & Year Filters Bar (For Options 1, 2, 3) ─── */}
+      {activeSection !== "movie_series" && (
+        <div className="rounded-2xl bg-card/60 backdrop-blur-md border border-border/60 p-4 sm:p-5 shadow-lg space-y-4">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+            {/* Search input */}
+            <div className="relative flex-1">
+              <Search className="absolute left-3.5 top-3 h-4 w-4 text-muted-foreground" />
+              <input
+                type="text"
+                value={searchFilter}
+                onChange={(e) => setSearchFilter(e.target.value)}
+                placeholder={
+                  activeSection === "movies"
+                    ? "Filter your watched feature films..."
+                    : activeSection === "series"
+                    ? "Filter your watched web series..."
+                    : "Filter your watched animes..."
+                }
+                className="w-full rounded-xl bg-background/80 border border-border/80 pl-10 pr-10 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-purple-500"
+              />
+              {searchFilter && (
                 <button
-                  key={yr}
-                  onClick={() => setSelectedYear(yr)}
+                  onClick={() => setSearchFilter("")}
+                  className="absolute right-3.5 top-3 text-muted-foreground hover:text-white"
+                  aria-label="Clear search"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+
+            {/* Sub-filter tabs for Anime */}
+            {activeSection === "animes" && (
+              <div className="flex items-center gap-1.5 shrink-0 p-1 bg-background/60 rounded-xl border border-border/60">
+                <button
+                  type="button"
+                  onClick={() => setAnimeSubFilter("all")}
                   className={cn(
-                    "px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-all border shrink-0",
-                    selectedYear === yr
-                      ? "bg-purple-600 border-purple-500 text-white shadow-md shadow-purple-900/40"
-                      : "bg-background/60 border-border/60 text-muted-foreground hover:text-white hover:border-purple-500/40"
+                    "px-3 py-1 rounded-lg text-xs font-semibold transition-all",
+                    animeSubFilter === "all" ? "bg-rose-600 text-white shadow-sm" : "text-muted-foreground hover:text-white"
                   )}
                 >
-                  {yr} ({count})
+                  All Anime ({watchedAnimes.length})
                 </button>
-              );
-            })}
-          </div>
-        )}
-      </div>
+                <button
+                  type="button"
+                  onClick={() => setAnimeSubFilter("series")}
+                  className={cn(
+                    "px-3 py-1 rounded-lg text-xs font-semibold transition-all",
+                    animeSubFilter === "series" ? "bg-rose-600 text-white shadow-sm" : "text-muted-foreground hover:text-white"
+                  )}
+                >
+                  Series ({watchedAnimes.filter(isAnimeSeries).length})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAnimeSubFilter("movies")}
+                  className={cn(
+                    "px-3 py-1 rounded-lg text-xs font-semibold transition-all",
+                    animeSubFilter === "movies" ? "bg-rose-600 text-white shadow-sm" : "text-muted-foreground hover:text-white"
+                  )}
+                >
+                  Movies ({watchedAnimes.filter(isAnimeMovie).length})
+                </button>
+              </div>
+            )}
 
-      {/* ─── YEAR-WISE CONTENT DISPLAY ─── */}
+            {/* Catalog count badge */}
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="text-xs font-semibold text-muted-foreground">
+                {activeSection === "movies"
+                  ? `${filteredMovies.length} of ${watchedMovies.length} Movies`
+                  : activeSection === "series"
+                  ? `${filteredSeries.length} of ${watchedSeries.length} Series`
+                  : `${filteredAnimes.length} of ${watchedAnimes.length} Animes`}
+              </span>
+            </div>
+          </div>
+
+          {/* Year jump selector pills */}
+          {availableYears.length > 0 && (
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-1 scrollbar-none">
+              <span className="text-xs font-semibold text-muted-foreground shrink-0 mr-1 flex items-center gap-1">
+                <Calendar className="h-3 w-3 text-purple-400" />
+                Release Year:
+              </span>
+
+              <button
+                onClick={() => setSelectedYear("all")}
+                className={cn(
+                  "px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-all border shrink-0",
+                  selectedYear === "all"
+                    ? "bg-purple-600 border-purple-500 text-white shadow-md shadow-purple-900/40"
+                    : "bg-background/60 border-border/60 text-muted-foreground hover:text-white"
+                )}
+              >
+                All Years
+              </button>
+
+              {availableYears.map((yr) => {
+                const count = (
+                  activeSection === "movies"
+                    ? watchedMovies
+                    : activeSection === "series"
+                    ? watchedSeries
+                    : watchedAnimes
+                ).filter((item) => item.releaseDate && String(item.releaseDate).startsWith(yr)).length;
+
+                return (
+                  <button
+                    key={yr}
+                    onClick={() => setSelectedYear(yr)}
+                    className={cn(
+                      "px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-all border shrink-0",
+                      selectedYear === yr
+                        ? "bg-purple-600 border-purple-500 text-white shadow-md shadow-purple-900/40"
+                        : "bg-background/60 border-border/60 text-muted-foreground hover:text-white hover:border-purple-500/40"
+                    )}
+                  >
+                    {yr} ({count})
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ─── MAIN CONTENT DISPLAY FOR ACTIVE SECTION ─── */}
       <div className="space-y-10">
         {isLoadingContent ? (
           <div className="space-y-8 animate-pulse">
             <div className="h-8 w-40 bg-card rounded-xl" />
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
               {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div
-                  key={i}
-                  className="aspect-[2/3] rounded-2xl bg-card border border-border/40"
-                />
+                <div key={i} className="aspect-[2/3] rounded-2xl bg-card border border-border/40" />
               ))}
             </div>
           </div>
         ) : activeSection === "movies" ? (
-          /* ─── MOVIES YEAR-WISE ─── */
+          /* ─── 1st OPTION: WATCHED MOVIES YEAR-WISE (Anime & Series Removed) ─── */
           movieYearGroups.length > 0 ? (
             movieYearGroups.map((group) => (
               <div key={group.year} className="space-y-4">
@@ -784,8 +1052,8 @@ export default function DashboardPage() {
               }}
             />
           )
-        ) : (
-          /* ─── WEB SERIES YEAR-WISE WITH SEASON SELECTION ─── */
+        ) : activeSection === "series" ? (
+          /* ─── 2nd OPTION: WATCHED WEBSERIES WITH SEASON SELECTION ─── */
           seriesYearGroups.length > 0 ? (
             seriesYearGroups.map((group) => (
               <div key={group.year} className="space-y-4">
@@ -841,13 +1109,12 @@ export default function DashboardPage() {
                             </div>
                           )}
 
-                          {/* Top badge: Watched series checkmark */}
+                          {/* Top badge */}
                           <div className="absolute top-2.5 left-2.5 flex items-center gap-1 px-2 py-1 rounded-md bg-emerald-600/90 backdrop-blur-md text-white text-[10px] font-bold shadow-md">
                             <Check className="h-3 w-3 stroke-[3]" />
-                            <span>WATCHED</span>
+                            <span>SERIES</span>
                           </div>
 
-                          {/* Rating badge if present */}
                           {series.voteAverage && (
                             <div className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-1 rounded-md bg-black/70 backdrop-blur-md text-amber-300 text-[10px] font-bold">
                               <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
@@ -861,10 +1128,10 @@ export default function DashboardPage() {
                               <Layers className="h-5 w-5" />
                             </div>
                             <span className="text-xs font-bold text-white leading-tight">
-                              Select Seasons
+                              Season Tracker
                             </span>
                             <span className="text-[10px] text-zinc-300 mt-1">
-                              Tap to track season progress
+                              View watched & unwatched
                             </span>
                           </div>
                         </div>
@@ -913,6 +1180,149 @@ export default function DashboardPage() {
               }}
             />
           )
+        ) : activeSection === "animes" ? (
+          /* ─── 3rd OPTION: WATCHED ANIMES YEAR-WISE (Anime Series & Movies) ─── */
+          animeYearGroups.length > 0 ? (
+            animeYearGroups.map((group) => (
+              <div key={group.year} className="space-y-4">
+                {/* Year Header */}
+                <div className="flex items-center gap-3 pb-2 border-b border-border/40">
+                  <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-rose-950/60 border border-rose-500/40 text-rose-300 font-extrabold text-sm tracking-wide shadow-sm">
+                    <Sparkles className="h-3.5 w-3.5 text-rose-400" />
+                    <span>{group.year}</span>
+                  </div>
+                  <span className="text-xs text-muted-foreground font-semibold">
+                    {group.items.length} {group.items.length === 1 ? "Anime" : "Animes"}
+                  </span>
+                  <div className="h-px flex-1 bg-gradient-to-r from-rose-500/30 via-border/40 to-transparent" />
+                </div>
+
+                {/* Animes Grid for this year */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
+                  {group.items.map((anime) => {
+                    const isSeries = anime.contentType === "tvshow";
+                    const watchedSeasonsList = parseWatchedSeasons(anime.notes);
+                    const seasonsLabel =
+                      watchedSeasonsList.length > 0
+                        ? `${watchedSeasonsList.length} Season${watchedSeasonsList.length > 1 ? "s" : ""} Watched`
+                        : "Track Seasons";
+
+                    return (
+                      <div
+                        key={anime.id}
+                        onClick={() => {
+                          if (isSeries) {
+                            setSelectedSeriesForSeasons({
+                              id: anime.id,
+                              tmdbId: anime.tmdbId,
+                              title: anime.title,
+                              posterPath: anime.posterPath,
+                              backdropPath: anime.backdropPath,
+                              releaseDate: anime.releaseDate,
+                              notes: anime.notes,
+                            });
+                          } else {
+                            setSelectedItem({
+                              id: anime.tmdbId,
+                              type: "movie",
+                            });
+                          }
+                        }}
+                        className="group relative cursor-pointer flex flex-col rounded-2xl overflow-hidden bg-card/60 border border-border/60 hover:border-rose-500/60 hover:shadow-xl hover:shadow-rose-950/40 transition-all duration-300"
+                      >
+                        {/* Poster */}
+                        <div className="relative aspect-[2/3] w-full bg-muted overflow-hidden">
+                          {anime.posterPath ? (
+                            <Image
+                              src={getImageUrl(anime.posterPath, "w342")}
+                              alt={anime.title}
+                              fill
+                              className="object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center bg-rose-950/30 text-rose-400">
+                              <Sparkles className="h-10 w-10" />
+                            </div>
+                          )}
+
+                          {/* Top badge */}
+                          <div className="absolute top-2.5 left-2.5 flex items-center gap-1 px-2 py-1 rounded-md bg-rose-600/90 backdrop-blur-md text-white text-[10px] font-bold shadow-md">
+                            <span>{isSeries ? "ANIME TV" : "ANIME MOVIE"}</span>
+                          </div>
+
+                          {anime.voteAverage && (
+                            <div className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-1 rounded-md bg-black/70 backdrop-blur-md text-amber-300 text-[10px] font-bold">
+                              <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                              <span>{anime.voteAverage.toFixed(1)}</span>
+                            </div>
+                          )}
+
+                          {/* Hover Overlay */}
+                          <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center p-3 text-center">
+                            <div className="h-10 w-10 rounded-full bg-rose-600 text-white flex items-center justify-center shadow-lg mb-2 transform group-hover:scale-110 transition-transform">
+                              {isSeries ? <Layers className="h-5 w-5" /> : <Clapperboard className="h-5 w-5" />}
+                            </div>
+                            <span className="text-xs font-bold text-white leading-tight">
+                              {isSeries ? "Track Seasons" : "View Movie Details"}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Info */}
+                        <div className="p-3 flex flex-col flex-1 justify-between gap-2">
+                          <div>
+                            <h4 className="text-xs sm:text-sm font-bold text-white group-hover:text-rose-300 transition-colors line-clamp-1">
+                              {anime.title}
+                            </h4>
+                            <p className="text-[11px] text-muted-foreground mt-0.5">
+                              {anime.releaseDate ? formatYear(anime.releaseDate) : "Anime"} •{" "}
+                              {isSeries ? "Series" : "Movie"}
+                            </p>
+                          </div>
+
+                          {isSeries && (
+                            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-rose-950/50 border border-rose-500/30 text-rose-300 text-[10px] font-semibold">
+                              <CheckCircle2 className="h-3 w-3 text-rose-400 shrink-0" />
+                              <span className="truncate">{seasonsLabel}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ))
+          ) : (
+            <EmptyState
+              preset="history"
+              title={searchFilter ? "No anime matches your search" : "No watched animes yet"}
+              description={
+                searchFilter
+                  ? "Try searching for a different anime title or reset the year filter."
+                  : "Watch anime series like Bleach, Jujutsu Kaisen, or movies like Your Name, and they will automatically appear here!"
+              }
+              action={{
+                label: searchFilter ? "Clear Filter" : "Browse Animation & Anime",
+                href: searchFilter ? undefined : "/animation",
+                onClick: searchFilter
+                  ? () => {
+                      setSearchFilter("");
+                      setSelectedYear("all");
+                    }
+                  : undefined,
+              }}
+            />
+          )
+        ) : (
+          /* ─── 4th OPTION: WATCHED MOVIE SERIES (Sequenced in Chronological Release Order) ─── */
+          <MovieSeriesSection
+            seriesList={movieSeriesList}
+            isLoading={isLoadingSeriesList}
+            onRefresh={fetchMovieSeries}
+            onSelectMovie={(tmdbId) => setSelectedItem({ id: tmdbId, type: "movie" })}
+            onToggleWatchEntry={handleToggleWatchMovieSeriesEntry}
+          />
         )}
       </div>
 
@@ -931,7 +1341,7 @@ export default function DashboardPage() {
               type="text"
               value={quickSearchQuery}
               onChange={(e) => setQuickSearchQuery(e.target.value)}
-              placeholder="Find any movie or TV series..."
+              placeholder="Find any movie, web series, or anime..."
               className="w-full rounded-xl bg-background/80 border border-border/80 px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-purple-500"
             />
             <button
@@ -1018,7 +1428,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* ─── Season Selection Modal (for Watched Series) ─── */}
+      {/* ─── Season Selection Modal (for Watched Series & Anime Series) ─── */}
       {selectedSeriesForSeasons && (
         <SeasonSelectModal
           isOpen={Boolean(selectedSeriesForSeasons)}
@@ -1038,10 +1448,12 @@ export default function DashboardPage() {
           onWatchlistChange={() => {
             fetchStats();
             fetchWatchedLists();
+            fetchMovieSeries();
           }}
           onWatchedChange={() => {
             fetchStats();
             fetchWatchedLists();
+            fetchMovieSeries();
           }}
         />
       )}
@@ -1119,5 +1531,20 @@ export default function DashboardPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="py-24 flex flex-col items-center justify-center gap-3">
+          <div className="h-8 w-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
+          <p className="text-sm text-muted-foreground font-semibold">Loading Cinematic Dashboard...</p>
+        </div>
+      }
+    >
+      <DashboardPageContent />
+    </Suspense>
   );
 }
