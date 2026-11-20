@@ -52,10 +52,14 @@ function LoginForm() {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [hasGoogleProvider, setHasGoogleProvider] = useState<boolean | null>(null);
   const [errorMessage, setErrorMessage] = useState(
-    urlError === "OAuthSignin" || urlError === "OAuthCallback" || urlError === "Configuration"
+    urlError === "OAuthAccountNotLinked"
+      ? "This email was originally registered with OTP/Password. Automatic linking is now enabled—please click Continue with Google again to connect and sign in."
+      : urlError === "OAuthSignin" || urlError === "OAuthCallback" || urlError === "Configuration"
       ? "Google Sign-In is not configured yet. It requires GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in Vercel. Please sign in with Email or OTP."
       : urlError === "CredentialsSignin"
       ? "Invalid email or password."
+      : urlError
+      ? `Authentication error: ${urlError}. Please try again.`
       : ""
   );
 

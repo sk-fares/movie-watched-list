@@ -13,6 +13,7 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      allowDangerousEmailAccountLinking: true,
     })
   );
 }
@@ -122,7 +123,10 @@ export const authOptions: NextAuthOptions = {
     error: "/login",
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async signIn({ user, account, profile }) {
+      return true;
+    },
+    async jwt({ token, user, account }) {
       if (user) {
         token.id = user.id;
       }
@@ -130,7 +134,7 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       if (session.user) {
-        (session.user as any).id = token.id;
+        (session.user as any).id = token.id || token.sub;
       }
       return session;
     },
