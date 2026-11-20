@@ -48,7 +48,17 @@ function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [hasGoogleProvider, setHasGoogleProvider] = useState<boolean | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    fetch("/api/auth/providers")
+      .then((res) => res.json())
+      .then((data) => {
+        setHasGoogleProvider(Boolean(data?.google));
+      })
+      .catch(() => setHasGoogleProvider(false));
+  }, []);
 
   // Countdown timer for resend code
   useEffect(() => {
@@ -248,6 +258,14 @@ function RegisterForm() {
   };
 
   const handleGoogleSignUp = async () => {
+    if (hasGoogleProvider === false) {
+      setErrorMessage(
+        "Google Sign-In is not enabled yet. It requires GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in your Vercel Environment Variables. Please create your account with Email and Password below."
+      );
+      toast.error("Google OAuth is not configured yet.", { icon: "⚠️" });
+      return;
+    }
+
     try {
       setIsGoogleLoading(true);
       setErrorMessage("");

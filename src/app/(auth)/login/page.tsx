@@ -50,13 +50,23 @@ function LoginForm() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [hasGoogleProvider, setHasGoogleProvider] = useState<boolean | null>(null);
   const [errorMessage, setErrorMessage] = useState(
-    urlError === "OAuthSignin" || urlError === "OAuthCallback"
-      ? "Google OAuth is not configured yet. Please sign in with Email or OTP."
+    urlError === "OAuthSignin" || urlError === "OAuthCallback" || urlError === "Configuration"
+      ? "Google Sign-In is not configured yet. It requires GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in Vercel. Please sign in with Email or OTP."
       : urlError === "CredentialsSignin"
       ? "Invalid email or password."
       : ""
   );
+
+  useEffect(() => {
+    fetch("/api/auth/providers")
+      .then((res) => res.json())
+      .then((data) => {
+        setHasGoogleProvider(Boolean(data?.google));
+      })
+      .catch(() => setHasGoogleProvider(false));
+  }, []);
 
   useEffect(() => {
     if (wasVerified) {
@@ -200,6 +210,14 @@ function LoginForm() {
   };
 
   const handleGoogleSignIn = async () => {
+    if (hasGoogleProvider === false) {
+      setErrorMessage(
+        "Google Sign-In is not enabled yet. It requires GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in your Vercel Environment Variables. Please use Email OTP or Password login."
+      );
+      toast.error("Google OAuth is not configured yet.", { icon: "⚠️" });
+      return;
+    }
+
     try {
       setIsGoogleLoading(true);
       setErrorMessage("");
