@@ -141,7 +141,7 @@ export const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
       const isTv =
         item.media_type === "tv" ||
         (!item.media_type && Boolean(item.first_air_date));
-      const targetUrl = isTv ? `/tv/${item.id}` : `/movies/${item.id}`;
+      const targetUrl = isTv ? `/content/tv/${item.id}` : `/content/movie/${item.id}`;
       router.push(targetUrl);
     };
 

@@ -402,6 +402,7 @@ function SeriesPageContent() {
                   isWatchlisted={isSeriesWatchlisted}
                   onWatchedChange={(watched) => handleWatchedChange(series.id, watched)}
                   onWatchlistChange={(inList) => handleWatchlistChange(series.id, inList)}
+                  onSelect={() => setSelectedSeriesId(series.id)}
                 />
               </div>
             );

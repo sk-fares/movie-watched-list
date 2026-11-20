@@ -13,6 +13,20 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/movies/:id",
+        destination: "/content/movie/:id",
+        permanent: false,
+      },
+      {
+        source: "/tv/:id",
+        destination: "/content/tv/:id",
+        permanent: false,
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

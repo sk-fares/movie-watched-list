@@ -466,6 +466,12 @@ export default function DiscoverPage() {
                     isWatchlisted={watchlistIds.has(item.id)}
                     onWatchedChange={(watched) => handleWatchedChange(item.id, watched)}
                     onWatchlistChange={(inList) => handleWatchlistChange(item.id, inList)}
+                    onSelect={() =>
+                      setSelectedDetail({
+                        id: item.id,
+                        type: item.media_type === "tv" ? "tv" : "movie",
+                      })
+                    }
                   />
                 </div>
               ))}
@@ -561,6 +567,12 @@ export default function DiscoverPage() {
                     isWatchlisted={watchlistIds.has(item.id)}
                     onWatchedChange={(watched) => handleWatchedChange(item.id, watched)}
                     onWatchlistChange={(inList) => handleWatchlistChange(item.id, inList)}
+                    onSelect={() =>
+                      setSelectedDetail({
+                        id: item.id,
+                        type: item.media_type === "tv" ? "tv" : "movie",
+                      })
+                    }
                   />
                   </div>
                 ))}
@@ -621,6 +633,12 @@ export default function DiscoverPage() {
                     isWatchlisted={watchlistIds.has(item.id)}
                     onWatchedChange={(watched) => handleWatchedChange(item.id, watched)}
                     onWatchlistChange={(inList) => handleWatchlistChange(item.id, inList)}
+                    onSelect={() =>
+                      setSelectedDetail({
+                        id: item.id,
+                        type: item.media_type === "tv" ? "tv" : "movie",
+                      })
+                    }
                   />
                   </div>
                 ))}
@@ -683,6 +701,12 @@ export default function DiscoverPage() {
                     isWatchlisted={watchlistIds.has(item.id)}
                     onWatchedChange={(watched) => handleWatchedChange(item.id, watched)}
                     onWatchlistChange={(inList) => handleWatchlistChange(item.id, inList)}
+                    onSelect={() =>
+                      setSelectedDetail({
+                        id: item.id,
+                        type: item.media_type === "tv" ? "tv" : "movie",
+                      })
+                    }
                   />
                   </div>
                 ))}

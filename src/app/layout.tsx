@@ -22,8 +22,20 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Movie Watched List Team" }],
   creator: "Movie Watched List",
+  manifest: "/manifest.webmanifest",
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Movie Watched List",
   },
   openGraph: {
     type: "website",

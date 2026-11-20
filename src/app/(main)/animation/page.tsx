@@ -525,6 +525,7 @@ function AnimationPageContent() {
                   isWatchlisted={isItemWatchlisted}
                   onWatchedChange={(watched) => handleWatchedChange(item.id, watched)}
                   onWatchlistChange={(inList) => handleWatchlistChange(item.id, inList)}
+                  onSelect={() => setSelectedItem({ id: item.id, type: mediaType })}
                 />
               </div>
             );

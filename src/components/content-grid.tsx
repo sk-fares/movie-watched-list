@@ -29,6 +29,7 @@ export interface ContentGridProps extends React.HTMLAttributes<HTMLDivElement> {
   emptyDescription?: string;
   emptyAction?: EmptyStateAction;
   onItemRemove?: (item: any) => void;
+  onItemSelect?: (item: any) => void;
   onItemWatchlistChange?: (inWatchlist: boolean, item: any) => void;
   onItemWatchedChange?: (watched: boolean, item: any) => void;
   pagination?: PaginationConfig;
@@ -49,6 +50,7 @@ export const ContentGrid = React.forwardRef<HTMLDivElement, ContentGridProps>(
       emptyDescription,
       emptyAction,
       onItemRemove,
+      onItemSelect,
       onItemWatchlistChange,
       onItemWatchedChange,
       pagination,
@@ -273,6 +275,7 @@ export const ContentGrid = React.forwardRef<HTMLDivElement, ContentGridProps>(
                   variant="grid"
                   priority={index < 6}
                   onRemove={onItemRemove}
+                  onSelect={onItemSelect}
                   onWatchlistChange={onItemWatchlistChange}
                   onWatchedChange={onItemWatchedChange}
                 />
@@ -294,6 +297,7 @@ export const ContentGrid = React.forwardRef<HTMLDivElement, ContentGridProps>(
                   variant="list"
                   priority={index < 4}
                   onRemove={onItemRemove}
+                  onSelect={onItemSelect}
                   onWatchlistChange={onItemWatchlistChange}
                   onWatchedChange={onItemWatchedChange}
                 />

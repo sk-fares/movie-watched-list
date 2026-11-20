@@ -47,6 +47,7 @@ export interface MovieCardProps
   onWatchlistChange?: (inWatchlist: boolean, item: any) => void;
   onWatchedChange?: (watched: boolean, item: any) => void;
   onRemove?: (item: any) => void;
+  onSelect?: (item: any) => void;
 }
 
 export const MovieCard = React.forwardRef<HTMLDivElement, MovieCardProps>(
@@ -65,6 +66,7 @@ export const MovieCard = React.forwardRef<HTMLDivElement, MovieCardProps>(
       onWatchlistChange,
       onWatchedChange,
       onRemove,
+      onSelect,
       className,
       ...props
     },
@@ -116,7 +118,15 @@ export const MovieCard = React.forwardRef<HTMLDivElement, MovieCardProps>(
       if (initialWatched !== undefined) setIsWatched(initialWatched);
     }, [initialWatched]);
 
-    const detailHref = isTv ? `/tv/${tmdbId}` : `/movies/${tmdbId}`;
+    const detailHref = isTv ? `/content/tv/${tmdbId}` : `/content/movie/${tmdbId}`;
+
+    const handleSelectClick = (e: React.MouseEvent) => {
+      if (onSelect) {
+        e.preventDefault();
+        e.stopPropagation();
+        onSelect(item);
+      }
+    };
 
     // Handle Watchlist toggle
     const handleWatchlistToggle = async (e: React.MouseEvent) => {
@@ -250,33 +260,66 @@ export const MovieCard = React.forwardRef<HTMLDivElement, MovieCardProps>(
           )}
           {...props}
         >
-          <Link href={detailHref} className="block relative aspect-[2/3] w-full rounded-lg overflow-hidden border border-border/50 bg-card">
-            <PosterImage
-              src={posterPath}
-              alt={title}
-              size="w185"
-              aspectRatio="poster"
-              priority={priority}
-              fallbackIcon={isTv ? "tv" : "movie"}
-            />
-            {voteAverage && voteAverage > 0 && (
-              <div className="absolute top-1.5 right-1.5">
-                <RatingStars
-                  rating={voteAverage}
-                  variant="badge"
-                  size="xs"
-                />
-              </div>
-            )}
-          </Link>
-          <div className="pt-1.5 px-0.5">
-            <Link
-              href={detailHref}
-              className="text-xs font-medium text-foreground hover:text-purple-400 line-clamp-1 transition-colors"
-              title={title}
-            >
-              {title}
+          {onSelect ? (
+            <div onClick={handleSelectClick} className="cursor-pointer block relative aspect-[2/3] w-full rounded-lg overflow-hidden border border-border/50 bg-card">
+              <PosterImage
+                src={posterPath}
+                alt={title}
+                size="w185"
+                aspectRatio="poster"
+                priority={priority}
+                fallbackIcon={isTv ? "tv" : "movie"}
+              />
+              {voteAverage && voteAverage > 0 && (
+                <div className="absolute top-1.5 right-1.5">
+                  <RatingStars
+                    rating={voteAverage}
+                    variant="badge"
+                    size="xs"
+                  />
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link href={detailHref} className="block relative aspect-[2/3] w-full rounded-lg overflow-hidden border border-border/50 bg-card">
+              <PosterImage
+                src={posterPath}
+                alt={title}
+                size="w185"
+                aspectRatio="poster"
+                priority={priority}
+                fallbackIcon={isTv ? "tv" : "movie"}
+              />
+              {voteAverage && voteAverage > 0 && (
+                <div className="absolute top-1.5 right-1.5">
+                  <RatingStars
+                    rating={voteAverage}
+                    variant="badge"
+                    size="xs"
+                  />
+                </div>
+              )}
             </Link>
+          )}
+          <div className="pt-1.5 px-0.5">
+            {onSelect ? (
+              <button
+                type="button"
+                onClick={handleSelectClick}
+                className="text-left text-xs font-medium text-foreground hover:text-purple-400 line-clamp-1 transition-colors w-full"
+                title={title}
+              >
+                {title}
+              </button>
+            ) : (
+              <Link
+                href={detailHref}
+                className="text-xs font-medium text-foreground hover:text-purple-400 line-clamp-1 transition-colors"
+                title={title}
+              >
+                {title}
+              </Link>
+            )}
             <p className="text-[10px] text-muted-foreground">
               {formatYear(releaseDate)}
             </p>
@@ -308,34 +351,65 @@ export const MovieCard = React.forwardRef<HTMLDivElement, MovieCardProps>(
           )}
 
           {/* Poster image thumbnail */}
-          <Link
-            href={detailHref}
-            className="relative w-20 sm:w-24 aspect-[2/3] rounded-lg overflow-hidden shrink-0 border border-border/40 shadow-sm"
-          >
-            <PosterImage
-              src={posterPath}
-              alt={title}
-              size="w185"
-              aspectRatio="poster"
-              priority={priority}
-              fallbackIcon={isTv ? "tv" : "movie"}
-            />
-            {isWatched && (
-              <div className="absolute bottom-1 right-1 bg-purple-600 text-white p-0.5 rounded shadow">
-                <Check className="h-3 w-3 stroke-[3]" />
-              </div>
-            )}
-          </Link>
+          {onSelect ? (
+            <div
+              onClick={handleSelectClick}
+              className="cursor-pointer relative w-20 sm:w-24 aspect-[2/3] rounded-lg overflow-hidden shrink-0 border border-border/40 shadow-sm"
+            >
+              <PosterImage
+                src={posterPath}
+                alt={title}
+                size="w185"
+                aspectRatio="poster"
+                priority={priority}
+                fallbackIcon={isTv ? "tv" : "movie"}
+              />
+              {isWatched && (
+                <div className="absolute bottom-1 right-1 bg-purple-600 text-white p-0.5 rounded shadow">
+                  <Check className="h-3 w-3 stroke-[3]" />
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link
+              href={detailHref}
+              className="relative w-20 sm:w-24 aspect-[2/3] rounded-lg overflow-hidden shrink-0 border border-border/40 shadow-sm"
+            >
+              <PosterImage
+                src={posterPath}
+                alt={title}
+                size="w185"
+                aspectRatio="poster"
+                priority={priority}
+                fallbackIcon={isTv ? "tv" : "movie"}
+              />
+              {isWatched && (
+                <div className="absolute bottom-1 right-1 bg-purple-600 text-white p-0.5 rounded shadow">
+                  <Check className="h-3 w-3 stroke-[3]" />
+                </div>
+              )}
+            </Link>
+          )}
 
           {/* Details column */}
           <div className="flex-1 min-w-0 space-y-1.5">
             <div className="flex flex-wrap items-center gap-2">
-              <Link
-                href={detailHref}
-                className="text-base sm:text-lg font-bold text-foreground hover:text-purple-400 transition-colors line-clamp-1"
-              >
-                {title}
-              </Link>
+              {onSelect ? (
+                <button
+                  type="button"
+                  onClick={handleSelectClick}
+                  className="text-left text-base sm:text-lg font-bold text-foreground hover:text-purple-400 transition-colors line-clamp-1"
+                >
+                  {title}
+                </button>
+              ) : (
+                <Link
+                  href={detailHref}
+                  className="text-base sm:text-lg font-bold text-foreground hover:text-purple-400 transition-colors line-clamp-1"
+                >
+                  {title}
+                </Link>
+              )}
 
               <span className="inline-flex items-center gap-1 text-[11px] font-mono uppercase px-2 py-0.5 rounded-full bg-muted/80 text-muted-foreground">
                 {isTv ? <Tv className="h-3 w-3 text-blue-400" /> : <Film className="h-3 w-3 text-purple-400" />}
@@ -455,18 +529,35 @@ export const MovieCard = React.forwardRef<HTMLDivElement, MovieCardProps>(
         {...props}
       >
         {/* Main Poster Container */}
-        <div className="relative aspect-[2/3] w-full overflow-hidden bg-muted/20">
-          <Link href={detailHref} className="block h-full w-full">
-            <PosterImage
-              src={posterPath}
-              alt={title}
-              size="w500"
-              aspectRatio="poster"
-              priority={priority}
-              fallbackIcon={isTv ? "tv" : "movie"}
-              className="h-full w-full"
-            />
-          </Link>
+        <div
+          className="relative aspect-[2/3] w-full overflow-hidden bg-muted/20 cursor-pointer"
+          onClick={handleSelectClick}
+        >
+          {onSelect ? (
+            <div className="block h-full w-full">
+              <PosterImage
+                src={posterPath}
+                alt={title}
+                size="w500"
+                aspectRatio="poster"
+                priority={priority}
+                fallbackIcon={isTv ? "tv" : "movie"}
+                className="h-full w-full"
+              />
+            </div>
+          ) : (
+            <Link href={detailHref} className="block h-full w-full">
+              <PosterImage
+                src={posterPath}
+                alt={title}
+                size="w500"
+                aspectRatio="poster"
+                priority={priority}
+                fallbackIcon={isTv ? "tv" : "movie"}
+                className="h-full w-full"
+              />
+            </Link>
+          )}
 
           {/* Top Badges Overlay */}
           <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none z-10">
@@ -571,14 +662,30 @@ export const MovieCard = React.forwardRef<HTMLDivElement, MovieCardProps>(
                         <span>Share link</span>
                       </DropdownMenu.Item>
 
-                      <DropdownMenu.Item asChild>
-                        <Link
-                          href={detailHref}
-                          className="flex cursor-pointer items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs outline-none hover:bg-purple-950/50 hover:text-purple-300 transition-colors"
-                        >
-                          <Film className="h-3.5 w-3.5" />
-                          <span>View Details</span>
-                        </Link>
+                      <DropdownMenu.Item
+                        onClick={(e) => {
+                          if (onSelect) {
+                            e.preventDefault();
+                            onSelect(item);
+                          }
+                        }}
+                        asChild={!onSelect}
+                        className="flex cursor-pointer items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs outline-none hover:bg-purple-950/50 hover:text-purple-300 transition-colors"
+                      >
+                        {onSelect ? (
+                          <>
+                            <Film className="h-3.5 w-3.5" />
+                            <span>View Details</span>
+                          </>
+                        ) : (
+                          <Link
+                            href={detailHref}
+                            className="flex cursor-pointer items-center gap-2"
+                          >
+                            <Film className="h-3.5 w-3.5" />
+                            <span>View Details</span>
+                          </Link>
+                        )}
                       </DropdownMenu.Item>
 
                       {onRemove && (
@@ -604,13 +711,24 @@ export const MovieCard = React.forwardRef<HTMLDivElement, MovieCardProps>(
         {/* Card Metadata / Body */}
         <div className="flex flex-1 flex-col justify-between p-3">
           <div className="space-y-1">
-            <Link
-              href={detailHref}
-              className="block font-semibold text-sm text-foreground hover:text-purple-400 transition-colors line-clamp-1"
-              title={title}
-            >
-              {title}
-            </Link>
+            {onSelect ? (
+              <button
+                type="button"
+                onClick={handleSelectClick}
+                className="block text-left font-semibold text-sm text-foreground hover:text-purple-400 transition-colors line-clamp-1 w-full"
+                title={title}
+              >
+                {title}
+              </button>
+            ) : (
+              <Link
+                href={detailHref}
+                className="block font-semibold text-sm text-foreground hover:text-purple-400 transition-colors line-clamp-1"
+                title={title}
+              >
+                {title}
+              </Link>
+            )}
 
             <div className="flex items-center justify-between text-xs text-muted-foreground pt-0.5">
               <span>{formatYear(releaseDate)}</span>

@@ -439,6 +439,7 @@ function MoviesPageContent() {
                   isWatchlisted={isMovieWatchlisted}
                   onWatchedChange={(watched) => handleWatchedChange(movie.id, watched)}
                   onWatchlistChange={(inList) => handleWatchlistChange(movie.id, inList)}
+                  onSelect={() => setSelectedMovieId(movie.id)}
                 />
               </div>
             );

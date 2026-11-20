@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { cn } from "@/lib/utils";
+import { PwaInstallButton } from "@/components/pwa-install-button";
 
 interface SidebarProps {
   className?: string;
@@ -300,6 +301,13 @@ export function Sidebar({ className, isMobileOpen, onMobileClose }: SidebarProps
               >
                 Browse Universes
               </Link>
+            </div>
+          )}
+
+          {/* PWA Phone Install Action */}
+          {!isCollapsed && (
+            <div className="mx-3 my-2">
+              <PwaInstallButton />
             </div>
           )}
         </div>

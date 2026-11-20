@@ -1043,6 +1043,12 @@ function DashboardPageContent() {
                         variant="grid"
                         isWatched={true}
                         chronoPosition={movie.chronoPosition}
+                        onSelect={() =>
+                          setSelectedItem({
+                            id: movie.tmdbId,
+                            type: "movie",
+                          })
+                        }
                       />
                     </div>
                   ))}
