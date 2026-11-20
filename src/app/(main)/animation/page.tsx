@@ -254,46 +254,23 @@ function AnimationPageContent() {
         totalP = Math.min(Math.max(tvData.total_pages || 1, movieData.total_pages || 1), 500);
       }
 
-      // ─── FILTERING LOGIC ───
+      // ─── FILTERING & STRICT DEDUPLICATION ───
       // If browsing (no search query) and hideWatched is true:
       // Filter out watched animation so user only discovers fresh, unwatched animation!
       if (!trimmedQuery && hideWatched) {
         results = results.filter((item: any) => !watchedIds.has(item.id));
-
-        // If filtering removed items, replenish from the next page
-        if (results.length < 18 && page < totalP) {
-          try {
-            let nextUrl = "";
-            if (activeTab === "anime_series") {
-              nextUrl = `/api/tmdb/discover?type=tv&with_genres=16&with_original_language=ja&sort_by=${sortBy}&page=${page + 1}`;
-            } else if (activeTab === "anime_movies") {
-              nextUrl = `/api/tmdb/discover?type=movie&with_genres=16&with_original_language=ja&sort_by=${sortBy}&page=${page + 1}`;
-            } else if (activeTab === "animated_series") {
-              nextUrl = `/api/tmdb/discover?type=tv&with_genres=16&without_original_language=ja&sort_by=${sortBy}&page=${page + 1}`;
-            } else if (activeTab === "animated_movies") {
-              nextUrl = `/api/tmdb/discover?type=movie&with_genres=16&sort_by=${sortBy}&page=${page + 1}`;
-            }
-            if (nextUrl) {
-              const nextRes = await fetch(nextUrl);
-              if (nextRes.ok) {
-                const nextData = await nextRes.json();
-                const nextResults = (nextData.results || [])
-                  .map((item: any) => ({
-                    ...item,
-                    media_type: activeTab.includes("series") ? "tv" : "movie",
-                    contentType: activeTab.includes("series") ? "tvshow" : "movie",
-                  }))
-                  .filter((item: any) => !watchedIds.has(item.id));
-                results = [...results, ...nextResults];
-              }
-            }
-          } catch (e) {
-            // Non-critical fallback
-          }
-        }
       }
 
-      setItemsList(results);
+      // Guarantee each title only appears once (no repeats across lists or pages)
+      const seen = new Set<string>();
+      const uniqueResults = results.filter((item: any) => {
+        const key = `${item.media_type || item.contentType || "item"}-${item.id}`;
+        if (!item.id || seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+
+      setItemsList(uniqueResults);
       setTotalPages(totalP);
     } catch (err) {
       console.error("Fetch animation error:", err);

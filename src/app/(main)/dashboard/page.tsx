@@ -192,23 +192,41 @@ function DashboardPageContent() {
     fetchMovieSeries();
   }, [fetchStats, fetchWatchedLists, fetchMovieSeries]);
 
-  // ─── CLASSIFIED CONTENT LISTS ──────────────────────────────────────────
+  // ─── CLASSIFIED CONTENT LISTS (GUARANTEED NO REPETITION) ──────────────────
 
-  // 1st Option: Pure Movies (Removed any anime or series mistakenly listed there)
+  // 1st Option: Pure Movies (Strictly unique, excluded any anime or TV series)
   const watchedMovies = React.useMemo(() => {
-    return rawWatchedMovies.filter((m) => isPureMovie(m));
+    const seen = new Set<number>();
+    return rawWatchedMovies.filter((m) => {
+      if (!isPureMovie(m)) return false;
+      if (seen.has(m.tmdbId)) return false;
+      seen.add(m.tmdbId);
+      return true;
+    });
   }, [rawWatchedMovies]);
 
-  // 2nd Option: Pure Web Series (Excluded anime series)
+  // 2nd Option: Pure Web Series (Strictly unique, excluded anime series)
   const watchedSeries = React.useMemo(() => {
-    return rawWatchedSeries.filter((s) => isPureSeries(s));
+    const seen = new Set<number>();
+    return rawWatchedSeries.filter((s) => {
+      if (!isPureSeries(s)) return false;
+      if (seen.has(s.tmdbId)) return false;
+      seen.add(s.tmdbId);
+      return true;
+    });
   }, [rawWatchedSeries]);
 
-  // 3rd Option: Watched Animes (Both anime series and anime movies combined)
+  // 3rd Option: Watched Animes (Both anime series and anime movies, strictly unique)
   const watchedAnimes = React.useMemo(() => {
     const fromMovies = rawWatchedMovies.filter((m) => isAnimeItem(m));
     const fromSeries = rawWatchedSeries.filter((s) => isAnimeItem(s));
-    return [...fromMovies, ...fromSeries];
+    const combined = [...fromMovies, ...fromSeries];
+    const seen = new Set<number>();
+    return combined.filter((a) => {
+      if (seen.has(a.tmdbId)) return false;
+      seen.add(a.tmdbId);
+      return true;
+    });
   }, [rawWatchedMovies, rawWatchedSeries]);
 
   // Handle season updates from SeasonSelectModal

@@ -12,9 +12,10 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const type = (searchParams.get("type") || "movie").toLowerCase();
     const timeWindow = searchParams.get("timeWindow") === "day" ? "day" : "week";
+    const page = parseInt(searchParams.get("page") || "1", 10);
 
     if (type === "tv" || type === "tvshow" || type === "series") {
-      const data = await getTrendingTVShows(timeWindow);
+      const data = await getTrendingTVShows(timeWindow, page);
       const tagged = (data.results || []).map((item: any) => ({
         ...item,
         media_type: "tv",
@@ -24,8 +25,8 @@ export async function GET(request: NextRequest) {
 
     if (type === "all") {
       const [moviesData, tvData] = await Promise.all([
-        getTrendingMovies(timeWindow).catch(() => ({ results: [] })),
-        getTrendingTVShows(timeWindow).catch(() => ({ results: [] })),
+        getTrendingMovies(timeWindow, page).catch(() => ({ results: [] })),
+        getTrendingTVShows(timeWindow, page).catch(() => ({ results: [] })),
       ]);
 
       const taggedMovies = (moviesData.results || []).map((m: any) => ({
@@ -43,7 +44,7 @@ export async function GET(request: NextRequest) {
       );
 
       return NextResponse.json({
-        page: 1,
+        page,
         results: combined,
         total_pages: Math.max(moviesData.total_pages || 1, tvData.total_pages || 1),
         total_results:
@@ -52,7 +53,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Default: movie
-    const data = await getTrendingMovies(timeWindow);
+    const data = await getTrendingMovies(timeWindow, page);
     const tagged = (data.results || []).map((item: any) => ({
       ...item,
       media_type: "movie",

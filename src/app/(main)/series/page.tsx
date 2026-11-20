@@ -120,7 +120,7 @@ function SeriesPageContent() {
       if (trimmedQuery) {
         url = `/api/tmdb/search?q=${encodeURIComponent(trimmedQuery)}&type=tv&page=${page}`;
       } else if (activeTab === "trending") {
-        url = `/api/tmdb/trending?type=tv&timeWindow=week`;
+        url = `/api/tmdb/trending?type=tv&timeWindow=week&page=${page}`;
       } else if (activeTab === "top_rated") {
         url = `/api/tmdb/discover?type=tv&sort_by=vote_average.desc&vote_count_gte=250&without_genres=16&page=${page}`;
         if (selectedGenreId > 0) url += `&with_genres=${selectedGenreId}`;
@@ -146,34 +146,22 @@ function SeriesPageContent() {
           contentType: "tvshow",
         }));
 
-      // ─── FILTERING LOGIC ───
+      // ─── FILTERING & STRICT DEDUPLICATION ───
       // If browsing (no search query) and hideWatched is true:
       // Filter out watched series so user only sees unwatched series!
       if (!trimmedQuery && hideWatched) {
         results = results.filter((t: any) => !watchedIds.has(t.id));
-
-        // If filtering removed series, replenish from next page
-        if (results.length < 18 && page < (data.total_pages || 1)) {
-          const nextUrl = url.includes("page=")
-            ? url.replace(/page=\d+/, `page=${page + 1}`)
-            : `${url}&page=${page + 1}`;
-          try {
-            const nextRes = await fetch(nextUrl);
-            if (nextRes.ok) {
-              const nextData = await nextRes.json();
-              const nextResults = (nextData.results || [])
-                .filter((t: any) => !t.genre_ids?.includes(16))
-                .map((t: any) => ({ ...t, media_type: "tv", contentType: "tvshow" }))
-                .filter((t: any) => !watchedIds.has(t.id));
-              results = [...results, ...nextResults];
-            }
-          } catch (e) {
-            // Non-critical fallback
-          }
-        }
       }
 
-      setSeriesList(results);
+      // Guarantee each web series only appears once (no repeats across lists or pages)
+      const seen = new Set<number>();
+      const uniqueResults = results.filter((t: any) => {
+        if (!t.id || seen.has(t.id)) return false;
+        seen.add(t.id);
+        return true;
+      });
+
+      setSeriesList(uniqueResults);
       setTotalPages(Math.min(data.total_pages || 1, 500));
     } catch (err) {
       console.error("Fetch series error:", err);

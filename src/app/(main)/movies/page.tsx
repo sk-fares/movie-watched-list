@@ -136,7 +136,7 @@ function MoviesPageContent() {
         // When searching, query TMDB search directly
         url = `/api/tmdb/search?q=${encodeURIComponent(trimmedQuery)}&type=movie&page=${page}`;
       } else if (activeTab === "trending") {
-        url = `/api/tmdb/trending?type=movie&timeWindow=week`;
+        url = `/api/tmdb/trending?type=movie&timeWindow=week&page=${page}`;
       } else if (activeTab === "top_rated") {
         url = `/api/tmdb/discover?type=movie&sort_by=vote_average.desc&vote_count_gte=350&without_genres=16&page=${page}`;
         if (selectedGenreId > 0) url += `&with_genres=${selectedGenreId}`;
@@ -166,34 +166,22 @@ function MoviesPageContent() {
           media_type: "movie",
         }));
 
-      // ─── FILTERING LOGIC ───
+      // ─── FILTERING & STRICT DEDUPLICATION ───
       // If user is NOT searching and hideWatched is true:
       // Filter out watched movies so the user discovers fresh, unwatched movies!
       if (!trimmedQuery && hideWatched) {
         results = results.filter((m: any) => !watchedIds.has(m.id));
-
-        // If filtering removed movies and we have few left, replenish from the next page
-        if (results.length < 18 && page < (data.total_pages || 1)) {
-          const nextUrl = url.includes("page=")
-            ? url.replace(/page=\d+/, `page=${page + 1}`)
-            : `${url}&page=${page + 1}`;
-          try {
-            const nextRes = await fetch(nextUrl);
-            if (nextRes.ok) {
-              const nextData = await nextRes.json();
-              const nextResults = (nextData.results || [])
-                .filter((m: any) => !m.genre_ids?.includes(16))
-                .map((m: any) => ({ ...m, media_type: "movie" }))
-                .filter((m: any) => !watchedIds.has(m.id));
-              results = [...results, ...nextResults];
-            }
-          } catch (e) {
-            // Non-critical fallback
-          }
-        }
       }
 
-      setMovies(results);
+      // Guarantee each movie only appears once (no repeats across lists or pages)
+      const seen = new Set<number>();
+      const uniqueResults = results.filter((m: any) => {
+        if (!m.id || seen.has(m.id)) return false;
+        seen.add(m.id);
+        return true;
+      });
+
+      setMovies(uniqueResults);
       setTotalPages(Math.min(data.total_pages || 1, 500));
     } catch (err) {
       console.error("Fetch movies error:", err);

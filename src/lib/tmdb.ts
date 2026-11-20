@@ -28,8 +28,8 @@ export async function getMovieDetails(tmdbId: number) {
   return tmdbFetch(`/movie/${tmdbId}`, { append_to_response: "credits,videos,similar,recommendations" });
 }
 
-export async function getTrendingMovies(timeWindow: "day" | "week" = "week") {
-  return tmdbFetch(`/trending/movie/${timeWindow}`);
+export async function getTrendingMovies(timeWindow: "day" | "week" = "week", page: number = 1) {
+  return tmdbFetch(`/trending/movie/${timeWindow}`, { page: String(page) });
 }
 
 export async function getPopularMovies(page: number = 1) {
@@ -66,8 +66,8 @@ export async function getTVSeasonDetails(tvId: number, seasonNumber: number) {
   return tmdbFetch(`/tv/${tvId}/season/${seasonNumber}`);
 }
 
-export async function getTrendingTVShows(timeWindow: "day" | "week" = "week") {
-  return tmdbFetch(`/trending/tv/${timeWindow}`);
+export async function getTrendingTVShows(timeWindow: "day" | "week" = "week", page: number = 1) {
+  return tmdbFetch(`/trending/tv/${timeWindow}`, { page: String(page) });
 }
 
 export async function getPopularTVShows(page: number = 1) {
