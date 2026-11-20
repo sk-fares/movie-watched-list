@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { MovieCard } from "@/components/movie-card";
 import { MovieDetailModal } from "@/components/movie-detail-modal";
 import { EmptyState } from "@/components/empty-state";
+import { PaginationBar } from "@/components/pagination-bar";
 
 type SeriesTab = "popular" | "trending" | "top_rated" | "on_the_air";
 
@@ -443,58 +444,14 @@ function SeriesPageContent() {
         />
       )}
 
-      {/* ─── Pagination Controls ─── */}
+      {/* ─── Centered Pagination Controls ─── */}
       {!isLoading && seriesList.length > 0 && totalPages > 1 && (
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-border/40 pt-6">
-          <p className="text-xs text-muted-foreground">
-            Page <span className="font-semibold text-white">{page}</span> of{" "}
-            <span className="font-semibold text-white">{totalPages}</span>
-          </p>
-
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={page <= 1}
-              onClick={() => handlePageChange(page - 1)}
-              className="gap-1 bg-card/60 border-border/60"
-            >
-              <ChevronLeft className="h-4 w-4" />
-              <span>Previous</span>
-            </Button>
-
-            {/* Quick Page Jump Buttons */}
-            <div className="hidden sm:flex items-center gap-1">
-              {[page - 1, page, page + 1]
-                .filter((p) => p >= 1 && p <= totalPages)
-                .map((p) => (
-                  <button
-                    key={p}
-                    onClick={() => handlePageChange(p)}
-                    className={cn(
-                      "h-8 w-8 rounded-lg text-xs font-semibold transition-all",
-                      p === page
-                        ? "bg-purple-600 text-white shadow-md shadow-purple-900/40"
-                        : "bg-card/60 text-muted-foreground hover:text-white"
-                    )}
-                  >
-                    {p}
-                  </button>
-                ))}
-            </div>
-
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={page >= totalPages}
-              onClick={() => handlePageChange(page + 1)}
-              className="gap-1 bg-card/60 border-border/60"
-            >
-              <span>Next</span>
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
+        <PaginationBar
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+          maxPageButtons={10}
+        />
       )}
 
       {/* ─── Detail Modal ─── */}
