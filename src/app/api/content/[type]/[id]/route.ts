@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAuthSession, getUserId } from "@/lib/session";
 import prisma from "@/lib/prisma";
 import { getMovieDetails, getTVShowDetails } from "@/lib/tmdb";
+import { getUniverseForItem } from "@/lib/curated-watchlist-data";
 
 export async function GET(
   req: NextRequest,
@@ -46,6 +47,9 @@ export async function GET(
       notes: null as string | null,
       franchiseInfo: null as any,
     };
+
+    const title = tmdbData.title || tmdbData.name || "";
+    const curatedUniverse = getUniverseForItem(tmdbId, title);
 
     if (session?.user) {
       const userId = getUserId(session);
@@ -105,14 +109,74 @@ export async function GET(
       userState.userRating = userRating?.rating ?? null;
       userState.userReview = userReview?.review ?? null;
       userState.notes = watchlistItem?.notes || watchedItem?.notes || null;
-      userState.franchiseInfo = franchiseEntry
-        ? {
-            franchiseId: franchiseEntry.franchiseId,
-            franchiseName: franchiseEntry.franchise.name,
-            sequenceNumber: franchiseEntry.sequenceNumber,
-            watched: franchiseEntry.watched,
-          }
-        : null;
+
+      if (curatedUniverse) {
+        const itemIds = curatedUniverse.items.map((it) => it.tmdbId);
+        const watchedUniverseItems = await prisma.watchedItem.findMany({
+          where: {
+            userId,
+            tmdbId: { in: itemIds },
+          },
+          select: { tmdbId: true },
+        });
+        const watchedSet = new Set(watchedUniverseItems.map((w) => w.tmdbId));
+        const watchedCount = curatedUniverse.items.filter((it) => watchedSet.has(it.tmdbId)).length;
+        const currentIdx = curatedUniverse.items.findIndex((it) => it.tmdbId === tmdbId);
+
+        userState.franchiseInfo = {
+          franchiseId: curatedUniverse.id,
+          franchiseName: curatedUniverse.name,
+          category: curatedUniverse.category,
+          sequenceNumber: currentIdx !== -1 ? currentIdx + 1 : (franchiseEntry?.sequenceNumber || 1),
+          totalParts: curatedUniverse.items.length,
+          watchedCount,
+          progressPercentage: Math.round((watchedCount / curatedUniverse.items.length) * 100),
+          watched: watchedSet.has(tmdbId),
+          items: curatedUniverse.items.map((it) => ({
+            id: it.tmdbId,
+            tmdbId: it.tmdbId,
+            title: it.title,
+            year: it.year,
+            role: it.role,
+            media_type: it.media_type || "movie",
+            posterPath: it.posterPath,
+            sequence: it.sequence,
+            isWatched: watchedSet.has(it.tmdbId),
+          })),
+        };
+      } else if (franchiseEntry) {
+        userState.franchiseInfo = {
+          franchiseId: franchiseEntry.franchiseId,
+          franchiseName: franchiseEntry.franchise.name,
+          sequenceNumber: franchiseEntry.sequenceNumber,
+          watched: franchiseEntry.watched,
+        };
+      }
+    } else {
+      if (curatedUniverse) {
+        const currentIdx = curatedUniverse.items.findIndex((it) => it.tmdbId === tmdbId);
+        userState.franchiseInfo = {
+          franchiseId: curatedUniverse.id,
+          franchiseName: curatedUniverse.name,
+          category: curatedUniverse.category,
+          sequenceNumber: currentIdx !== -1 ? currentIdx + 1 : 1,
+          totalParts: curatedUniverse.items.length,
+          watchedCount: 0,
+          progressPercentage: 0,
+          watched: false,
+          items: curatedUniverse.items.map((it) => ({
+            id: it.tmdbId,
+            tmdbId: it.tmdbId,
+            title: it.title,
+            year: it.year,
+            role: it.role,
+            media_type: it.media_type || "movie",
+            posterPath: it.posterPath,
+            sequence: it.sequence,
+            isWatched: false,
+          })),
+        };
+      }
     }
 
     return NextResponse.json({

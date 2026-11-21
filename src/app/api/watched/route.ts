@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAuthSession, getUserId } from "@/lib/session";
 import prisma from "@/lib/prisma";
 import { autoLinkMovieToSeries } from "@/lib/movie-series-detector";
+import { isAnimeItem, isPureMovie, isPureSeries } from "@/lib/anime-detector";
 
 export async function GET(req: NextRequest) {
   try {
@@ -27,7 +28,7 @@ export async function GET(req: NextRequest) {
       userId,
     };
 
-    if (contentType && contentType !== "all") {
+    if (contentType && contentType !== "all" && contentType !== "anime") {
       where.contentType = contentType;
     }
 
@@ -70,6 +71,8 @@ export async function GET(req: NextRequest) {
               backdropPath: true,
               collectionId: true,
               collectionName: true,
+              originalTitle: true,
+              genres: true,
             },
           },
           tvShow: {
@@ -77,6 +80,8 @@ export async function GET(req: NextRequest) {
               backdropPath: true,
               numberOfSeasons: true,
               numberOfEpisodes: true,
+              originalName: true,
+              genres: true,
             },
           },
         },
@@ -135,11 +140,13 @@ export async function GET(req: NextRequest) {
         tmdbId: item.tmdbId,
         contentType: item.contentType as "movie" | "tvshow" | "season" | "episode",
         title: item.title,
+        originalName: item.tvShow?.originalName || item.movie?.originalTitle || null,
         posterPath: item.posterPath,
         backdropPath: item.movie?.backdropPath || item.tvShow?.backdropPath || null,
+        numberOfSeasons: item.tvShow?.numberOfSeasons || null,
         releaseDate: item.releaseDate,
         voteAverage: item.voteAverage,
-        genres: item.genres,
+        genres: item.genres || item.tvShow?.genres || item.movie?.genres || null,
         runtime: item.movie?.runtime || null,
         watchedDate: item.watchedDate.toISOString(),
         chronoPosition: item.chronoPosition,
@@ -152,6 +159,21 @@ export async function GET(req: NextRequest) {
         createdAt: item.createdAt.toISOString(),
       };
     });
+
+    // Content Classification Filtering (Anime vs Pure Series vs Pure Movies)
+    if (contentType === "anime") {
+      enrichedItems = enrichedItems.filter(isAnimeItem);
+    } else if (
+      contentType === "tvshow" &&
+      (searchParams.get("pureSeries") === "true" || searchParams.get("excludeAnime") === "true")
+    ) {
+      enrichedItems = enrichedItems.filter(isPureSeries);
+    } else if (
+      contentType === "movie" &&
+      (searchParams.get("pureMovie") === "true" || searchParams.get("excludeAnime") === "true")
+    ) {
+      enrichedItems = enrichedItems.filter(isPureMovie);
+    }
 
     // Handle minRating filter if specified
     if (minRating) {
@@ -177,7 +199,11 @@ export async function GET(req: NextRequest) {
       where: { userId },
       select: {
         contentType: true,
-        movie: { select: { runtime: true } },
+        tmdbId: true,
+        title: true,
+        genres: true,
+        movie: { select: { runtime: true, originalTitle: true, genres: true } },
+        tvShow: { select: { originalName: true, genres: true, numberOfSeasons: true } },
       },
     });
 
@@ -186,8 +212,33 @@ export async function GET(req: NextRequest) {
       select: { rating: true },
     });
 
-    const totalMovies = allUserWatched.filter((i) => i.contentType === "movie").length;
-    const totalSeries = allUserWatched.filter((i) => i.contentType === "tvshow").length;
+    const totalMovies = allUserWatched.filter((i) => isPureMovie({
+      tmdbId: i.tmdbId,
+      title: i.title,
+      contentType: i.contentType,
+      genres: i.genres || i.movie?.genres,
+      originalTitle: i.movie?.originalTitle,
+    })).length;
+
+    const totalSeries = allUserWatched.filter((i) => isPureSeries({
+      tmdbId: i.tmdbId,
+      title: i.title,
+      contentType: i.contentType,
+      genres: i.genres || i.tvShow?.genres,
+      originalName: i.tvShow?.originalName,
+      numberOfSeasons: i.tvShow?.numberOfSeasons,
+    })).length;
+
+    const totalAnime = allUserWatched.filter((i) => isAnimeItem({
+      tmdbId: i.tmdbId,
+      title: i.title,
+      contentType: i.contentType,
+      genres: i.genres || i.tvShow?.genres || i.movie?.genres,
+      originalName: i.tvShow?.originalName,
+      originalTitle: i.movie?.originalTitle,
+      numberOfSeasons: i.tvShow?.numberOfSeasons,
+    })).length;
+
     const totalWatchTimeMinutes = allUserWatched.reduce(
       (sum, item) => sum + (item.movie?.runtime || 0),
       0
@@ -201,6 +252,7 @@ export async function GET(req: NextRequest) {
       totalWatched: allUserWatched.length,
       totalMovies,
       totalSeries,
+      totalAnime,
       totalWatchTimeMinutes,
       averageRating: parseFloat(avgRating.toFixed(1)),
     };

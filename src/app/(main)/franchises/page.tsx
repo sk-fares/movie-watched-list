@@ -41,6 +41,8 @@ import {
 } from "@/components/ui/dialog";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { PosterImage } from "@/components/poster-image";
+import { UniverseRelatedModal } from "@/components/universe-related-modal";
+import { ALL_CURATED_UNIVERSES } from "@/lib/curated-watchlist-data";
 import { useDebounce } from "@/hooks/use-debounce";
 import { cn, formatDate, formatYear } from "@/lib/utils";
 
@@ -81,81 +83,26 @@ interface Franchise {
 }
 
 interface UniversePreset {
-  id: number;
+  id: number | string;
+  universeId?: string;
   name: string;
   count: number;
-  category: "Superhero" | "Sci-Fi & Fantasy" | "Action & Crime" | "Animation" | "Horror & Thriller" | "Classic Sagas";
+  category:
+    | "Web Series & TV"
+    | "Anime Sagas"
+    | "Superhero"
+    | "Sci-Fi & Fantasy"
+    | "Action & Crime"
+    | "Animation"
+    | "Horror & Thriller"
+    | "Classic Sagas";
   poster?: string;
 }
 
-// ─── HUGE PRESET CATALOG (50+ Popular Universes) ──────────────────────────
-const POPULAR_UNIVERSES: UniversePreset[] = [
-  // ── Superhero ──
-  { id: 86311, name: "The Avengers / Marvel Cinematic Universe", count: 4, category: "Superhero", poster: "/yFSIUVTCvgYr05wtP0qdwuU3N2d.jpg" },
-  { id: 556, name: "Spider-Man (Sam Raimi Trilogy)", count: 3, category: "Superhero", poster: "/rPVOJq703q6zX9vjJ9aZ35f60J5.jpg" },
-  { id: 173710, name: "The Amazing Spider-Man Collection", count: 2, category: "Superhero", poster: "/bU3Nq6a4wX4uB1wX4uB1wX4uB1w.jpg" },
-  { id: 531241, name: "Spider-Man (MCU Homecoming Trilogy)", count: 3, category: "Superhero", poster: "/t3bhkrUX31QnZ51J8U6gT1z0kF5.jpg" },
-  { id: 952726, name: "Spider-Verse (Animated)", count: 2, category: "Superhero", poster: "/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg" },
-  { id: 263, name: "The Dark Knight Trilogy", count: 3, category: "Superhero", poster: "/3bgtU2x3a4k9J31qX7P70eE31L0.jpg" },
-  { id: 120794, name: "Batman (Original Anthology 1989-1997)", count: 4, category: "Superhero", poster: "/2bXGZLkuq61asKveaHkYxI8817.jpg" },
-  { id: 748, name: "X-Men Collection", count: 7, category: "Superhero", poster: "/1c2a1f11e93895e6f6630f0f49.jpg" },
-  { id: 93345, name: "The Wolverine Collection", count: 3, category: "Superhero", poster: "/9Dk3B0hW713dK7g9J4K2L6u5y2X.jpg" },
-  { id: 448150, name: "Deadpool Collection", count: 3, category: "Superhero", poster: "/yFSIUVTCvgYr05wtP0qdwuU3N2d.jpg" },
-  { id: 131296, name: "Iron Man Collection", count: 3, category: "Superhero", poster: "/7vAEN9l0AevX5n4L22hX9F1k4c.jpg" },
-  { id: 131295, name: "Captain America Collection", count: 3, category: "Superhero", poster: "/q4L8D8eT4o3k9W6b4u2X7y6j0m.jpg" },
-  { id: 131292, name: "Thor Collection", count: 4, category: "Superhero", poster: "/prSfAi1xGrhLQNxVSUFh61x940w.jpg" },
-  { id: 284433, name: "Guardians of the Galaxy Collection", count: 3, category: "Superhero", poster: "/nLBRD7UPR6GjmRiipVo2O1pa400.jpg" },
-
-  // ── Sci-Fi & Fantasy ──
-  { id: 10, name: "Star Wars Saga", count: 9, category: "Sci-Fi & Fantasy", poster: "/r8Ph5qVLud39e4465YVo07neQUS.jpg" },
-  { id: 1241, name: "Harry Potter & Wizarding World", count: 8, category: "Sci-Fi & Fantasy", poster: "/eVPs2Y0LyvTLZn6AP5Z6O2rtiGB.jpg" },
-  { id: 119, name: "The Lord of the Rings Collection", count: 3, category: "Sci-Fi & Fantasy", poster: "/p4UebmvvgdnJz9pT4yY2vHkL3Z.jpg" },
-  { id: 121938, name: "The Hobbit Collection", count: 3, category: "Sci-Fi & Fantasy", poster: "/1g0dhYtq4irTY1GPXvft6k4IRKS.jpg" },
-  { id: 2344, name: "The Matrix Collection", count: 4, category: "Sci-Fi & Fantasy", poster: "/dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg" },
-  { id: 328, name: "Jurassic Park & World Collection", count: 6, category: "Sci-Fi & Fantasy", poster: "/qIm2nHUQYHG9UJ19qoRBnWtEvk0.jpg" },
-  { id: 8650, name: "Transformers Collection", count: 7, category: "Sci-Fi & Fantasy", poster: "/7t0lC15F3iA6fG7jX8L4y3M1q9.jpg" },
-  { id: 391854, name: "Planet of the Apes (Reboot Saga)", count: 4, category: "Sci-Fi & Fantasy", poster: "/afk1i68Hl3qT8d0A1b6k7U5Y2v.jpg" },
-  { id: 8091, name: "Alien Collection", count: 6, category: "Sci-Fi & Fantasy", poster: "/2b3F3X1W8J4K7L5y9U6a2v0m1q.jpg" },
-  { id: 399, name: "Predator Collection", count: 5, category: "Sci-Fi & Fantasy", poster: "/4jV9lT4b2hX6y7U8w1m5k0q3a9.jpg" },
-  { id: 131635, name: "The Hunger Games Collection", count: 5, category: "Sci-Fi & Fantasy", poster: "/yK2kE12L8K2M9N6wU6b3h0i2v7M.jpg" },
-  { id: 33514, name: "The Twilight Saga", count: 5, category: "Sci-Fi & Fantasy", poster: "/p4UebmvvgdnJz9pT4yY2vHkL3Z.jpg" },
-  { id: 264, name: "Back to the Future Trilogy", count: 3, category: "Sci-Fi & Fantasy", poster: "/7t0lC15F3iA6fG7jX8L4y3M1q9.jpg" },
-  { id: 528, name: "Terminator Collection", count: 6, category: "Sci-Fi & Fantasy", poster: "/2bXGZLkuq61asKveaHkYxI8817.jpg" },
-  { id: 86036, name: "Men in Black Collection", count: 4, category: "Sci-Fi & Fantasy", poster: "/dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg" },
-  { id: 535313, name: "MonsterVerse (Godzilla & Kong)", count: 5, category: "Sci-Fi & Fantasy", poster: "/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg" },
-
-  // ── Action & Crime ──
-  { id: 87359, name: "Mission: Impossible Collection", count: 7, category: "Action & Crime", poster: "/geu1T07Jm46sVfT4hO2lG6kM5p1.jpg" },
-  { id: 645, name: "James Bond 007 Collection", count: 25, category: "Action & Crime", poster: "/horxC3W31r7N5H4Qe00EcxZ60a0.jpg" },
-  { id: 9485, name: "Fast & Furious Collection", count: 10, category: "Action & Crime", poster: "/yK2kE12L8K2M9N6wU6b3h0i2v7M.jpg" },
-  { id: 404609, name: "John Wick Universe", count: 4, category: "Action & Crime", poster: "/p4UebmvvgdnJz9pT4yY2vHkL3Z.jpg" },
-  { id: 295, name: "Pirates of the Caribbean Collection", count: 5, category: "Action & Crime", poster: "/4jV9lT4b2hX6y7U8w1m5k0q3a9.jpg" },
-  { id: 84, name: "Indiana Jones Collection", count: 5, category: "Action & Crime", poster: "/2b3F3X1W8J4K7L5y9U6a2v0m1q.jpg" },
-  { id: 2150, name: "Jason Bourne Collection", count: 5, category: "Action & Crime", poster: "/q4L8D8eT4o3k9W6b4u2X7y6j0m.jpg" },
-  { id: 8945, name: "Mad Max Collection", count: 5, category: "Action & Crime", poster: "/3bgtU2x3a4k9J31qX7P70eE31L0.jpg" },
-  { id: 1570, name: "Die Hard Collection", count: 5, category: "Action & Crime", poster: "/dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg" },
-  { id: 1575, name: "Rocky & Creed Collection", count: 9, category: "Action & Crime", poster: "/7t0lC15F3iA6fG7jX8L4y3M1q9.jpg" },
-
-  // ── Animation ──
-  { id: 10194, name: "Toy Story Collection", count: 4, category: "Animation", poster: "/7G9Z1Iq2L2q6a4wX4uB1wX4uB1w.jpg" },
-  { id: 12, name: "Shrek Collection", count: 4, category: "Animation", poster: "/eVPs2Y0LyvTLZn6AP5Z6O2rtiGB.jpg" },
-  { id: 86066, name: "Despicable Me & Minions", count: 6, category: "Animation", poster: "/yFSIUVTCvgYr05wtP0qdwuU3N2d.jpg" },
-  { id: 77816, name: "Kung Fu Panda Collection", count: 4, category: "Animation", poster: "/r8Ph5qVLud39e4465YVo07neQUS.jpg" },
-  { id: 89163, name: "How to Train Your Dragon", count: 3, category: "Animation", poster: "/p4UebmvvgdnJz9pT4yY2vHkL3Z.jpg" },
-  { id: 8354, name: "Ice Age Collection", count: 5, category: "Animation", poster: "/3bgtU2x3a4k9J31qX7P70eE31L0.jpg" },
-
-  // ── Horror & Thriller ──
-  { id: 313086, name: "The Conjuring Universe", count: 8, category: "Horror & Thriller", poster: "/2bXGZLkuq61asKveaHkYxI8817.jpg" },
-  { id: 91361, name: "Halloween Collection", count: 13, category: "Horror & Thriller", poster: "/dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg" },
-  { id: 2599, name: "Scream Collection", count: 6, category: "Horror & Thriller", poster: "/7t0lC15F3iA6fG7jX8L4y3M1q9.jpg" },
-  { id: 125570, name: "Saw Collection", count: 10, category: "Horror & Thriller", poster: "/4jV9lT4b2hX6y7U8w1m5k0q3a9.jpg" },
-
-  // ── Classic Sagas ──
-  { id: 230, name: "The Godfather Trilogy", count: 3, category: "Classic Sagas", poster: "/2b3F3X1W8J4K7L5y9U6a2v0m1q.jpg" },
-];
-
 const PRESET_CATEGORIES = [
   "All",
+  "Web Series & TV",
+  "Anime Sagas",
   "Superhero",
   "Sci-Fi & Fantasy",
   "Action & Crime",
@@ -163,6 +110,87 @@ const PRESET_CATEGORIES = [
   "Horror & Thriller",
   "Classic Sagas",
 ] as const;
+
+// Curated 110+ Universes from Master Compendium (Hollywood Movies, Web Series, and Anime Sagas)
+const POPULAR_UNIVERSES: UniversePreset[] = ALL_CURATED_UNIVERSES.map((u) => {
+  let cat: UniversePreset["category"] = "Sci-Fi & Fantasy";
+  const n = u.name.toLowerCase();
+  if (u.category === "series") cat = "Web Series & TV";
+  else if (u.category === "anime") cat = "Anime Sagas";
+  else if (
+    n.includes("spider") ||
+    n.includes("batman") ||
+    n.includes("mcu") ||
+    n.includes("marvel") ||
+    n.includes("dc") ||
+    n.includes("x-men") ||
+    n.includes("superman") ||
+    n.includes("deadpool") ||
+    n.includes("iron man") ||
+    n.includes("captain america") ||
+    n.includes("thor") ||
+    n.includes("guardians") ||
+    n.includes("avengers") ||
+    n.includes("wolverine")
+  )
+    cat = "Superhero";
+  else if (
+    n.includes("mission") ||
+    n.includes("bond") ||
+    n.includes("fast") ||
+    n.includes("john wick") ||
+    n.includes("bourne") ||
+    n.includes("mad max") ||
+    n.includes("die hard") ||
+    n.includes("indiana jones") ||
+    n.includes("pirates") ||
+    n.includes("ocean")
+  )
+    cat = "Action & Crime";
+  else if (
+    n.includes("toy story") ||
+    n.includes("shrek") ||
+    n.includes("minions") ||
+    n.includes("kung fu") ||
+    n.includes("dragon") ||
+    n.includes("ice age") ||
+    n.includes("despicable") ||
+    n.includes("spider-verse") ||
+    n.includes("lion king") ||
+    n.includes("avatar")
+  )
+    cat = "Animation";
+  else if (
+    n.includes("conjuring") ||
+    n.includes("halloween") ||
+    n.includes("scream") ||
+    n.includes("saw") ||
+    n.includes("alien") ||
+    n.includes("predator") ||
+    n.includes("insidious") ||
+    n.includes("paranormal") ||
+    n.includes("purge")
+  )
+    cat = "Horror & Thriller";
+  else if (
+    n.includes("godfather") ||
+    n.includes("rocky") ||
+    n.includes("creed") ||
+    n.includes("matrix") ||
+    n.includes("terminator") ||
+    n.includes("back to the future")
+  )
+    cat = "Classic Sagas";
+
+  return {
+    id: u.id,
+    universeId: u.id,
+    name: u.name,
+    count: u.items.length,
+    category: cat,
+    poster: u.posterPath,
+  };
+});
 
 export default function FranchisesPage() {
   const [franchises, setFranchises] = useState<Franchise[]>([]);
@@ -183,19 +211,21 @@ export default function FranchisesPage() {
   const [isSearchingTmdb, setIsSearchingTmdb] = useState<boolean>(false);
 
   // Multi-Selection state
-  const [selectedCollectionIds, setSelectedCollectionIds] = useState<Set<number>>(new Set());
-  const [addedCollectionIds, setAddedCollectionIds] = useState<Set<number>>(new Set());
+  const [selectedCollectionIds, setSelectedCollectionIds] = useState<Set<string | number>>(new Set());
+  const [addedCollectionIds, setAddedCollectionIds] = useState<Set<string | number>>(new Set());
   const [isBatchImporting, setIsBatchImporting] = useState<boolean>(false);
   const [hasAddedAny, setHasAddedAny] = useState<boolean>(false);
+  const [inspectUniverseId, setInspectUniverseId] = useState<string | null>(null);
 
   const debouncedTmdbSearch = useDebounce(tmdbSearchInput, 500);
 
-  // Set of already-imported collection IDs in user's vault
+  // Set of already-imported collection IDs and names in user's vault
   const existingVaultCollectionIds = useMemo(() => {
-    return new Set<number>(
-      franchises
-        .map((f) => f.tmdbCollectionId)
-        .filter((id): id is number => typeof id === "number" && id > 0)
+    return new Set<string | number>(
+      franchises.flatMap((f) => [
+        ...(f.tmdbCollectionId ? [f.tmdbCollectionId] : []),
+        f.name.toLowerCase(),
+      ])
     );
   }, [franchises]);
 
@@ -265,8 +295,8 @@ export default function FranchisesPage() {
     searchCollections();
   }, [debouncedTmdbSearch]);
 
-  // Toggle selection for a collection
-  const toggleSelectCollection = (collectionId: number) => {
+  // Toggle selection for a collection or curated universe
+  const toggleSelectCollection = (collectionId: number | string) => {
     if (existingVaultCollectionIds.has(collectionId) || addedCollectionIds.has(collectionId)) {
       return; // Already added
     }
@@ -282,12 +312,17 @@ export default function FranchisesPage() {
   };
 
   // Single import without closing modal
-  const handleImportSingle = async (collectionId: number, name: string) => {
+  const handleImportSingle = async (collectionId: number | string, name: string) => {
     try {
+      const payload =
+        typeof collectionId === "string"
+          ? { curatedUniverseId: collectionId }
+          : { tmdbCollectionId: collectionId };
+
       const res = await fetch("/api/franchise", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tmdbCollectionId: collectionId }),
+        body: JSON.stringify(payload),
       });
       const data = await res.json();
 
@@ -323,7 +358,11 @@ export default function FranchisesPage() {
           fetch("/api/franchise", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ tmdbCollectionId: id }),
+            body: JSON.stringify(
+              typeof id === "string"
+                ? { curatedUniverseId: id }
+                : { tmdbCollectionId: id }
+            ),
           })
         )
       );
@@ -738,6 +777,20 @@ export default function FranchisesPage() {
 
                     <div className="flex items-center gap-2">
                       <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setInspectUniverseId(franchise.name);
+                        }}
+                        className="text-xs h-8 px-2.5 border-purple-800 text-purple-300 hover:bg-purple-950/60 hidden sm:inline-flex"
+                        title="Open interactive universe tracker"
+                      >
+                        <Layers className="w-3.5 h-3.5 mr-1 text-purple-400" />
+                        <span>Explore Saga</span>
+                      </Button>
+
+                      <Button
                         variant="ghost"
                         size="icon"
                         onClick={(e) => {
@@ -944,7 +997,9 @@ export default function FranchisesPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {filteredPresets.map((preset) => {
                   const isAlreadyInVault =
-                    existingVaultCollectionIds.has(preset.id) || addedCollectionIds.has(preset.id);
+                    existingVaultCollectionIds.has(preset.id) ||
+                    existingVaultCollectionIds.has(preset.name.toLowerCase()) ||
+                    addedCollectionIds.has(preset.id);
                   const isSelected = selectedCollectionIds.has(preset.id);
 
                   return (
@@ -999,8 +1054,19 @@ export default function FranchisesPage() {
                         </div>
                       </div>
 
-                      {/* Quick Add Button or Status Badge */}
-                      <div className="shrink-0 ml-2" onClick={(e) => e.stopPropagation()}>
+                      {/* Quick Actions: Explore Sequence & Add Button */}
+                      <div className="shrink-0 ml-2 flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => setInspectUniverseId(preset.universeId || String(preset.id))}
+                          className="text-[11px] h-8 px-2 text-purple-300 hover:text-white hover:bg-purple-950/50"
+                          title="Explore complete saga sequence & spin-offs"
+                        >
+                          <Layers className="w-3.5 h-3.5 mr-1 text-purple-400" />
+                          <span>Explore</span>
+                        </Button>
+
                         {isAlreadyInVault ? (
                           <span className="text-[10px] font-bold text-emerald-400 bg-emerald-950/60 px-2 py-1 rounded-md border border-emerald-700/40 flex items-center gap-1">
                             <Check className="w-3 h-3" />
@@ -1183,6 +1249,15 @@ export default function FranchisesPage() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* ─── UNIVERSE & RELATED ITEMS MODAL ──────────────────────────────────── */}
+      {inspectUniverseId && (
+        <UniverseRelatedModal
+          isOpen={Boolean(inspectUniverseId)}
+          onClose={() => setInspectUniverseId(null)}
+          universeId={inspectUniverseId}
+        />
+      )}
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAuthSession, getUserId } from "@/lib/session";
 import prisma from "@/lib/prisma";
 import { getCollection } from "@/lib/tmdb";
+import { ALL_CURATED_UNIVERSES } from "@/lib/curated-watchlist-data";
 
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 
@@ -213,7 +214,83 @@ export async function POST(req: NextRequest) {
     const userId = getUserId(session);
 
     const body = await req.json();
-    const { tmdbCollectionId, name, overview, posterPath, backdropPath, entries } = body;
+    const { tmdbCollectionId, curatedUniverseId, name, overview, posterPath, backdropPath, entries } = body;
+
+    // ─── OPTION 0: Import Curated Universe from Compendium by ID ───────────────
+    if (curatedUniverseId) {
+      const match = ALL_CURATED_UNIVERSES.find((u) => u.id === curatedUniverseId);
+      if (!match) {
+        return NextResponse.json({ error: "Curated universe not found" }, { status: 404 });
+      }
+
+      const existingForUser = await prisma.franchise.findFirst({
+        where: {
+          userId,
+          name: match.name,
+        },
+      });
+
+      if (existingForUser) {
+        return NextResponse.json(
+          {
+            error: "You already have this universe in your vault.",
+            franchiseId: existingForUser.id,
+          },
+          { status: 409 }
+        );
+      }
+
+      const itemIds = match.items.map((it) => it.tmdbId);
+      const userWatchedItems = await prisma.watchedItem.findMany({
+        where: {
+          userId,
+          tmdbId: { in: itemIds },
+        },
+        select: { tmdbId: true, watchedDate: true },
+      });
+      const watchedMap = new Map<number, string | null>(
+        userWatchedItems.map((w) => [w.tmdbId, w.watchedDate ? w.watchedDate.toISOString() : null])
+      );
+
+      const newFranchise = await prisma.franchise.create({
+        data: {
+          name: match.name,
+          overview: match.overview || null,
+          posterPath: match.posterPath || null,
+          userId,
+          entries: {
+            create: match.items.map((it, idx) => {
+              const isWatched = watchedMap.has(it.tmdbId);
+              return {
+                sequenceNumber: it.sequence || idx + 1,
+                contentType: it.media_type === "tv" ? "tvshow" : "movie",
+                tmdbId: it.tmdbId,
+                title: it.title,
+                releaseDate: it.year ? `${it.year}-01-01` : null,
+                posterPath: it.posterPath || null,
+                watched: isWatched,
+                watchedDate: isWatched ? watchedMap.get(it.tmdbId) : null,
+                userId,
+              };
+            }),
+          },
+        },
+        include: {
+          entries: {
+            orderBy: { sequenceNumber: "asc" },
+          },
+        },
+      });
+
+      return NextResponse.json(
+        {
+          success: true,
+          message: `Successfully imported "${newFranchise.name}" with ${newFranchise.entries.length} sequential entries.`,
+          franchise: newFranchise,
+        },
+        { status: 201 }
+      );
+    }
 
     // ─── OPTION A: Import TMDB Collection by ID ─────────────────────────────────
     if (tmdbCollectionId) {

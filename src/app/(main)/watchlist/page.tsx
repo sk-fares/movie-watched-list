@@ -33,6 +33,7 @@ import {
 } from "lucide-react";
 
 import { cn, formatDate, formatYear, formatRuntime, getRatingColor } from "@/lib/utils";
+import { isAnimeItem, isPureMovie, isPureSeries } from "@/lib/anime-detector";
 import { WatchlistItemType } from "@/types";
 import { PosterImage } from "@/components/poster-image";
 import { GenreBadge } from "@/components/genre-badge";
@@ -60,7 +61,7 @@ export default function WatchlistPage() {
   const [error, setError] = React.useState<string | null>(null);
 
   // Filters & Controls
-  const [contentType, setContentType] = React.useState<"all" | "movie" | "tvshow">("all");
+  const [contentType, setContentType] = React.useState<"all" | "movie" | "tvshow" | "anime">("all");
   const [priorityFilter, setPriorityFilter] = React.useState<string>("all");
   const [selectedGenre, setSelectedGenre] = React.useState<string>("all");
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -99,7 +100,7 @@ export default function WatchlistPage() {
       setIsLoading(true);
       setError(null);
       const params = new URLSearchParams();
-      if (contentType !== "all") params.set("contentType", contentType);
+      if (contentType !== "all" && contentType !== "anime") params.set("contentType", contentType);
       if (priorityFilter !== "all") params.set("priority", priorityFilter);
       if (searchQuery.trim()) params.set("search", searchQuery.trim());
       params.set("sortBy", sortBy);
@@ -150,28 +151,43 @@ export default function WatchlistPage() {
     return Array.from(genreSet).sort();
   }, [items]);
 
-  // Filter items by client-side genre if selected
+  // Filter items by client-side content type & genre
   const filteredItems = React.useMemo(() => {
-    if (selectedGenre === "all") return items;
-    return items.filter((item) => {
-      if (!item.genres) return false;
-      try {
-        const parsed = JSON.parse(item.genres);
-        if (Array.isArray(parsed)) {
-          return parsed.some((g: any) => (typeof g === "string" ? g : g.name) === selectedGenre);
+    let list = items;
+
+    // Strict classification: exclude anime from web series & movies; single list for anime
+    if (contentType === "movie") {
+      list = list.filter((i) => isPureMovie(i));
+    } else if (contentType === "tvshow") {
+      list = list.filter((i) => isPureSeries(i));
+    } else if (contentType === "anime") {
+      list = list.filter((i) => isAnimeItem(i));
+    }
+
+    if (selectedGenre !== "all") {
+      list = list.filter((item) => {
+        if (!item.genres) return false;
+        try {
+          const parsed = JSON.parse(item.genres);
+          if (Array.isArray(parsed)) {
+            return parsed.some((g: any) => (typeof g === "string" ? g : g.name) === selectedGenre);
+          }
+        } catch {
+          return item.genres.includes(selectedGenre);
         }
-      } catch {
-        return item.genres.includes(selectedGenre);
-      }
-      return false;
-    });
-  }, [items, selectedGenre]);
+        return false;
+      });
+    }
+
+    return list;
+  }, [items, contentType, selectedGenre]);
 
   // Overall Statistics
   const stats = React.useMemo(() => {
     const totalItems = items.length;
-    const moviesCount = items.filter((i) => i.contentType === "movie").length;
-    const tvCount = items.filter((i) => i.contentType === "tvshow").length;
+    const moviesCount = items.filter((i) => isPureMovie(i)).length;
+    const tvCount = items.filter((i) => isPureSeries(i)).length;
+    const animeCount = items.filter((i) => isAnimeItem(i)).length;
     const totalMinutes = items.reduce((acc, i) => acc + (i.runtime || 0), 0);
     const highPriorityCount = items.filter((i) => i.priority >= 2).length;
 
@@ -179,6 +195,7 @@ export default function WatchlistPage() {
       totalItems,
       moviesCount,
       tvCount,
+      animeCount,
       totalMinutes,
       highPriorityCount,
     };
@@ -503,11 +520,11 @@ export default function WatchlistPage() {
             </div>
 
             {/* Type Selector Tabs */}
-            <div className="flex items-center gap-1.5 bg-background/60 p-1 rounded-xl border border-white/5">
+            <div className="flex items-center gap-1.5 bg-background/60 p-1 rounded-xl border border-white/5 overflow-x-auto scrollbar-none">
               <button
                 onClick={() => setContentType("all")}
                 className={cn(
-                  "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
+                  "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all shrink-0",
                   contentType === "all"
                     ? "bg-purple-600 text-white shadow"
                     : "text-muted-foreground hover:text-white"
@@ -518,7 +535,7 @@ export default function WatchlistPage() {
               <button
                 onClick={() => setContentType("movie")}
                 className={cn(
-                  "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5",
+                  "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 shrink-0",
                   contentType === "movie"
                     ? "bg-purple-600 text-white shadow"
                     : "text-muted-foreground hover:text-white"
@@ -530,14 +547,26 @@ export default function WatchlistPage() {
               <button
                 onClick={() => setContentType("tvshow")}
                 className={cn(
-                  "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5",
+                  "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 shrink-0",
                   contentType === "tvshow"
                     ? "bg-purple-600 text-white shadow"
                     : "text-muted-foreground hover:text-white"
                 )}
               >
                 <Tv className="h-3.5 w-3.5" />
-                Series
+                Web Series
+              </button>
+              <button
+                onClick={() => setContentType("anime")}
+                className={cn(
+                  "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 shrink-0",
+                  contentType === "anime"
+                    ? "bg-rose-600 text-white shadow"
+                    : "text-muted-foreground hover:text-white"
+                )}
+              >
+                <Sparkles className="h-3.5 w-3.5 text-rose-400" />
+                Anime
               </button>
             </div>
 

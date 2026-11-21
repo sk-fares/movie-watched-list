@@ -38,6 +38,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { PosterImage } from "@/components/poster-image";
 import { GenreBadge } from "@/components/genre-badge";
 import { RatingStars } from "@/components/rating-stars";
+import { UniverseRelatedModal } from "@/components/universe-related-modal";
 import {
   cn,
   formatDate,
@@ -82,6 +83,7 @@ export default function ContentDetailPage() {
   const [userNote, setUserNote] = useState<string>("");
   const [isSavingNote, setIsSavingNote] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>("overview");
+  const [isUniverseModalOpen, setIsUniverseModalOpen] = useState<boolean>(false);
 
   // Fetch title details from internal API
   useEffect(() => {
@@ -589,24 +591,45 @@ export default function ContentDetailPage() {
               )}
             </div>
 
-            {/* Franchise / Collection Banner if belongs to a collection */}
-            {data.belongs_to_collection && (
-              <div className="mt-4 p-3.5 rounded-xl bg-purple-950/30 border border-purple-800/40 flex items-center justify-between gap-4">
-                <div className="flex items-center gap-2.5">
-                  <Layers className="w-4 h-4 text-purple-400 flex-shrink-0" />
-                  <span className="text-xs text-purple-200">
-                    Part of the <strong>{data.belongs_to_collection.name}</strong>
-                  </span>
+            {/* Franchise / Universe Banner */}
+            {(userState.franchiseInfo || data.belongs_to_collection) && (
+              <div className="mt-4 p-4 rounded-xl bg-gradient-to-r from-purple-950/60 via-purple-900/30 to-card border border-purple-700/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-600/20 border border-purple-500/40 text-purple-300 shrink-0">
+                    <Layers className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-purple-400">
+                        Connected Universe
+                      </span>
+                      {userState.franchiseInfo?.sequenceNumber && (
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-purple-800/60 text-purple-200 font-mono">
+                          Part #{userState.franchiseInfo.sequenceNumber}
+                        </span>
+                      )}
+                    </div>
+                    <h4 className="font-bold text-white text-base">
+                      {userState.franchiseInfo?.franchiseName || data.belongs_to_collection?.name}
+                    </h4>
+                    {userState.franchiseInfo?.totalParts ? (
+                      <p className="text-xs text-muted-foreground">
+                        {userState.franchiseInfo.watchedCount} of {userState.franchiseInfo.totalParts} watched ({userState.franchiseInfo.progressPercentage}%)
+                      </p>
+                    ) : null}
+                  </div>
                 </div>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={handleTrackFranchise}
-                  className="text-xs h-7 px-3 border-purple-600/50 text-purple-200 hover:bg-purple-900/50"
-                >
-                  <Plus className="w-3 h-3 mr-1" />
-                  <span>Track Universe</span>
-                </Button>
+
+                <div className="flex items-center gap-2">
+                  <Button
+                    size="sm"
+                    onClick={() => setIsUniverseModalOpen(true)}
+                    className="text-xs h-8 px-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold"
+                  >
+                    <Layers className="w-3.5 h-3.5 mr-1.5" />
+                    <span>View All Connected Titles</span>
+                  </Button>
+                </div>
               </div>
             )}
           </div>
@@ -619,6 +642,12 @@ export default function ContentDetailPage() {
               <TabsTrigger value="overview" className="text-xs sm:text-sm">
                 Overview & Story
               </TabsTrigger>
+              {userState.franchiseInfo?.items && userState.franchiseInfo.items.length > 0 && (
+                <TabsTrigger value="universe" className="text-xs sm:text-sm">
+                  <Layers className="w-3.5 h-3.5 mr-1 text-purple-400" />
+                  Universe & Spin-Offs ({userState.franchiseInfo.items.length})
+                </TabsTrigger>
+              )}
               <TabsTrigger value="cast" className="text-xs sm:text-sm">
                 Cast & Crew
               </TabsTrigger>
@@ -681,6 +710,71 @@ export default function ContentDetailPage() {
                       )}
                     </div>
                   )}
+
+                  {/* Related Universe Titles Strip */}
+                  {userState.franchiseInfo?.items && userState.franchiseInfo.items.length > 0 && (
+                    <div className="pt-4 border-t border-border/50 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold uppercase tracking-wider text-purple-300">
+                          Connected Universe & Sequels ({userState.franchiseInfo.items.length})
+                        </span>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setActiveTab("universe")}
+                          className="h-7 text-xs text-purple-400 hover:text-purple-300"
+                        >
+                          View Full Saga
+                          <ChevronRight className="w-3.5 h-3.5 ml-1" />
+                        </Button>
+                      </div>
+                      <div className="flex items-stretch gap-2.5 overflow-x-auto pb-2 scrollbar-thin">
+                        {userState.franchiseInfo.items.map((it: any) => {
+                          const itId = it.tmdbId || it.id;
+                          const isCurrent = itId === tmdbId;
+                          const itHref = `/content/${it.media_type === "tv" ? "tvshow" : "movie"}/${itId}`;
+                          return (
+                            <Link
+                              key={itId}
+                              href={itHref}
+                              className={cn(
+                                "relative flex flex-col w-28 shrink-0 rounded-xl overflow-hidden border p-1.5 transition-all group",
+                                isCurrent
+                                  ? "bg-purple-950/60 border-purple-500 shadow-md shadow-purple-950/30"
+                                  : "bg-card/70 hover:bg-card border-border/60 hover:border-purple-500/50"
+                              )}
+                            >
+                              <div className="relative aspect-[2/3] w-full rounded-lg overflow-hidden bg-muted mb-1.5">
+                                <PosterImage
+                                  src={it.posterPath || it.poster_path}
+                                  alt={it.title}
+                                  aspectRatio="poster"
+                                  size="w185"
+                                />
+                                {it.isWatched && (
+                                  <div className="absolute top-1 right-1 h-4 w-4 rounded-full bg-emerald-500 flex items-center justify-center text-white shadow">
+                                    <CheckCircle2 className="h-2.5 w-2.5" />
+                                  </div>
+                                )}
+                                <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/80 backdrop-blur-sm text-[9px] font-mono text-purple-200">
+                                  #{it.sequence}
+                                </span>
+                              </div>
+                              <p className="text-[11px] font-semibold text-white line-clamp-1 group-hover:text-purple-300">
+                                {it.title}
+                              </p>
+                              <div className="flex items-center justify-between text-[10px] text-muted-foreground mt-0.5">
+                                <span>{it.year}</span>
+                                <span className="text-[9px] px-1 rounded bg-secondary/80 text-purple-300 font-medium truncate max-w-[55px]">
+                                  {it.role || "Sequel"}
+                                </span>
+                              </div>
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Quick Facts Sidebar */}
@@ -740,6 +834,94 @@ export default function ContentDetailPage() {
                 </div>
               </div>
             </TabsContent>
+
+            {/* TAB: Universe & Spin-Offs */}
+            {userState.franchiseInfo?.items && (
+              <TabsContent value="universe" className="space-y-6">
+                <div className="p-5 rounded-2xl bg-gradient-to-r from-purple-950/60 via-background to-card border border-purple-600/40">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-purple-900/80 text-purple-200 uppercase tracking-wider">
+                          Complete Saga Order
+                        </span>
+                        <span className="text-xs text-muted-foreground font-mono">
+                          {userState.franchiseInfo.totalParts} Total Parts
+                        </span>
+                      </div>
+                      <h3 className="text-xl font-bold text-white">
+                        {userState.franchiseInfo.franchiseName}
+                      </h3>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <div className="text-right">
+                        <span className="text-xs font-semibold text-purple-200">
+                          {userState.franchiseInfo.watchedCount} of {userState.franchiseInfo.totalParts} Watched ({userState.franchiseInfo.progressPercentage}%)
+                        </span>
+                      </div>
+                      <Button
+                        size="sm"
+                        onClick={() => setIsUniverseModalOpen(true)}
+                        className="bg-purple-600 hover:bg-purple-500 text-white text-xs"
+                      >
+                        <Layers className="w-3.5 h-3.5 mr-1" />
+                        Interactive Tracker
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                  {userState.franchiseInfo.items.map((it: any) => {
+                    const itId = it.tmdbId || it.id;
+                    const isCurrent = itId === tmdbId;
+                    const itHref = `/content/${it.media_type === "tv" ? "tvshow" : "movie"}/${itId}`;
+                    return (
+                      <Link
+                        key={itId}
+                        href={itHref}
+                        className={cn(
+                          "group rounded-xl overflow-hidden border p-2 transition-all hover:scale-[1.02]",
+                          isCurrent
+                            ? "bg-purple-950/50 border-purple-500 shadow-lg shadow-purple-950/40 ring-1 ring-purple-500/50"
+                            : "bg-card/60 hover:bg-card border-border/60 hover:border-purple-500/50"
+                        )}
+                      >
+                        <div className="relative aspect-[2/3] w-full rounded-lg overflow-hidden bg-muted mb-2">
+                          <PosterImage
+                            src={it.posterPath || it.poster_path}
+                            alt={it.title}
+                            aspectRatio="poster"
+                            size="w342"
+                          />
+                          <div className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded bg-black/85 backdrop-blur-md text-xs font-mono font-bold text-purple-200 border border-purple-500/40">
+                            #{it.sequence}
+                          </div>
+                          {it.isWatched && (
+                            <div className="absolute top-1.5 right-1.5 px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-bold flex items-center gap-1 shadow">
+                              <CheckCircle2 className="w-3 h-3" />
+                              WATCHED
+                            </div>
+                          )}
+                        </div>
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between text-[11px]">
+                            <span className="font-semibold text-purple-300">
+                              {it.role || "Core"}
+                            </span>
+                            <span className="text-muted-foreground">{it.year}</span>
+                          </div>
+                          <p className="text-xs font-bold text-white line-clamp-1 group-hover:text-purple-300">
+                            {it.title}
+                          </p>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </TabsContent>
+            )}
 
             {/* TAB 2: Cast & Crew */}
             <TabsContent value="cast" className="space-y-4">
@@ -941,6 +1123,31 @@ export default function ContentDetailPage() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* ─── UNIVERSE & RELATED MODAL ────────────────────────────────────────── */}
+      {isUniverseModalOpen && (
+        <UniverseRelatedModal
+          isOpen={isUniverseModalOpen}
+          onClose={() => setIsUniverseModalOpen(false)}
+          universeId={userState.franchiseInfo?.franchiseId}
+          tmdbId={tmdbId}
+          title={userState.franchiseInfo?.franchiseName || title}
+          initialUniverse={
+            userState.franchiseInfo
+              ? {
+                  id: userState.franchiseInfo.franchiseId || "universe",
+                  name: userState.franchiseInfo.franchiseName || "Universe",
+                  category: userState.franchiseInfo.category || contentType,
+                  items: userState.franchiseInfo.items || [],
+                }
+              : null
+          }
+          onSelectTitle={(selectedId, mediaType) => {
+            setIsUniverseModalOpen(false);
+            router.push(`/content/${mediaType === "tv" ? "tvshow" : "movie"}/${selectedId}`);
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -48,6 +48,7 @@ export interface MovieCardProps
   onWatchedChange?: (watched: boolean, item: any) => void;
   onRemove?: (item: any) => void;
   onSelect?: (item: any) => void;
+  onOpenUniverse?: (universeIdOrName: string) => void;
 }
 
 export const MovieCard = React.forwardRef<HTMLDivElement, MovieCardProps>(
@@ -67,6 +68,7 @@ export const MovieCard = React.forwardRef<HTMLDivElement, MovieCardProps>(
       onWatchedChange,
       onRemove,
       onSelect,
+      onOpenUniverse,
       className,
       ...props
     },
@@ -87,6 +89,12 @@ export const MovieCard = React.forwardRef<HTMLDivElement, MovieCardProps>(
     const voteAverage = item.voteAverage ?? item.vote_average ?? null;
     const runtime = item.runtime ?? item.episode_run_time?.[0] ?? null;
     const overview = item.overview ?? "";
+
+    // Universe / Franchise data
+    const universeName = item.universeName || franchiseName || null;
+    const universeId = item.universeId || null;
+    const universeSeq = item.universeSeq ?? franchiseSeq ?? chronoPosition ?? null;
+    const universeTotal = item.universeTotalItems || item.relatedItems?.length || null;
 
     // Parse genres
     const genresList = React.useMemo(() => {
@@ -463,6 +471,28 @@ export const MovieCard = React.forwardRef<HTMLDivElement, MovieCardProps>(
                 ))}
               </div>
             )}
+
+            {universeName && (
+              <div className="pt-1">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    onOpenUniverse?.(universeId || universeName);
+                  }}
+                  className="inline-flex items-center gap-1.5 text-xs font-medium text-purple-300 hover:text-purple-200 bg-purple-950/70 hover:bg-purple-900/80 px-2.5 py-1 rounded-lg border border-purple-800/60 transition-all"
+                  title={`View all related parts in ${universeName}`}
+                >
+                  <Layers className="h-3 w-3 text-purple-400" />
+                  <span>
+                    {universeSeq ? `Part #${universeSeq} in ` : ""}
+                    {universeName}
+                    {universeTotal ? ` (${universeTotal} titles)` : ""}
+                  </span>
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Action buttons */}
@@ -688,6 +718,20 @@ export const MovieCard = React.forwardRef<HTMLDivElement, MovieCardProps>(
                         )}
                       </DropdownMenu.Item>
 
+                      {universeName && (
+                        <DropdownMenu.Item
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            onOpenUniverse?.(universeId || universeName);
+                          }}
+                          className="flex cursor-pointer items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs text-purple-300 outline-none hover:bg-purple-950/50 hover:text-purple-200 transition-colors"
+                        >
+                          <Layers className="h-3.5 w-3.5" />
+                          <span>View Universe & Spin-Offs</span>
+                        </DropdownMenu.Item>
+                      )}
+
                       {onRemove && (
                         <>
                           <DropdownMenu.Separator className="my-1 h-px bg-border/60" />
@@ -736,6 +780,25 @@ export const MovieCard = React.forwardRef<HTMLDivElement, MovieCardProps>(
                 <span className="text-[11px] font-mono">{formatRuntime(runtime)}</span>
               ) : null}
             </div>
+
+            {universeName && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onOpenUniverse?.(universeId || universeName);
+                }}
+                className="inline-flex items-center gap-1 text-[10px] font-semibold text-purple-300 hover:text-purple-200 bg-purple-950/70 hover:bg-purple-900/80 px-2 py-0.5 rounded-md border border-purple-800/60 transition-all max-w-full truncate mt-1 text-left"
+                title={`View all related parts in ${universeName}`}
+              >
+                <Layers className="h-2.5 w-2.5 text-purple-400 shrink-0" />
+                <span className="truncate">
+                  {universeSeq ? `#${universeSeq} ` : ""}
+                  {universeName}
+                </span>
+              </button>
+            )}
           </div>
 
           {/* Genre tags */}

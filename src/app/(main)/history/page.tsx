@@ -46,6 +46,13 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  isAnimeItem,
+  isPureMovie,
+  isPureSeries,
+  hasSeasons,
+} from "@/lib/anime-detector";
+import { SeasonSelectModal, WatchedSeriesItem } from "@/components/season-select-modal";
 
 interface EnrichedWatchedItem extends WatchedItemType {
   franchiseName?: string | null;
@@ -57,9 +64,12 @@ interface HistoryStats {
   totalWatched: number;
   totalMovies: number;
   totalSeries: number;
+  totalAnime?: number;
   totalWatchTimeMinutes: number;
   averageRating: number;
 }
+
+type HistoryFilterType = "all" | "movie" | "tvshow" | "anime";
 
 export default function HistoryPage() {
   const [items, setItems] = React.useState<EnrichedWatchedItem[]>([]);
@@ -74,12 +84,16 @@ export default function HistoryPage() {
   const [error, setError] = React.useState<string | null>(null);
 
   // Filters & Controls
-  const [contentType, setContentType] = React.useState<"all" | "movie" | "tvshow">("all");
+  const [contentType, setContentType] = React.useState<HistoryFilterType>("all");
   const [ratingFilter, setRatingFilter] = React.useState<string>("all");
   const [searchQuery, setSearchQuery] = React.useState("");
   const [sortBy, setSortBy] = React.useState<"chronoPosition" | "watchedDate" | "rating" | "releaseDate" | "title">("chronoPosition");
   const [sortOrder, setSortOrder] = React.useState<"asc" | "desc">("desc");
   const [viewMode, setViewMode] = React.useState<"timeline" | "franchise" | "grid">("timeline");
+
+  // Season Selection Modal State
+  const [selectedSeriesForSeasons, setSelectedSeriesForSeasons] =
+    React.useState<WatchedSeriesItem | null>(null);
 
   // Dialog States
   const [editItem, setEditItem] = React.useState<EnrichedWatchedItem | null>(null);
@@ -101,6 +115,50 @@ export default function HistoryPage() {
   const [logNotes, setLogNotes] = React.useState("");
   const [isSubmittingLog, setIsSubmittingLog] = React.useState(false);
 
+  // Parse watched seasons from notes JSON
+  const parseWatchedSeasons = React.useCallback((notesStr?: string | null): number[] => {
+    if (!notesStr) return [];
+    try {
+      const parsed = JSON.parse(notesStr);
+      if (Array.isArray(parsed.watchedSeasons)) {
+        return parsed.watchedSeasons.map(Number);
+      }
+      if (Array.isArray(parsed)) {
+        return parsed.map(Number);
+      }
+    } catch {}
+    return [];
+  }, []);
+
+  const getSeasonProgressLabel = React.useCallback(
+    (notesStr?: string | null): string => {
+      const seasons = parseWatchedSeasons(notesStr);
+      if (seasons.length > 0) {
+        return `${seasons.length} Season${seasons.length > 1 ? "s" : ""} Watched`;
+      }
+      return "Track Seasons";
+    },
+    [parseWatchedSeasons]
+  );
+
+  const handleSeasonChange = (tmdbId: number, updatedSeasons: number[]) => {
+    setItems((prev) =>
+      prev.map((item) => {
+        if (item.tmdbId === tmdbId) {
+          return {
+            ...item,
+            notes: JSON.stringify({
+              watchedSeasons: updatedSeasons,
+              totalSeasons: updatedSeasons.length,
+              updatedAt: new Date().toISOString(),
+            }),
+          };
+        }
+        return item;
+      })
+    );
+  };
+
   // Fetch Watched History
   const fetchHistory = React.useCallback(async () => {
     try {
@@ -108,6 +166,8 @@ export default function HistoryPage() {
       setError(null);
       const params = new URLSearchParams();
       if (contentType !== "all") params.set("contentType", contentType);
+      if (contentType === "tvshow") params.set("pureSeries", "true");
+      if (contentType === "movie") params.set("pureMovie", "true");
       if (searchQuery.trim()) params.set("search", searchQuery.trim());
       params.set("sortBy", sortBy);
       params.set("order", sortOrder);
@@ -136,9 +196,19 @@ export default function HistoryPage() {
     fetchHistory();
   }, [fetchHistory]);
 
-  // Client Filter by Rating
+  // Client Filter by Content Type & Rating
   const filteredItems = React.useMemo(() => {
     let list = items;
+
+    // Strict classification: exclude anime from web series & movies; single list for anime
+    if (contentType === "movie") {
+      list = list.filter((i) => isPureMovie(i));
+    } else if (contentType === "tvshow") {
+      list = list.filter((i) => isPureSeries(i));
+    } else if (contentType === "anime") {
+      list = list.filter((i) => isAnimeItem(i));
+    }
+
     if (ratingFilter === "masterpiece") {
       list = list.filter((i) => i.userRating !== null && i.userRating !== undefined && i.userRating >= 9);
     } else if (ratingFilter === "great") {
@@ -153,7 +223,7 @@ export default function HistoryPage() {
       list = list.filter((i) => !i.userRating);
     }
     return list;
-  }, [items, ratingFilter]);
+  }, [items, contentType, ratingFilter]);
 
   // Group items by Franchise for Franchise View Mode
   const franchiseGroups = React.useMemo(() => {
@@ -467,10 +537,10 @@ export default function HistoryPage() {
             </div>
             <div>
               <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">
-                Movies / Shows
+                Movies / Series / Anime
               </p>
-              <p className="text-2xl font-bold text-white">
-                {stats.totalMovies} <span className="text-sm font-normal text-muted-foreground">/</span> {stats.totalSeries}
+              <p className="text-xl sm:text-2xl font-bold text-white">
+                {stats.totalMovies} <span className="text-xs font-normal text-muted-foreground">/</span> {stats.totalSeries} <span className="text-xs font-normal text-muted-foreground">/</span> <span className="text-rose-400">{stats.totalAnime || 0}</span>
               </p>
             </div>
           </div>
@@ -528,11 +598,11 @@ export default function HistoryPage() {
             </div>
 
             {/* Type Selector Tabs */}
-            <div className="flex items-center gap-1.5 bg-background/60 p-1 rounded-xl border border-white/5">
+            <div className="flex items-center gap-1.5 bg-background/60 p-1 rounded-xl border border-white/5 overflow-x-auto scrollbar-none">
               <button
                 onClick={() => setContentType("all")}
                 className={cn(
-                  "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
+                  "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all shrink-0",
                   contentType === "all"
                     ? "bg-purple-600 text-white shadow"
                     : "text-muted-foreground hover:text-white"
@@ -543,7 +613,7 @@ export default function HistoryPage() {
               <button
                 onClick={() => setContentType("movie")}
                 className={cn(
-                  "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5",
+                  "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 shrink-0",
                   contentType === "movie"
                     ? "bg-purple-600 text-white shadow"
                     : "text-muted-foreground hover:text-white"
@@ -555,14 +625,26 @@ export default function HistoryPage() {
               <button
                 onClick={() => setContentType("tvshow")}
                 className={cn(
-                  "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5",
+                  "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 shrink-0",
                   contentType === "tvshow"
                     ? "bg-purple-600 text-white shadow"
                     : "text-muted-foreground hover:text-white"
                 )}
               >
                 <Tv className="h-3.5 w-3.5" />
-                Series
+                Web Series
+              </button>
+              <button
+                onClick={() => setContentType("anime")}
+                className={cn(
+                  "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 shrink-0",
+                  contentType === "anime"
+                    ? "bg-rose-600 text-white shadow"
+                    : "text-muted-foreground hover:text-white"
+                )}
+              >
+                <Sparkles className="h-3.5 w-3.5 text-rose-400" />
+                Anime
               </button>
             </div>
 
@@ -757,8 +839,36 @@ export default function HistoryPage() {
                         </span>
                       </div>
 
+                      {/* Season Progress for Anime Series & Web Series */}
+                      {hasSeasons(item) && (
+                        <div className="pt-1">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setSelectedSeriesForSeasons({
+                                id: item.id,
+                                tmdbId: item.tmdbId,
+                                title: item.title,
+                                posterPath: item.posterPath,
+                                backdropPath: item.backdropPath,
+                                releaseDate: item.releaseDate,
+                                notes: item.notes,
+                              })
+                            }
+                            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-950/70 hover:bg-indigo-900 border border-indigo-500/40 hover:border-indigo-400 text-indigo-300 text-xs font-semibold transition-all shadow-sm"
+                            title="Click to mark seasons you have watched"
+                          >
+                            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                            <span>{getSeasonProgressLabel(item.notes)}</span>
+                            <span className="text-[10px] text-indigo-400/80 underline ml-1">
+                              • Mark Seasons
+                            </span>
+                          </button>
+                        </div>
+                      )}
+
                       {/* Notes / Thoughts snippet */}
-                      {item.notes && (
+                      {item.notes && !item.notes.startsWith('{"watchedSeasons"') && (
                         <p className="text-xs text-zinc-300 italic line-clamp-2 bg-white/5 border border-white/5 rounded-lg p-2 mt-1">
                           "{item.notes}"
                         </p>
@@ -768,6 +878,29 @@ export default function HistoryPage() {
 
                   {/* Actions */}
                   <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
+                    {hasSeasons(item) && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() =>
+                          setSelectedSeriesForSeasons({
+                            id: item.id,
+                            tmdbId: item.tmdbId,
+                            title: item.title,
+                            posterPath: item.posterPath,
+                            backdropPath: item.backdropPath,
+                            releaseDate: item.releaseDate,
+                            notes: item.notes,
+                          })
+                        }
+                        className="border-indigo-500/40 hover:border-indigo-400 bg-indigo-950/50 hover:bg-indigo-900 text-indigo-200 text-xs h-9 px-3 gap-1.5 shadow-sm"
+                        title="Mark what seasons you have seen"
+                      >
+                        <Layers className="h-3.5 w-3.5 text-indigo-400" />
+                        Seasons
+                      </Button>
+                    )}
+
                     <Button
                       size="sm"
                       variant="outline"
@@ -993,6 +1126,26 @@ export default function HistoryPage() {
 
                     {/* Hover Overlay */}
                     <div className="absolute inset-0 z-20 bg-black/75 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-3 gap-2">
+                      {hasSeasons(item) && (
+                        <Button
+                          size="sm"
+                          onClick={() =>
+                            setSelectedSeriesForSeasons({
+                              id: item.id,
+                              tmdbId: item.tmdbId,
+                              title: item.title,
+                              posterPath: item.posterPath,
+                              backdropPath: item.backdropPath,
+                              releaseDate: item.releaseDate,
+                              notes: item.notes,
+                            })
+                          }
+                          className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs h-8 gap-1.5 shadow-md"
+                        >
+                          <Layers className="h-3.5 w-3.5" />
+                          Track Seasons
+                        </Button>
+                      )}
                       <Button
                         size="sm"
                         onClick={() => openEditModal(item)}
@@ -1030,6 +1183,27 @@ export default function HistoryPage() {
                       <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
                         <span>{formatDate(item.watchedDate)}</span>
                       </div>
+                      {hasSeasons(item) && (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setSelectedSeriesForSeasons({
+                              id: item.id,
+                              tmdbId: item.tmdbId,
+                              title: item.title,
+                              posterPath: item.posterPath,
+                              backdropPath: item.backdropPath,
+                              releaseDate: item.releaseDate,
+                              notes: item.notes,
+                            })
+                          }
+                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-indigo-950/70 border border-indigo-500/30 text-indigo-300 text-[10px] font-semibold hover:bg-indigo-900 transition-colors mt-1.5 w-fit shadow-sm"
+                          title="Click to mark seasons watched"
+                        >
+                          <CheckCircle2 className="h-2.5 w-2.5 text-emerald-400" />
+                          <span className="truncate">{getSeasonProgressLabel(item.notes)}</span>
+                        </button>
+                      )}
                     </div>
                   </div>
                 </motion.div>
@@ -1308,6 +1482,19 @@ export default function HistoryPage() {
           </form>
         </DialogContent>
       </Dialog>
+
+      {/* SEASON SELECTION MODAL */}
+      <SeasonSelectModal
+        isOpen={Boolean(selectedSeriesForSeasons)}
+        onClose={() => setSelectedSeriesForSeasons(null)}
+        series={selectedSeriesForSeasons}
+        onSeasonsChange={handleSeasonChange}
+        onRemoveSeries={(tmdbId) => {
+          const item = items.find((i) => i.tmdbId === tmdbId);
+          if (item) handleDelete(item.id, false);
+          setSelectedSeriesForSeasons(null);
+        }}
+      />
     </div>
   );
 }

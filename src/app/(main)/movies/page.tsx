@@ -23,12 +23,14 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { MovieCard } from "@/components/movie-card";
 import { MovieDetailModal } from "@/components/movie-detail-modal";
+import { UniverseRelatedModal } from "@/components/universe-related-modal";
 import { EmptyState } from "@/components/empty-state";
 import { PaginationBar } from "@/components/pagination-bar";
 
-type MovieTab = "popular" | "trending" | "top_rated" | "now_playing" | "upcoming";
+type MovieTab = "curated" | "popular" | "trending" | "top_rated" | "now_playing" | "upcoming";
 
 const TABS: { id: MovieTab; label: string; icon: React.ElementType }[] = [
+  { id: "curated", label: "Master Watchlist", icon: Sparkles },
   { id: "popular", label: "Popular", icon: Flame },
   { id: "trending", label: "Trending", icon: Sparkles },
   { id: "top_rated", label: "Top Rated", icon: Star },
@@ -90,6 +92,7 @@ function MoviesPageContent() {
   const [movies, setMovies] = React.useState<any[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [selectedMovieId, setSelectedMovieId] = React.useState<number | null>(null);
+  const [selectedUniverseId, setSelectedUniverseId] = React.useState<string | null>(null);
 
   // Sync tab with URL
   React.useEffect(() => {
@@ -141,6 +144,10 @@ function MoviesPageContent() {
       if (trimmedQuery) {
         // When searching, query TMDB search directly
         url = `/api/tmdb/search?q=${encodeURIComponent(trimmedQuery)}&type=movie&page=${page}`;
+      } else if (activeTab === "curated") {
+        url = `/api/curated?category=movie&page=${page}`;
+        if (selectedGenreId > 0) url += `&genre=${selectedGenreId}`;
+        if (selectedYear) url += `&year=${selectedYear}`;
       } else if (activeTab === "trending") {
         url = `/api/tmdb/trending?type=movie&timeWindow=week&page=${page}`;
       } else if (activeTab === "top_rated") {
@@ -413,6 +420,26 @@ function MoviesPageContent() {
         </div>
       </div>
 
+      {/* Master Watchlist Curated Compendium Banner */}
+      {(activeTab === "curated" || page <= 15) && !searchQuery && (
+        <div className="flex flex-wrap items-center justify-between gap-3 p-3 sm:p-3.5 rounded-2xl bg-gradient-to-r from-purple-950/40 via-background to-card border border-purple-800/40 text-xs shadow-sm">
+          <div className="flex items-center gap-2 text-purple-200">
+            <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-purple-600/30 text-purple-300 shrink-0">
+              <Sparkles className="h-3.5 w-3.5 text-purple-400" />
+            </span>
+            <span>
+              <strong>Master Watchlist Active:</strong> Prioritizing major film universes (MCU, Star Wars, Harry Potter, Matrix, John Wick, Alien, DC) and essential cinema from your compendium.
+            </span>
+          </div>
+          <button
+            onClick={() => setSelectedUniverseId("mcu")}
+            className="text-[11px] font-semibold text-purple-400 hover:text-purple-300 underline underline-offset-2 shrink-0"
+          >
+            Explore Universes
+          </button>
+        </div>
+      )}
+
       {/* ─── Movie Grid ─── */}
       {isLoading ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
@@ -443,6 +470,7 @@ function MoviesPageContent() {
                   onWatchedChange={(watched) => handleWatchedChange(movie.id, watched)}
                   onWatchlistChange={(inList) => handleWatchlistChange(movie.id, inList)}
                   onSelect={() => setSelectedMovieId(movie.id)}
+                  onOpenUniverse={(uId) => setSelectedUniverseId(uId)}
                 />
               </div>
             );
@@ -491,6 +519,19 @@ function MoviesPageContent() {
           onClose={() => setSelectedMovieId(null)}
           tmdbId={selectedMovieId}
           contentType="movie"
+        />
+      )}
+
+      {/* ─── Universe & Related Items Modal ─── */}
+      {selectedUniverseId && (
+        <UniverseRelatedModal
+          isOpen={Boolean(selectedUniverseId)}
+          onClose={() => setSelectedUniverseId(null)}
+          universeId={selectedUniverseId}
+          onSelectTitle={(selectedId) => {
+            setSelectedUniverseId(null);
+            setSelectedMovieId(selectedId);
+          }}
         />
       )}
     </div>

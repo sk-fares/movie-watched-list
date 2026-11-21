@@ -22,12 +22,14 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { MovieCard } from "@/components/movie-card";
 import { MovieDetailModal } from "@/components/movie-detail-modal";
+import { UniverseRelatedModal } from "@/components/universe-related-modal";
 import { EmptyState } from "@/components/empty-state";
 import { PaginationBar } from "@/components/pagination-bar";
 
-type SeriesTab = "popular" | "trending" | "top_rated" | "on_the_air";
+type SeriesTab = "curated" | "popular" | "trending" | "top_rated" | "on_the_air";
 
 const TABS: { id: SeriesTab; label: string; icon: React.ElementType }[] = [
+  { id: "curated", label: "Master Watchlist", icon: Sparkles },
   { id: "popular", label: "Popular", icon: Flame },
   { id: "trending", label: "Trending", icon: Sparkles },
   { id: "top_rated", label: "Top Rated", icon: Star },
@@ -75,6 +77,7 @@ function SeriesPageContent() {
   const [seriesList, setSeriesList] = React.useState<any[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [selectedSeriesId, setSelectedSeriesId] = React.useState<number | null>(null);
+  const [selectedUniverseId, setSelectedUniverseId] = React.useState<string | null>(null);
 
   // Sync tab with URL
   React.useEffect(() => {
@@ -125,6 +128,9 @@ function SeriesPageContent() {
 
       if (trimmedQuery) {
         url = `/api/tmdb/search?q=${encodeURIComponent(trimmedQuery)}&type=tv&page=${page}`;
+      } else if (activeTab === "curated") {
+        url = `/api/curated?category=series&page=${page}`;
+        if (selectedGenreId > 0) url += `&genre=${selectedGenreId}`;
       } else if (activeTab === "trending") {
         url = `/api/tmdb/trending?type=tv&timeWindow=week&page=${page}`;
       } else if (activeTab === "top_rated") {
@@ -375,6 +381,26 @@ function SeriesPageContent() {
         </div>
       </div>
 
+      {/* Master Watchlist Curated Compendium Banner */}
+      {(activeTab === "curated" || page <= 15) && !searchQuery && (
+        <div className="flex flex-wrap items-center justify-between gap-3 p-3 sm:p-3.5 rounded-2xl bg-gradient-to-r from-purple-950/40 via-background to-card border border-purple-800/40 text-xs shadow-sm">
+          <div className="flex items-center gap-2 text-purple-200">
+            <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-purple-600/30 text-purple-300 shrink-0">
+              <Sparkles className="h-3.5 w-3.5 text-purple-400" />
+            </span>
+            <span>
+              <strong>Master Watchlist Active:</strong> Prioritizing top television universes (Breaking Bad, Game of Thrones, The Boys, Dexter, Walking Dead, Peaky Blinders) and global streaming series.
+            </span>
+          </div>
+          <button
+            onClick={() => setSelectedUniverseId("breaking_bad")}
+            className="text-[11px] font-semibold text-purple-400 hover:text-purple-300 underline underline-offset-2 shrink-0"
+          >
+            Explore TV Universes
+          </button>
+        </div>
+      )}
+
       {/* ─── Series Grid ─── */}
       {isLoading ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
@@ -405,6 +431,7 @@ function SeriesPageContent() {
                   onWatchedChange={(watched) => handleWatchedChange(series.id, watched)}
                   onWatchlistChange={(inList) => handleWatchlistChange(series.id, inList)}
                   onSelect={() => setSelectedSeriesId(series.id)}
+                  onOpenUniverse={(uId) => setSelectedUniverseId(uId)}
                 />
               </div>
             );
@@ -452,6 +479,19 @@ function SeriesPageContent() {
           onClose={() => setSelectedSeriesId(null)}
           tmdbId={selectedSeriesId}
           contentType="tvshow"
+        />
+      )}
+
+      {/* ─── Universe & Related Items Modal ─── */}
+      {selectedUniverseId && (
+        <UniverseRelatedModal
+          isOpen={Boolean(selectedUniverseId)}
+          onClose={() => setSelectedUniverseId(null)}
+          universeId={selectedUniverseId}
+          onSelectTitle={(selectedId) => {
+            setSelectedUniverseId(null);
+            setSelectedSeriesId(selectedId);
+          }}
         />
       )}
     </div>

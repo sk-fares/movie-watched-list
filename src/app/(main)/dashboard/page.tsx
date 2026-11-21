@@ -38,6 +38,7 @@ import {
   isPureSeries,
   isAnimeSeries,
   isAnimeMovie,
+  hasSeasons,
 } from "@/lib/anime-detector";
 import { Button } from "@/components/ui/button";
 import { MovieCard } from "@/components/movie-card";
@@ -349,14 +350,9 @@ function DashboardPageContent() {
     return list;
   }, [watchedSeries, searchFilter, selectedYear]);
 
-  // Filtered watched animes
+  // 3rd Option: Watched Anime (Single unified list for all anime)
   const filteredAnimes = React.useMemo(() => {
     let list = watchedAnimes;
-    if (animeSubFilter === "series") {
-      list = list.filter((a) => isAnimeSeries(a));
-    } else if (animeSubFilter === "movies") {
-      list = list.filter((a) => isAnimeMovie(a));
-    }
 
     if (searchFilter.trim()) {
       const q = searchFilter.toLowerCase();
@@ -369,7 +365,7 @@ function DashboardPageContent() {
       });
     }
     return list;
-  }, [watchedAnimes, animeSubFilter, searchFilter, selectedYear]);
+  }, [watchedAnimes, searchFilter, selectedYear]);
 
   // Year groups for active section
   const movieYearGroups = React.useMemo(() => groupItemsYearWise(filteredMovies), [filteredMovies]);
@@ -923,41 +919,6 @@ function DashboardPageContent() {
               )}
             </div>
 
-            {/* Sub-filter tabs for Anime */}
-            {activeSection === "animes" && (
-              <div className="flex items-center gap-1.5 shrink-0 p-1 bg-background/60 rounded-xl border border-border/60">
-                <button
-                  type="button"
-                  onClick={() => setAnimeSubFilter("all")}
-                  className={cn(
-                    "px-3 py-1 rounded-lg text-xs font-semibold transition-all",
-                    animeSubFilter === "all" ? "bg-rose-600 text-white shadow-sm" : "text-muted-foreground hover:text-white"
-                  )}
-                >
-                  All Anime ({watchedAnimes.length})
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setAnimeSubFilter("series")}
-                  className={cn(
-                    "px-3 py-1 rounded-lg text-xs font-semibold transition-all",
-                    animeSubFilter === "series" ? "bg-rose-600 text-white shadow-sm" : "text-muted-foreground hover:text-white"
-                  )}
-                >
-                  Series ({watchedAnimes.filter(isAnimeSeries).length})
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setAnimeSubFilter("movies")}
-                  className={cn(
-                    "px-3 py-1 rounded-lg text-xs font-semibold transition-all",
-                    animeSubFilter === "movies" ? "bg-rose-600 text-white shadow-sm" : "text-muted-foreground hover:text-white"
-                  )}
-                >
-                  Movies ({watchedAnimes.filter(isAnimeMovie).length})
-                </button>
-              </div>
-            )}
 
             {/* Catalog count badge */}
             <div className="flex items-center gap-2 shrink-0">
@@ -1264,7 +1225,7 @@ function DashboardPageContent() {
                 {/* Animes Grid for this year */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
                   {group.items.map((anime) => {
-                    const isSeries = anime.contentType === "tvshow";
+                    const animeHasSeasons = hasSeasons(anime);
                     const watchedSeasonsList = parseWatchedSeasons(anime.notes);
                     const seasonsLabel =
                       watchedSeasonsList.length > 0
@@ -1275,7 +1236,7 @@ function DashboardPageContent() {
                       <div
                         key={anime.id}
                         onClick={() => {
-                          if (isSeries) {
+                          if (animeHasSeasons) {
                             setSelectedSeriesForSeasons({
                               id: anime.id,
                               tmdbId: anime.tmdbId,
@@ -1311,7 +1272,7 @@ function DashboardPageContent() {
 
                           {/* Top badge */}
                           <div className="absolute top-2.5 left-2.5 flex items-center gap-1 px-2 py-1 rounded-md bg-rose-600/90 backdrop-blur-md text-white text-[10px] font-bold shadow-md">
-                            <span>{isSeries ? "ANIME TV" : "ANIME MOVIE"}</span>
+                            <span>{animeHasSeasons ? "ANIME SERIES" : "ANIME MOVIE"}</span>
                           </div>
 
                           {anime.voteAverage && (
@@ -1336,11 +1297,16 @@ function DashboardPageContent() {
                               <span>Unmark</span>
                             </button>
                             <div className="h-10 w-10 rounded-full bg-rose-600 text-white flex items-center justify-center shadow-lg mb-2 transform group-hover:scale-110 transition-transform">
-                              {isSeries ? <Layers className="h-5 w-5" /> : <Clapperboard className="h-5 w-5" />}
+                              {animeHasSeasons ? <Layers className="h-5 w-5" /> : <Clapperboard className="h-5 w-5" />}
                             </div>
                             <span className="text-xs font-bold text-white leading-tight">
-                              {isSeries ? "Track Seasons" : "View Movie Details"}
+                              {animeHasSeasons ? "Track & Mark Seasons" : "View Movie Details"}
                             </span>
+                            {animeHasSeasons && (
+                              <span className="text-[10px] text-zinc-300 mt-1">
+                                Click to mark watched seasons
+                              </span>
+                            )}
                           </div>
                         </div>
 
@@ -1352,15 +1318,31 @@ function DashboardPageContent() {
                             </h4>
                             <p className="text-[11px] text-muted-foreground mt-0.5">
                               {anime.releaseDate ? formatYear(anime.releaseDate) : "Anime"} •{" "}
-                              {isSeries ? "Series" : "Movie"}
+                              {animeHasSeasons ? "Series" : "Movie"}
                             </p>
                           </div>
 
-                          {isSeries && (
-                            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-rose-950/50 border border-rose-500/30 text-rose-300 text-[10px] font-semibold">
+                          {animeHasSeasons && (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedSeriesForSeasons({
+                                  id: anime.id,
+                                  tmdbId: anime.tmdbId,
+                                  title: anime.title,
+                                  posterPath: anime.posterPath,
+                                  backdropPath: anime.backdropPath,
+                                  releaseDate: anime.releaseDate,
+                                  notes: anime.notes,
+                                });
+                              }}
+                              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-rose-950/60 hover:bg-rose-900/80 border border-rose-500/30 hover:border-rose-400 text-rose-300 text-[10px] font-semibold transition-all w-fit shadow-sm"
+                              title="Click to mark seasons you have seen"
+                            >
                               <CheckCircle2 className="h-3 w-3 text-rose-400 shrink-0" />
                               <span className="truncate">{seasonsLabel}</span>
-                            </div>
+                            </button>
                           )}
                         </div>
                       </div>

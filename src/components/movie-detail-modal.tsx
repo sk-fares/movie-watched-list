@@ -32,6 +32,7 @@ import {
 import { GenreBadge } from "@/components/genre-badge";
 import { RatingStars } from "@/components/rating-stars";
 import { Button } from "@/components/ui/button";
+import { UniverseRelatedModal } from "@/components/universe-related-modal";
 
 export interface MovieDetailModalProps {
   isOpen: boolean;
@@ -60,11 +61,21 @@ export function MovieDetailModal({
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [showTrailer, setShowTrailer] = React.useState(false);
 
-  const isTv = contentType === "tv" || contentType === "tvshow";
+  // Active item inside modal (allows navigating between related franchise parts)
+  const [activeTmdbId, setActiveTmdbId] = React.useState<number | null>(tmdbId);
+  const [activeContentType, setActiveContentType] = React.useState<"movie" | "tv" | "tvshow">(contentType);
+  const [isUniverseModalOpen, setIsUniverseModalOpen] = React.useState(false);
 
-  // Fetch full details whenever modal opens or ID changes
   React.useEffect(() => {
-    if (!isOpen || !tmdbId) {
+    setActiveTmdbId(tmdbId);
+    setActiveContentType(contentType);
+  }, [tmdbId, contentType, isOpen]);
+
+  const isTv = activeContentType === "tv" || activeContentType === "tvshow";
+
+  // Fetch full details whenever modal opens or active ID changes
+  React.useEffect(() => {
+    if (!isOpen || !activeTmdbId) {
       setData(null);
       setShowTrailer(false);
       setShowRatingInput(false);
@@ -75,8 +86,8 @@ export function MovieDetailModal({
     setIsLoading(true);
 
     const endpoint = isTv
-      ? `/api/tmdb/tv/${tmdbId}`
-      : `/api/tmdb/movie/${tmdbId}`;
+      ? `/api/tmdb/tv/${activeTmdbId}`
+      : `/api/tmdb/movie/${activeTmdbId}`;
 
     fetch(endpoint)
       .then((res) => {
@@ -499,46 +510,133 @@ export function MovieDetailModal({
 
               {/* Franchise / Collection Banner (Rule 14 Highlight) */}
               {franchise && (
-                <div className="mt-6 p-4 rounded-xl bg-gradient-to-r from-purple-950/60 via-purple-900/30 to-card border border-purple-700/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-600/20 border border-purple-500/40 text-purple-300 shrink-0">
-                      <Layers className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-[11px] font-semibold uppercase tracking-wider text-purple-400">
-                          Part of Franchise
-                        </span>
-                        {franchise.sequenceNumber && (
-                          <span className="text-xs px-2 py-0.5 rounded-full bg-purple-800/60 text-purple-200 font-mono">
-                            Part #{franchise.sequenceNumber}
-                          </span>
-                        )}
+                <div className="mt-6 space-y-3">
+                  <div className="p-4 rounded-xl bg-gradient-to-r from-purple-950/60 via-purple-900/30 to-card border border-purple-700/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-600/20 border border-purple-500/40 text-purple-300 shrink-0">
+                        <Layers className="h-5 w-5" />
                       </div>
-                      <h4 className="font-bold text-white text-base">
-                        {franchise.name}
-                      </h4>
-                      <p className="text-xs text-muted-foreground">
-                        {franchise.watchedCount} of {franchise.totalParts} watched (
-                        {franchise.progressPercentage}%)
-                      </p>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[11px] font-semibold uppercase tracking-wider text-purple-400">
+                            Part of Franchise
+                          </span>
+                          {franchise.sequenceNumber && (
+                            <span className="text-xs px-2 py-0.5 rounded-full bg-purple-800/60 text-purple-200 font-mono">
+                              Part #{franchise.sequenceNumber}
+                            </span>
+                          )}
+                        </div>
+                        <h4 className="font-bold text-white text-base">
+                          {franchise.name}
+                        </h4>
+                        <p className="text-xs text-muted-foreground">
+                          {franchise.watchedCount} of {franchise.totalParts} watched (
+                          {franchise.progressPercentage}%)
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Progress Bar & Explore Button */}
+                    <div className="w-full sm:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                      <div className="w-full sm:w-40 flex flex-col gap-1.5">
+                        <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
+                          <div
+                            className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 transition-all duration-500"
+                            style={{
+                              width: `${franchise.progressPercentage}%`,
+                            }}
+                          />
+                        </div>
+                        <span className="text-[10px] text-muted-foreground text-right">
+                          {franchise.progressPercentage}% Completed
+                        </span>
+                      </div>
+
+                      <Button
+                        size="sm"
+                        onClick={() => setIsUniverseModalOpen(true)}
+                        className="gap-1.5 bg-purple-600 hover:bg-purple-700 text-white text-xs h-8 whitespace-nowrap"
+                      >
+                        <Layers className="h-3.5 w-3.5" />
+                        <span>All {franchise.totalParts} Titles</span>
+                      </Button>
                     </div>
                   </div>
 
-                  {/* Progress Bar */}
-                  <div className="w-full sm:w-48 flex flex-col gap-1.5">
-                    <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
-                      <div
-                        className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 transition-all duration-500"
-                        style={{
-                          width: `${franchise.progressPercentage}%`,
-                        }}
-                      />
+                  {/* Horizontal Strip of Related Installments */}
+                  {franchise.items && franchise.items.length > 0 && (
+                    <div className="space-y-2 pt-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold uppercase tracking-wider text-purple-300">
+                          Connected Universe & Related Titles ({franchise.items.length})
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => setIsUniverseModalOpen(true)}
+                          className="text-xs text-purple-400 hover:text-purple-300 flex items-center gap-1 font-medium transition-colors"
+                        >
+                          <span>Explore Sagas & Spin-Offs</span>
+                          <ChevronRight className="h-3 w-3" />
+                        </button>
+                      </div>
+
+                      <div className="flex items-stretch gap-2.5 overflow-x-auto pb-2 pt-1 scrollbar-thin">
+                        {franchise.items.map((it: any) => {
+                          const itId = it.tmdbId || it.id;
+                          const isCurrent = itId === activeTmdbId;
+                          const poster = it.posterPath || it.poster_path;
+                          return (
+                            <div
+                              key={itId}
+                              onClick={() => {
+                                setActiveTmdbId(itId);
+                                setActiveContentType(it.media_type === "tv" ? "tv" : "movie");
+                              }}
+                              className={cn(
+                                "relative flex flex-col w-28 shrink-0 rounded-xl overflow-hidden border p-1.5 transition-all cursor-pointer group",
+                                isCurrent
+                                  ? "bg-purple-950/60 border-purple-500 shadow-md shadow-purple-950/30"
+                                  : "bg-card/70 hover:bg-card border-border/60 hover:border-purple-500/50"
+                              )}
+                            >
+                              <div className="relative aspect-[2/3] w-full rounded-lg overflow-hidden bg-muted mb-1.5">
+                                {poster ? (
+                                  <Image
+                                    src={getImageUrl(poster, "w185")}
+                                    alt={it.title}
+                                    fill
+                                    className="object-cover group-hover:scale-105 transition-transform"
+                                  />
+                                ) : (
+                                  <div className="h-full w-full flex items-center justify-center text-xs text-muted-foreground">
+                                    {it.media_type === "tv" ? <Tv className="h-5 w-5" /> : <Film className="h-5 w-5" />}
+                                  </div>
+                                )}
+                                {it.isWatched && (
+                                  <div className="absolute top-1 right-1 h-4 w-4 rounded-full bg-emerald-500 flex items-center justify-center text-white shadow">
+                                    <Check className="h-2.5 w-2.5 stroke-[3]" />
+                                  </div>
+                                )}
+                                <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/80 backdrop-blur-sm text-[9px] font-mono text-purple-200">
+                                  #{it.sequence}
+                                </span>
+                              </div>
+                              <p className="text-[11px] font-semibold text-white line-clamp-1 group-hover:text-purple-300">
+                                {it.title}
+                              </p>
+                              <div className="flex items-center justify-between text-[10px] text-muted-foreground mt-0.5">
+                                <span>{it.year}</span>
+                                <span className="text-[9px] px-1 rounded bg-secondary/80 text-purple-300 font-medium truncate max-w-[55px]">
+                                  {it.role || "Sequel"}
+                                </span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
-                    <span className="text-[10px] text-muted-foreground text-right">
-                      {franchise.progressPercentage}% Completed
-                    </span>
-                  </div>
+                  )}
                 </div>
               )}
 
@@ -595,6 +693,32 @@ export function MovieDetailModal({
           </div>
         ) : null}
       </div>
+
+      {/* Universe & Related Titles Modal */}
+      {isUniverseModalOpen && (
+        <UniverseRelatedModal
+          isOpen={isUniverseModalOpen}
+          onClose={() => setIsUniverseModalOpen(false)}
+          universeId={franchise?.universeId}
+          tmdbId={activeTmdbId}
+          title={franchise?.name || title}
+          initialUniverse={
+            franchise
+              ? {
+                  id: franchise.universeId || "universe",
+                  name: franchise.name,
+                  category: franchise.category || "movie",
+                  items: franchise.items || [],
+                }
+              : null
+          }
+          onSelectTitle={(selectedId, mediaType) => {
+            setActiveTmdbId(selectedId);
+            setActiveContentType(mediaType === "tv" ? "tv" : "movie");
+            setIsUniverseModalOpen(false);
+          }}
+        />
+      )}
     </div>
   );
 }

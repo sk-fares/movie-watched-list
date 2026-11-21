@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthSession, getUserId } from "@/lib/session";
 import { getMovieDetails, getCollection } from "@/lib/tmdb";
+import { getUniverseForItem } from "@/lib/curated-watchlist-data";
 import prisma from "@/lib/prisma";
 
 export async function GET(
@@ -92,11 +93,59 @@ export async function GET(
             progressPercentage: Math.round((watchedCount / totalParts) * 100),
             sequenceNumber: currentPartIndex !== -1 ? currentPartIndex + 1 : null,
             isCurrentMovieWatched: watchedPartSet.has(tmdbId),
+            items: sortedParts.map((p: any, idx: number) => ({
+              id: p.id,
+              title: p.title || p.name,
+              year: (p.release_date || "").slice(0, 4),
+              role: idx === 0 ? "Core" : "Sequel",
+              media_type: "movie",
+              poster_path: p.poster_path,
+              sequence: idx + 1,
+              isWatched: watchedPartSet.has(p.id),
+            })),
           };
         }
       } catch (colErr) {
         console.warn("Could not fetch collection details for movie:", colErr);
       }
+    }
+
+    // Check curated compendium universe (expands beyond TMDB collection with full spin-offs, prequels, etc.)
+    const curatedUniverse = getUniverseForItem(tmdbId, movie.title);
+    if (curatedUniverse) {
+      const itemIds = curatedUniverse.items.map((it) => it.tmdbId);
+      const watchedUniverseItems = await prisma.watchedItem.findMany({
+        where: {
+          userId,
+          tmdbId: { in: itemIds },
+        },
+        select: { tmdbId: true },
+      });
+      const watchedSet = new Set(watchedUniverseItems.map((w) => w.tmdbId));
+      const watchedCount = curatedUniverse.items.filter((it) => watchedSet.has(it.tmdbId)).length;
+      const currentIdx = curatedUniverse.items.findIndex((it) => it.tmdbId === tmdbId);
+
+      franchiseProgress = {
+        universeId: curatedUniverse.id,
+        name: curatedUniverse.name,
+        category: curatedUniverse.category,
+        totalParts: curatedUniverse.items.length,
+        watchedCount,
+        progressPercentage: Math.round((watchedCount / curatedUniverse.items.length) * 100),
+        sequenceNumber: currentIdx !== -1 ? currentIdx + 1 : (franchiseProgress?.sequenceNumber || null),
+        isCurrentMovieWatched: watchedSet.has(tmdbId),
+        items: curatedUniverse.items.map((it) => ({
+          id: it.tmdbId,
+          tmdbId: it.tmdbId,
+          title: it.title,
+          year: it.year,
+          role: it.role,
+          media_type: it.media_type || "movie",
+          posterPath: it.posterPath,
+          sequence: it.sequence,
+          isWatched: watchedSet.has(it.tmdbId),
+        })),
+      };
     }
 
     return NextResponse.json({
