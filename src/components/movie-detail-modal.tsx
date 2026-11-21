@@ -219,6 +219,33 @@ export function MovieDetailModal({
     }
   };
 
+  // Unmark watched
+  const handleUnmarkWatched = async () => {
+    if (!data || isSubmitting) return;
+    setIsSubmitting(true);
+
+    try {
+      const res = await fetch(
+        `/api/watched?tmdbId=${data.id}&contentType=${isTv ? "tvshow" : "movie"}`,
+        { method: "DELETE" }
+      );
+
+      if (res.ok) {
+        setInWatched(false);
+        setUserRating(null);
+        setShowRatingInput(false);
+        toast.success(`Unmarked "${title}" as watched`);
+        onWatchedChange?.(false, data);
+      } else {
+        toast.error("Failed to unmark as watched");
+      }
+    } catch {
+      toast.error("An error occurred");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-y-auto bg-black/80 backdrop-blur-md animate-fade-in">
       {/* Click outside backdrop */}
@@ -402,24 +429,39 @@ export function MovieDetailModal({
                       {inWatchlist ? "In Watchlist" : "Add to Watchlist"}
                     </Button>
 
-                    <Button
-                      onClick={() => setShowRatingInput(!showRatingInput)}
-                      disabled={isSubmitting}
-                      variant={inWatched ? "secondary" : "outline"}
-                      className={cn(
-                        "gap-2",
-                        inWatched &&
-                          "border-emerald-500/50 text-emerald-300 bg-emerald-950/40"
-                      )}
-                    >
-                      <Check
-                        className={cn(
-                          "h-4 w-4",
-                          inWatched && "text-emerald-400"
-                        )}
-                      />
-                      {inWatched ? "Watched" : "Mark as Watched"}
-                    </Button>
+                    {inWatched ? (
+                      <>
+                        <Button
+                          onClick={() => setShowRatingInput(!showRatingInput)}
+                          disabled={isSubmitting}
+                          variant="secondary"
+                          className="gap-2 border-emerald-500/50 text-emerald-300 bg-emerald-950/40"
+                        >
+                          <Check className="h-4 w-4 text-emerald-400" />
+                          Watched
+                        </Button>
+
+                        <Button
+                          onClick={handleUnmarkWatched}
+                          disabled={isSubmitting}
+                          variant="outline"
+                          className="gap-2 border-red-500/30 text-red-400 hover:bg-red-950/30 hover:text-red-300"
+                        >
+                          <X className="h-4 w-4" />
+                          Unmark Watched
+                        </Button>
+                      </>
+                    ) : (
+                      <Button
+                        onClick={() => handleMarkWatched()}
+                        disabled={isSubmitting}
+                        variant="outline"
+                        className="gap-2 hover:border-emerald-500/50 hover:text-emerald-300"
+                      >
+                        <Check className="h-4 w-4" />
+                        Mark as Watched
+                      </Button>
+                    )}
 
                     {userRating && (
                       <div className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-amber-950/40 border border-amber-600/40 text-amber-300 text-xs font-semibold">

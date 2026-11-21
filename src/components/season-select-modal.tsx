@@ -45,6 +45,7 @@ interface SeasonSelectModalProps {
   onClose: () => void;
   series: WatchedSeriesItem | null;
   onSeasonsChange?: (tmdbId: number, watchedSeasons: number[]) => void;
+  onRemoveSeries?: (tmdbId: number) => void;
 }
 
 type SeasonFilterTab = "all" | "watched" | "unwatched" | "newly_released";
@@ -54,6 +55,7 @@ export function SeasonSelectModal({
   onClose,
   series,
   onSeasonsChange,
+  onRemoveSeries,
 }: SeasonSelectModalProps) {
   const [isLoading, setIsLoading] = React.useState(true);
   const [seasons, setSeasons] = React.useState<SeasonInfo[]>([]);
@@ -198,6 +200,28 @@ export function SeasonSelectModal({
       saveSeasons(list, true);
       return next;
     });
+  };
+
+  // Remove whole series from watched
+  const handleRemoveSeries = async () => {
+    if (!series || isSaving) return;
+    setIsSaving(true);
+    try {
+      const res = await fetch(`/api/watched?tmdbId=${series.tmdbId}&contentType=tvshow`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        toast.success(`Removed "${series.title}" from watched`);
+        onRemoveSeries?.(series.tmdbId);
+        onClose();
+      } else {
+        toast.error("Failed to remove series");
+      }
+    } catch {
+      toast.error("Error removing series");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   // Mark all seasons watched
@@ -571,10 +595,23 @@ export function SeasonSelectModal({
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-border/50 bg-background/50 flex items-center justify-between">
-          <p className="text-xs text-muted-foreground">
-            {watchedCount} of {totalCount} seasons watched • {unwatchedCount} not watched
-          </p>
+        <div className="p-4 border-t border-border/50 bg-background/50 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <p className="text-xs text-muted-foreground">
+              {watchedCount} of {totalCount} seasons watched • {unwatchedCount} not watched
+            </p>
+            {onRemoveSeries && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleRemoveSeries}
+                disabled={isSaving}
+                className="text-xs text-red-400 hover:text-red-300 hover:bg-red-950/40 h-7 px-2.5"
+              >
+                Unmark Series
+              </Button>
+            )}
+          </div>
           <Button size="sm" onClick={onClose} className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-5">
             Done
           </Button>

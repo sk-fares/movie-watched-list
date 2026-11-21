@@ -299,13 +299,6 @@ export async function POST(req: NextRequest) {
         });
       }
 
-      // Check if tmdbCollectionId exists for another user (due to @unique constraint in schema)
-      const existingAnywhere = await prisma.franchise.findUnique({
-        where: { tmdbCollectionId: collectionIdNum },
-      });
-
-      const effectiveCollectionId = existingAnywhere ? null : collectionIdNum;
-
       // Create Franchise and ordered FranchiseEntry items in a single transaction
       const newFranchise = await prisma.franchise.create({
         data: {
@@ -313,7 +306,7 @@ export async function POST(req: NextRequest) {
           overview: tmdbCollection.overview || null,
           posterPath: tmdbCollection.poster_path || null,
           backdropPath: tmdbCollection.backdrop_path || null,
-          tmdbCollectionId: effectiveCollectionId,
+          tmdbCollectionId: collectionIdNum,
           userId,
           entries: {
             create: sortedParts.map((part: any, index: number) => {

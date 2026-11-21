@@ -125,6 +125,12 @@ function MoviesPageContent() {
     fetchUserStatus();
   }, [fetchUserStatus]);
 
+  // Keep a ref of watchedIds so fetchMovies doesn't re-run and cause page reloads on every watch action
+  const watchedIdsRef = React.useRef(watchedIds);
+  React.useEffect(() => {
+    watchedIdsRef.current = watchedIds;
+  }, [watchedIds]);
+
   // Fetch movies based on current tab, filters, page
   const fetchMovies = React.useCallback(async () => {
     setIsLoading(true);
@@ -168,9 +174,9 @@ function MoviesPageContent() {
 
       // ─── FILTERING & STRICT DEDUPLICATION ───
       // If user is NOT searching and hideWatched is true:
-      // Filter out watched movies so the user discovers fresh, unwatched movies!
+      // Filter out watched movies so the user discovers fresh, unwatched movies when loading a page!
       if (!trimmedQuery && hideWatched) {
-        results = results.filter((m: any) => !watchedIds.has(m.id));
+        results = results.filter((m: any) => !watchedIdsRef.current.has(m.id));
       }
 
       // Guarantee each movie only appears once (no repeats across lists or pages)
@@ -189,7 +195,7 @@ function MoviesPageContent() {
     } finally {
       setIsLoading(false);
     }
-  }, [activeTab, page, selectedGenreId, selectedYear, sortBy, searchQuery, hideWatched, watchedIds]);
+  }, [activeTab, page, selectedGenreId, selectedYear, sortBy, searchQuery, hideWatched]);
 
   React.useEffect(() => {
     fetchMovies();
@@ -206,12 +212,9 @@ function MoviesPageContent() {
       }
       return next;
     });
-
-    // If browsing (no search query) and hideWatched is enabled:
-    // When marked watched, immediately remove it from view so new movies take its place!
-    if (isWatched && !searchQuery.trim() && hideWatched) {
-      setMovies((prev) => prev.filter((m) => m.id !== movieId));
-    }
+    // Note: Do NOT remove the movie immediately from view!
+    // The movie stays visible with its checkmark so the user can select multiple movies at once.
+    // It will be excluded automatically when they navigate to another page or tab.
   };
 
   // Handle watchlist status toggle

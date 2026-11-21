@@ -110,6 +110,12 @@ function SeriesPageContent() {
     fetchUserStatus();
   }, [fetchUserStatus]);
 
+  // Keep a ref of watchedIds so fetchSeries doesn't re-run and flicker on every watch toggle
+  const watchedIdsRef = React.useRef(watchedIds);
+  React.useEffect(() => {
+    watchedIdsRef.current = watchedIds;
+  }, [watchedIds]);
+
   // Fetch TV shows based on current tab, filters, page
   const fetchSeries = React.useCallback(async () => {
     setIsLoading(true);
@@ -148,9 +154,9 @@ function SeriesPageContent() {
 
       // ─── FILTERING & STRICT DEDUPLICATION ───
       // If browsing (no search query) and hideWatched is true:
-      // Filter out watched series so user only sees unwatched series!
+      // Filter out watched series so user only sees unwatched series when loading page!
       if (!trimmedQuery && hideWatched) {
-        results = results.filter((t: any) => !watchedIds.has(t.id));
+        results = results.filter((t: any) => !watchedIdsRef.current.has(t.id));
       }
 
       // Guarantee each web series only appears once (no repeats across lists or pages)
@@ -169,7 +175,7 @@ function SeriesPageContent() {
     } finally {
       setIsLoading(false);
     }
-  }, [activeTab, page, selectedGenreId, sortBy, searchQuery, hideWatched, watchedIds]);
+  }, [activeTab, page, selectedGenreId, sortBy, searchQuery, hideWatched]);
 
   React.useEffect(() => {
     fetchSeries();
@@ -186,12 +192,8 @@ function SeriesPageContent() {
       }
       return next;
     });
-
-    // If browsing (no search query) and hideWatched is enabled:
-    // When marked watched, remove from view immediately so new series take its place!
-    if (isWatched && !searchQuery.trim() && hideWatched) {
-      setSeriesList((prev) => prev.filter((s) => s.id !== seriesId));
-    }
+    // Note: Do NOT remove immediately from view!
+    // Keeps it visible so user can select multiple series smoothly without reload.
   };
 
   // Handle watchlist toggle

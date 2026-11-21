@@ -109,6 +109,12 @@ function AnimationPageContent() {
     fetchUserStatus();
   }, [fetchUserStatus]);
 
+  // Keep a ref of watchedIds so fetchAnimationContent doesn't re-run and cause page reload on every watch action
+  const watchedIdsRef = React.useRef(watchedIds);
+  React.useEffect(() => {
+    watchedIdsRef.current = watchedIds;
+  }, [watchedIds]);
+
   // Helper to map selected sub-genre for movie vs TV
   const getGenreQueryParam = (type: "movie" | "tv") => {
     if (selectedGenreId === 0) return "";
@@ -258,7 +264,7 @@ function AnimationPageContent() {
       // If browsing (no search query) and hideWatched is true:
       // Filter out watched animation so user only discovers fresh, unwatched animation!
       if (!trimmedQuery && hideWatched) {
-        results = results.filter((item: any) => !watchedIds.has(item.id));
+        results = results.filter((item: any) => !watchedIdsRef.current.has(item.id));
       }
 
       // Guarantee each title only appears once (no repeats across lists or pages)
@@ -278,7 +284,7 @@ function AnimationPageContent() {
     } finally {
       setIsLoading(false);
     }
-  }, [activeTab, page, selectedGenreId, sortBy, searchQuery, hideWatched, watchedIds]);
+  }, [activeTab, page, selectedGenreId, sortBy, searchQuery, hideWatched]);
 
   React.useEffect(() => {
     fetchAnimationContent();
@@ -296,11 +302,9 @@ function AnimationPageContent() {
       return next;
     });
 
-    // If browsing (no search query) and hideWatched is enabled:
-    // When marked watched, immediately remove from view so new titles take its place!
-    if (isWatched && !searchQuery.trim() && hideWatched) {
-      setItemsList((prev) => prev.filter((item) => item.id !== itemId));
-    }
+    // Note: Do NOT remove item immediately from view!
+    // The card remains visible with its checkmark so users can select multiple titles at once.
+    // It will be excluded automatically when they navigate to another page or tab.
   };
 
   // Handle watchlist toggle

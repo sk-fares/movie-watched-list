@@ -249,6 +249,29 @@ function DashboardPageContent() {
     fetchStats();
   };
 
+  // Handle unmarking/removing an item from watched history
+  const handleRemoveWatched = async (tmdbId: number, contentType: "movie" | "tvshow") => {
+    try {
+      if (contentType === "movie") {
+        setRawWatchedMovies((prev) => prev.filter((m) => m.tmdbId !== tmdbId));
+      } else {
+        setRawWatchedSeries((prev) => prev.filter((s) => s.tmdbId !== tmdbId));
+      }
+      const res = await fetch(`/api/watched?tmdbId=${tmdbId}&contentType=${contentType}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) {
+        throw new Error("Failed to unmark item");
+      }
+      toast.success("Removed from watched list");
+      fetchStats();
+      fetchMovieSeries();
+    } catch (err: any) {
+      toast.error(err.message || "Failed to remove item");
+      fetchWatchedLists();
+    }
+  };
+
   // Group items by release year (sorted from latest year at top down to oldest at bottom)
   const groupItemsYearWise = <
     T extends { releaseDate?: string | null; firstAirDate?: string | null; title?: string }
@@ -1043,6 +1066,11 @@ function DashboardPageContent() {
                         variant="grid"
                         isWatched={true}
                         chronoPosition={movie.chronoPosition}
+                        onWatchedChange={(isWatched) => {
+                          if (!isWatched) {
+                            handleRemoveWatched(movie.tmdbId, "movie");
+                          }
+                        }}
                         onSelect={() =>
                           setSelectedItem({
                             id: movie.tmdbId,
@@ -1146,8 +1174,20 @@ function DashboardPageContent() {
                             </div>
                           )}
 
-                          {/* Hover Overlay: Manage Seasons button */}
+                          {/* Hover Overlay: Manage Seasons button & Unmark */}
                           <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center p-3 text-center">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleRemoveWatched(series.tmdbId, "tvshow");
+                              }}
+                              className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-1 rounded-md bg-red-600/80 hover:bg-red-600 text-white text-[10px] font-bold transition-colors shadow-md z-10"
+                              title="Unmark from watched"
+                            >
+                              <X className="h-3 w-3" />
+                              <span>Unmark</span>
+                            </button>
                             <div className="h-10 w-10 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg mb-2 transform group-hover:scale-110 transition-transform">
                               <Layers className="h-5 w-5" />
                             </div>
@@ -1283,6 +1323,18 @@ function DashboardPageContent() {
 
                           {/* Hover Overlay */}
                           <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center p-3 text-center">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleRemoveWatched(anime.tmdbId, anime.contentType === "tvshow" ? "tvshow" : "movie");
+                              }}
+                              className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-1 rounded-md bg-red-600/80 hover:bg-red-600 text-white text-[10px] font-bold transition-colors shadow-md z-10"
+                              title="Unmark from watched"
+                            >
+                              <X className="h-3 w-3" />
+                              <span>Unmark</span>
+                            </button>
                             <div className="h-10 w-10 rounded-full bg-rose-600 text-white flex items-center justify-center shadow-lg mb-2 transform group-hover:scale-110 transition-transform">
                               {isSeries ? <Layers className="h-5 w-5" /> : <Clapperboard className="h-5 w-5" />}
                             </div>
@@ -1459,6 +1511,7 @@ function DashboardPageContent() {
           onClose={() => setSelectedSeriesForSeasons(null)}
           series={selectedSeriesForSeasons}
           onSeasonsChange={handleSeasonChange}
+          onRemoveSeries={(tmdbId) => handleRemoveWatched(tmdbId, "tvshow")}
         />
       )}
 

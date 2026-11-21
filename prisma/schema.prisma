@@ -183,7 +183,7 @@ model Episode {
 
 model Franchise {
   id          String   @id @default(cuid())
-  tmdbCollectionId Int? @unique
+  tmdbCollectionId Int?
   name        String
   overview    String?  @db.Text
   posterPath  String?
@@ -194,6 +194,7 @@ model Franchise {
 
   entries FranchiseEntry[]
 
+  @@unique([userId, tmdbCollectionId])
   @@map("franchises")
 }
 
