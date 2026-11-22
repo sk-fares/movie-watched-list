@@ -37,10 +37,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Citizen Kane"
   },
   "19": {
-    "posterPath": "/zxo5Vrd0oXgm9ZCz4r7Q3L8veWg.jpg",
-    "backdropPath": "/JrBiUtR2CwxZR5GMK5Z9dU7Wr4.jpg",
-    "voteAverage": 6.909,
-    "title": "Planet of the Apes"
+    "posterPath": "/n5XNKXnoXpoXyfiCtXHOf8q8PFM.jpg",
+    "backdropPath": "/6T19aRp9zLMghZo1dTEwoNyreNZ.jpg",
+    "voteAverage": 8.519,
+    "title": "Monster"
   },
   "22": {
     "posterPath": "/poHwCZeWzJCShH7tOjg8RIoyjcw.jpg",
@@ -1483,10 +1483,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "WALL·E"
   },
   "10729": {
-    "posterPath": "/8q0VQYwOhhuRFMsyzdZ5JoB676g.jpg",
-    "backdropPath": "/fVKTOZwkLer18dG3piAzSPWFlY5.jpg",
-    "voteAverage": 6.696,
-    "title": "Quick Change"
+    "posterPath": "/eDjIG2hAeMU5cxLrd6oiQqdqoZt.jpg",
+    "backdropPath": "/7a4WHNllmX5ZGR0MfYJDPhV69eM.jpg",
+    "voteAverage": 7.214,
+    "title": "The Animatrix"
   },
   "10764": {
     "posterPath": "/e3DXXLJHGqMx9yYpXsql1XNljmM.jpg",
@@ -1501,10 +1501,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Shutter Island"
   },
   "11956": {
-    "posterPath": "/vZjHfDpE74EmbknicrTg4n5YOLr.jpg",
-    "backdropPath": "/zQPEo9JVbfbKagRyr92Vfk9xqXT.jpg",
-    "voteAverage": 6.2,
-    "title": "When the Cat's Away"
+    "posterPath": "/1ZJRbLDVr90KLtKdmTT4WZhT26E.jpg",
+    "backdropPath": "/8AGLGUYg9UqcDWXtAH0t7InsBd.jpg",
+    "voteAverage": 7.368,
+    "title": "Ghost in the Shell 2: Innocence"
   },
   "12444": {
     "posterPath": "/iGoXIpQb7Pot00EEdwpwPajheZ5.jpg",
@@ -1561,10 +1561,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Up"
   },
   "15301": {
-    "posterPath": "/sDWARc5aYTUKE8Y2FIGVgWXuI4K.jpg",
-    "backdropPath": "/8z8uPdpCBxGMQQGr8IfxRSbXNFs.jpg",
-    "voteAverage": 6.5,
-    "title": "Twilight Zone: The Movie"
+    "posterPath": "/pETU4GurpeEjBOM8oytMH0yNBHx.jpg",
+    "backdropPath": "/ktzhr2m6y98PtwOdfOtTA0X232m.jpg",
+    "voteAverage": 7.6,
+    "title": "Evangelion: 1.0 You Are (Not) Alone"
   },
   "16869": {
     "posterPath": "/aupnPtagH9JVBuMrGEanf4iqXEQ.jpg",
@@ -1609,10 +1609,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "The Hangover"
   },
   "19875": {
-    "posterPath": "/eAEevhb654WbpRWwsVohKEeQjx.jpg",
-    "backdropPath": "/1XVrUsDP8eqvR8z21X1Ri7F0MEN.jpg",
-    "voteAverage": 6.514,
-    "title": "Bury Me Behind the Baseboard"
+    "posterPath": "/kdovrjrKighUFEh9ZRQul0Evx6L.jpg",
+    "backdropPath": "/gFzBLipMi8pBn3KkoL4WSgkIUu9.jpg",
+    "voteAverage": 7.329,
+    "title": "Fullmetal Alchemist the Movie: Conqueror of Shamballa"
   },
   "19885": {
     "posterPath": "/7WTsnHkbA0FaG6R9twfFde0I9hl.jpg",
@@ -1669,10 +1669,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Inception"
   },
   "30983": {
-    "posterPath": "/iHfA63x7rFaWbP2C832uCe2r0zy.jpg",
-    "backdropPath": "/z67lpMtm8YGykJO4p89meuNMvj8.jpg",
-    "voteAverage": 8.018,
-    "title": "Detective Conan"
+    "posterPath": "/sG0Z0yWJmzr7UW6183cmz5DAjqm.jpg",
+    "backdropPath": "/la3G4VRIVcryxNmxU1YYTZcy9fL.jpg",
+    "voteAverage": 8.191,
+    "title": "Gurren Lagann"
   },
   "30984": {
     "posterPath": "/2EewmxXe72ogD0EaWM8gqa0ccIw.jpg",
@@ -1681,52 +1681,52 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Bleach"
   },
   "30985": {
-    "posterPath": "/zCEjjb1NH3LLsWeZx47wOeqkezf.jpg",
-    "backdropPath": "/cHII6sQ91q8H5EMONKCwCQMauCP.jpg",
-    "voteAverage": 8.1,
-    "title": "Monogatari"
+    "posterPath": "/mYakikF9MYpiRRQKnXQD6ubRHwr.jpg",
+    "backdropPath": "/1g7fMpp0c5tOlHoLMABx6LI7gMu.jpg",
+    "voteAverage": 8.292,
+    "title": "Elfen Lied"
   },
   "30986": {
-    "posterPath": "/7o9x0cdLjNXLeKfPM7p8h7DBL9B.jpg",
-    "backdropPath": "/yOCxMtJ3wgQyXjP9j8zUhoixPrU.jpg",
-    "voteAverage": 7.483,
-    "title": "Speed Racer"
+    "posterPath": "/rQt8X4kjBxah0laGwUVJISf1086.jpg",
+    "backdropPath": "/9345bFQXPCyIJLQemkpI5zFJCOp.jpg",
+    "voteAverage": 8.177,
+    "title": "Claymore"
   },
   "30987": {
-    "posterPath": "/c3xPlnsN8nP9VGaHfOK8jVSDOxw.jpg",
-    "backdropPath": "/yNMpoLtCdD9lyQ88FhwqdieUrkx.jpg",
-    "voteAverage": 5.933,
-    "title": "Ride Back"
+    "posterPath": "/cgcvNzLUQUjkur8zfhHwcadwzVz.jpg",
+    "backdropPath": "/pOhJoBPgw0GmwAO3O3YueZCJW2A.jpg",
+    "voteAverage": 8.415,
+    "title": "Great Teacher Onizuka"
   },
   "30988": {
-    "posterPath": "/70hf2538UAf7mzzNgvqTlWq6PDf.jpg",
-    "backdropPath": "/pYa81GUfKspR81chpcyVuTDqPCC.jpg",
-    "voteAverage": 8.014,
-    "title": "K-ON!"
+    "posterPath": "/deeJUvjGSXtRyECJHMO903zvSPP.jpg",
+    "backdropPath": "/tuFgC0PqzU1muAWQlBz7LjTW6nk.jpg",
+    "voteAverage": 8,
+    "title": "Golden Boy"
   },
   "30989": {
-    "posterPath": "/rOVSpNPFr62tFKeFuHgPdOXQx3E.jpg",
-    "backdropPath": "/kH9iK6krt0VBwAv5xbsYyhn8AW5.jpg",
-    "voteAverage": 7.657,
-    "title": "Durarara!!"
+    "posterPath": "/nmmOKeydeeO4TKucpvyMA2o6gdD.jpg",
+    "backdropPath": "/eklM8HZeGKB5KMKRqkuff0yW0Oq.jpg",
+    "voteAverage": 8.667,
+    "title": "Slam Dunk"
   },
   "30990": {
-    "posterPath": "/j6amUPH88lc7cJf54MKZCf4a9NA.jpg",
-    "backdropPath": "/fWZu2vaHJg7M6iwqeFPO3rMHTi7.jpg",
-    "voteAverage": 8.587,
-    "title": "Legend of the Galactic Heroes"
+    "posterPath": "/z8Gn9AcWEVHpqgOxgCtgjiSteSQ.jpg",
+    "backdropPath": "/85MXH20B2i3iBpr0kuICqMSFlWn.jpg",
+    "voteAverage": 8,
+    "title": "Hajime no ippo manga"
   },
   "30991": {
-    "posterPath": "/xDiXDfZwC6XYC6fxHI1jl3A3Ill.jpg",
-    "backdropPath": "/A4PHx94G7mvM3b8vsDJ5HEaQ6uv.jpg",
-    "voteAverage": 8.486,
-    "title": "Cowboy Bebop"
+    "posterPath": "/5OnjguJwkujo3R23w95EEX8eAEN.jpg",
+    "backdropPath": "/uNM5dbnPJXJJs1eggepRWjSvdIR.jpg",
+    "voteAverage": 8.476,
+    "title": "Yu Yu Hakusho"
   },
   "30992": {
-    "posterPath": "/a3td66l71KKDS1iaV0EHbaB1wHI.jpg",
-    "backdropPath": "/kcE0oKf6Lt5bYriMLJyEeyXhJ2i.jpg",
-    "voteAverage": 6.843,
-    "title": "Love Hina"
+    "posterPath": "/jC4xEYiaGbgZkQSy1hOHbXhKh5D.jpg",
+    "backdropPath": "/1KQYzDvPhe6XDycqmL4jb7QO51d.jpg",
+    "voteAverage": 7.759,
+    "title": "Baccano!"
   },
   "31724": {
     "posterPath": "/1cFqtyKUbdo1IurdpkK4tDthUJO.jpg",
@@ -1735,10 +1735,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Code Geass: Lelouch of the Rebellion"
   },
   "31776": {
-    "posterPath": "/uDMM8yIcHDpfdyxlokKnBK44th6.jpg",
-    "backdropPath": null,
-    "voteAverage": 8,
-    "title": "Living Britain"
+    "posterPath": "/nJlfPscbODh5gV1yTGSPqYOO7rl.jpg",
+    "backdropPath": "/2rvFW70UeOMCTXGmYHij1bwHCiu.jpg",
+    "voteAverage": 8.229,
+    "title": "Ghost in the Shell: Stand Alone Complex"
   },
   "31910": {
     "posterPath": "/kV27j3Nz4d5z8u6mN3EJw9RiLg2.jpg",
@@ -1753,10 +1753,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Fullmetal Alchemist: Brotherhood"
   },
   "33880": {
-    "posterPath": "/dZgYvSfuh1YHDrJuILlVQ5oA2hF.jpg",
-    "backdropPath": "/bauKfP3CX5JPAXpmveOlPG1pngC.jpg",
-    "voteAverage": 8.226,
-    "title": "The Legend of Korra"
+    "posterPath": "/xctRBSZzvoHDHz38ZZUGxRYetvG.jpg",
+    "backdropPath": "/99Y64VK0KwyRWfaW6VdpDfPKNMo.jpg",
+    "voteAverage": 8.5,
+    "title": "Berserk"
   },
   "34016": {
     "posterPath": "/mpYHjyPX0DAxbsnWKmSK5jZ1s4T.jpg",
@@ -1783,16 +1783,16 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Dragon Ball Z Kai"
   },
   "36360": {
-    "posterPath": "/vqkUhAAWhSs1lFdltOsvXPVJPp5.jpg",
-    "backdropPath": "/vmpMO3TPBZwFtFtXIA6AZlqjLRc.jpg",
-    "voteAverage": 6,
-    "title": "Kamen no Maid Guy"
+    "posterPath": "/qy5enaLa2Iy8zJAnXC1UNA1Ssjc.jpg",
+    "backdropPath": "/ce2s97LwKSsB7MYBHK53OCUbDWo.jpg",
+    "voteAverage": 7.503,
+    "title": "Spice and Wolf"
   },
   "36361": {
-    "posterPath": "/zBEHcmVe87YjfI8SmIYkiDtX35I.jpg",
-    "backdropPath": "/cchlQWYrnMPyl1EbjZWCzeAz8l5.jpg",
-    "voteAverage": 4.9,
-    "title": "Ulice"
+    "posterPath": "/jPBMYp4ddXkGJDSxxmaKBjzv2r3.jpg",
+    "backdropPath": "/vB7HwJNhlRA9tPViK32bK0hVCmb.jpg",
+    "voteAverage": 8.3,
+    "title": "Clannad"
   },
   "36557": {
     "posterPath": "/lMrxYKKhd4lqRzwUHAy5gcx9PSO.jpg",
@@ -1849,10 +1849,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "One Piece"
   },
   "37958": {
-    "posterPath": "/2oo3JspWdCHj3RClVjT4gp4u2b0.jpg",
-    "backdropPath": "/vbcUqIQZl7q7O2op2NT0ZqTLXxH.jpg",
-    "voteAverage": 6.05,
-    "title": "Immortals"
+    "posterPath": "/z9S39hH4IOX9Hmtn3zho3Wdqem8.jpg",
+    "backdropPath": "/1oaRUHv1zX4mZNX1zq4NcHIg50m.jpg",
+    "voteAverage": 7.432,
+    "title": "One Piece Film: Strong World"
   },
   "38356": {
     "posterPath": "/28YlCLrFhONteYSs9hKjD1Km0Cj.jpg",
@@ -1861,16 +1861,16 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Transformers: Dark of the Moon"
   },
   "38472": {
-    "posterPath": "/oxnWofiE9fHOgUfs9NJa6nG6NTR.jpg",
-    "backdropPath": "/fjEOQhzZk2Or7VYUBeMx5ZIwU95.jpg",
-    "voteAverage": 7.47,
-    "title": "Marvel's Jessica Jones"
+    "posterPath": "/kpNoqNmElzGUEcEoZyfFwvYXMsR.jpg",
+    "backdropPath": "/wJzHFl5mq6JFbD6equTleJuzlnk.jpg",
+    "voteAverage": 7.8,
+    "title": "Blue Exorcist"
   },
   "39535": {
-    "posterPath": "/rVNoet7eAKEeJVq55rhxOoe6ORJ.jpg",
-    "backdropPath": "/ga9JNSYTrLkNWf1bJxIdzeISVho.jpg",
-    "voteAverage": 3,
-    "title": "Ice T and Coco"
+    "posterPath": "/chUbHBiMX7buj8TzOEIjHHPCJfF.jpg",
+    "backdropPath": "/l6UO4qEHwUdjPyavbP6yGA06cS3.jpg",
+    "voteAverage": 8.012,
+    "title": "Fate/Zero"
   },
   "39763": {
     "posterPath": "/cf9vkwFmwvdzBlcpAYEVQfsKoTp.jpg",
@@ -1897,10 +1897,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Black Mirror"
   },
   "42646": {
-    "posterPath": "/2Z52nZaAQt1P7XJtu8fNlMXgdps.jpg",
-    "backdropPath": "/82hAXKATyuldbt4PxSNnHHy2BVO.jpg",
-    "voteAverage": 8.182,
-    "title": "Toradora!"
+    "posterPath": "/h3YyESKtOy7Rrv7zymyF9kfpz7T.jpg",
+    "backdropPath": "/lL0rMeVqiOyVwmft6oPKQKbDYr6.jpg",
+    "voteAverage": 8.28,
+    "title": "Another"
   },
   "44214": {
     "posterPath": "/viWheBd44bouiLCHgNMvahLThqx.jpg",
@@ -1909,10 +1909,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Black Swan"
   },
   "44217": {
-    "posterPath": "/bQLrHIRNEkE3PdIWQrZHynQZazu.jpg",
-    "backdropPath": "/13kblIK8DnxMurcRDkeyy2sGR7v.jpg",
-    "voteAverage": 8.104,
-    "title": "Vikings"
+    "posterPath": "/qi8dlAgQEeahpEn1AOb5BJEOcVB.jpg",
+    "backdropPath": "/fOyOP702oDeGyM2H4I8mQ5pdKne.jpg",
+    "voteAverage": 8.395,
+    "title": "Kuroko's Basketball"
   },
   "44912": {
     "posterPath": "/fj21HwUprqjjwTdkKC1XZurRSpV.jpg",
@@ -1933,16 +1933,16 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Sword Art Online"
   },
   "45789": {
-    "posterPath": "/jfFNydakwvbeACEwSd2Gh8UWtba.jpg",
-    "backdropPath": "/kGxPVyra9Lvf5tPmTXnMEBpwOip.jpg",
-    "voteAverage": 6,
-    "title": "Sturm der Liebe"
+    "posterPath": "/1EdA21TRBXJU5aBP4EHkOMF2tNx.jpg",
+    "backdropPath": "/8ysRHGV3URjOJT7u7NkZiFjvObk.jpg",
+    "voteAverage": 8.075,
+    "title": "Mushi-Shi"
   },
   "45790": {
-    "posterPath": "/ogAWwbh3frWtiTyyXrZaVFtqCgp.jpg",
-    "backdropPath": "/l2gc2dPRUPe3bAfYCRTjc6uAMmB.jpg",
-    "voteAverage": 8.6,
-    "title": "JoJo's Bizarre Adventure"
+    "posterPath": "/6iIoK9LEM92hBEZD3aVQVCWeaRC.jpg",
+    "backdropPath": "/xHjRfQIRlxug491JrKiEYl9vHM1.jpg",
+    "voteAverage": 8.2,
+    "title": "Natsume's Book of Friends"
   },
   "46187": {
     "posterPath": "/uWnP6qTcc4imPJ9ZHaXlPQlcYnB.jpg",
@@ -1975,10 +1975,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "The Americans"
   },
   "46648": {
-    "posterPath": "/cuV2O5ZyDLHSOWzg3nLVljp1ubw.jpg",
-    "backdropPath": "/v8YFr8BbU9qsO8PYIulzTeM6Qk.jpg",
-    "voteAverage": 8.295,
-    "title": "True Detective"
+    "posterPath": "/sb5MNoeZGHX21qvtwhmizUsJJqq.jpg",
+    "backdropPath": "/5VL7HC4aeLhepAaGxaQBUBWgIGo.jpg",
+    "voteAverage": 8.216,
+    "title": "My Teen Romantic Comedy SNAFU"
   },
   "46896": {
     "posterPath": "/keJOhJXGiLL54EW6QocbyvQGquA.jpg",
@@ -2137,22 +2137,22 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "BoJack Horseman"
   },
   "61374": {
-    "posterPath": "/1m4RlC9BTCbyY549TOdVQ5NRPcR.jpg",
-    "backdropPath": "/jnwRlthXIgJB75Mt9GEl93Dczki.jpg",
-    "voteAverage": 8.2,
-    "title": "Tokyo Ghoul"
+    "posterPath": "/4F1WtP3dFIwLPOfa3u29VEVnNkf.jpg",
+    "backdropPath": "/yECUoiSTtm3MV6BRc5WV1bh6xS7.jpg",
+    "voteAverage": 8.147,
+    "title": "Kill la Kill"
   },
   "61378": {
-    "posterPath": "/6Nl1ablo4DNTLb4ZH7Mycz81AEt.jpg",
-    "backdropPath": "/jzkTau3O7CfG3LkKopxkNWPZf8d.jpg",
-    "voteAverage": 7.006,
-    "title": "Madam Secretary"
+    "posterPath": "/7l8nKzWZrhlGAWUubbw4UJaRlLH.jpg",
+    "backdropPath": "/7nq4Nu5kaggdGGYxzxGMxdI6aNJ.jpg",
+    "voteAverage": 8.005,
+    "title": "No Game No Life"
   },
   "61408": {
-    "posterPath": "/hOm9TB9JQJhAT1tBXGsngP35cCX.jpg",
-    "backdropPath": "/oIiQkUSr8oqzCCeiSzVS7VJj1Y0.jpg",
-    "voteAverage": 7.7,
-    "title": "Nagi-Asu: A Lull in the Sea"
+    "posterPath": "/qa4an6FYwTXAeiOk5zHyZsJ4CNx.jpg",
+    "backdropPath": "/lt5rC0GcXVmHEjXzRruNIdbca8B.jpg",
+    "voteAverage": 7.726,
+    "title": "Terror in Resonance"
   },
   "61415": {
     "posterPath": "/jyqi5BkDoKKIA2WAoz3HBtRHld3.jpg",
@@ -2227,10 +2227,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Mr. Robot"
   },
   "62710": {
-    "posterPath": "/4AeYzamQmd9Fa6hawDmYKbdvBSe.jpg",
-    "backdropPath": "/1GWiao0QYuKsoTvUmd7ivnE3qDY.jpg",
-    "voteAverage": 7.379,
-    "title": "Blindspot"
+    "posterPath": "/AojgldgsOlzZV8ahyOzaiAjJWvV.jpg",
+    "backdropPath": "/8phLVFEXOe02JgFmH9ldn3j4tXW.jpg",
+    "voteAverage": 9.613,
+    "title": "Dragon Ball Super: Beerus"
   },
   "62715": {
     "posterPath": "/qEUrbXJ2qt4Rg84Btlx4STOhgte.jpg",
@@ -2269,16 +2269,16 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Narcos"
   },
   "63510": {
-    "posterPath": "/el6yFiXQxiPLZLCJsukAI9UTI6J.jpg",
-    "backdropPath": "/2Eq2CYTV8cAJeddla6vFgIlxIH6.jpg",
-    "voteAverage": 7.851,
-    "title": "Attack on Titan: Junior High"
+    "posterPath": "/rfSzXC476Qr1K8JL7oj6jpSrWce.jpg",
+    "backdropPath": "/lnbzlEHSgGTNGgQNnfOvlE3cDz3.jpg",
+    "voteAverage": 6,
+    "title": "Code Geass: Akito the Exiled"
   },
   "63639": {
-    "posterPath": "/8djpxDeWpINnGhjpFXQjnBe6zbx.jpg",
-    "backdropPath": "/7yKtaRij2giAj0s09F6gmB8XIje.jpg",
-    "voteAverage": 8.071,
-    "title": "The Expanse"
+    "posterPath": "/K8ZUjxaj9F0t3AwJDz8ypzBynM.jpg",
+    "backdropPath": "/q5WJxYTXNNJdEHxFCqd3S8pO4VA.jpg",
+    "voteAverage": 8.4,
+    "title": "Overlord"
   },
   "63926": {
     "posterPath": "/dT10AxJIXVvRwFAew4tt2RhzJrD.jpg",
@@ -2293,16 +2293,16 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Reply 1988"
   },
   "64790": {
-    "posterPath": "/dGfgwWkZKU9WX7sHpfK6f3v9HQo.jpg",
-    "backdropPath": "/nL5rWQRquSCs5BwZouk8wL9v6Hc.jpg",
-    "voteAverage": 6,
-    "title": "For Sarah"
+    "posterPath": "/5zPrZYZRg2xSxoU8541ROdK1oVj.jpg",
+    "backdropPath": "/22YtPgohea5ADkePsnISEU34U99.jpg",
+    "voteAverage": 8,
+    "title": "Descending Stories"
   },
   "65335": {
-    "posterPath": "/ubu8jnSKTumfeXVJx01BtmnKGVJ.jpg",
-    "backdropPath": null,
-    "voteAverage": 7,
-    "title": "The Dearest Lady"
+    "posterPath": "/EljUwZJhpuYfVuSfqY8Pt1xxpH.jpg",
+    "backdropPath": "/rRGnjRCHdDl3m3oCVSvo5z2E5c5.jpg",
+    "voteAverage": 8.5,
+    "title": "ERASED"
   },
   "65494": {
     "posterPath": "/1M876KPjulVwppEpldhdc8V4o68.jpg",
@@ -2311,10 +2311,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "The Crown"
   },
   "65495": {
-    "posterPath": "/8HZyGMnPLVVb00rmrh6A2SbK9NX.jpg",
-    "backdropPath": "/vN84JlTvOZvZzxi0D2SJQNFvtjS.jpg",
-    "voteAverage": 8.042,
-    "title": "Atlanta"
+    "posterPath": "/oRaOeQlwktbGSd2T31FYAcgHZlh.jpg",
+    "backdropPath": "/rvZJxD36tKoglL8fXoMMWKGQfM.jpg",
+    "voteAverage": 8.537,
+    "title": "KONOSUBA - God's blessing on this wonderful world!"
   },
   "65930": {
     "posterPath": "/phuYuzqWW9ru8EA3HVjE9W2Rr3M.jpg",
@@ -2323,10 +2323,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "My Hero Academia"
   },
   "65942": {
-    "posterPath": "/oHqYrPAsIiTD5m4DuxumV4er8BU.jpg",
-    "backdropPath": "/7ZruEnSnHD6Jx5mF0hBt1E306Vt.jpg",
-    "voteAverage": 8.13,
-    "title": "Re:ZERO -Starting Life in Another World-"
+    "posterPath": "/6AQmGhkYwAqW2OevjXbsh7tZnNO.jpg",
+    "backdropPath": "/79lc4Rocfnn9RIv1YlHC0jeBsqf.jpg",
+    "voteAverage": 8.236,
+    "title": "Bungo Stray Dogs"
   },
   "66573": {
     "posterPath": "/qIhsuhoIYR5yTnDta0IL4senbeN.jpg",
@@ -2347,16 +2347,16 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Grace"
   },
   "67070": {
-    "posterPath": "/vFn0nLPcIggPH5LTWWaJ2hcsGlc.jpg",
-    "backdropPath": "/hXdQ4MWsEOX6qg6VydKrLb3YJ4g.jpg",
-    "voteAverage": 8.277,
-    "title": "Fleabag"
+    "posterPath": "/vR7hwaGQ0ySRoq1WobiNRaPs4WO.jpg",
+    "backdropPath": "/kP5duNJEbTfXpBs6CITsaZ88pQi.jpg",
+    "voteAverage": 8.484,
+    "title": "Mob Psycho 100"
   },
   "67178": {
-    "posterPath": "/tM6xqRKXoloH9UchaJEyyRE9O1w.jpg",
-    "backdropPath": "/jBGjbSDRxOEudW9rmQbWDzJUKq9.jpg",
-    "voteAverage": 8.2,
-    "title": "Marvel's The Punisher"
+    "posterPath": "/zrSxmvaHLvr6nqUOQ3R0uPl12v4.jpg",
+    "backdropPath": "/iiHQiu3Kg8TFzVCiugQT0SGPEU.jpg",
+    "voteAverage": 7.599,
+    "title": "91 Days"
   },
   "67744": {
     "posterPath": "/fbKE87mojpIETWepSbD5Qt741fp.jpg",
@@ -2365,10 +2365,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "MINDHUNTER"
   },
   "67915": {
-    "posterPath": "/sPkxHNw5BFvuCFGWw825TS7n6X3.jpg",
-    "backdropPath": "/smSbK5cd8T9XHcxEUcems23BDEF.jpg",
-    "voteAverage": 8.617,
-    "title": "Guardian: The Lonely and Great God"
+    "posterPath": "/sokReNdjEwG2TkdUzJcVnD6sChT.jpg",
+    "backdropPath": "/mLzJpP9YRexGbvgiqunirAM5HAA.jpg",
+    "voteAverage": 8,
+    "title": "March Comes In Like a Lion"
   },
   "68718": {
     "posterPath": "/7oWY8VDWW7thTzWh3OKYRkWUlD5.jpg",
@@ -2443,10 +2443,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "The Witcher"
   },
   "72636": {
-    "posterPath": "/n30CBH4BoN5Z34tCpOWIPGJYOaS.jpg",
-    "backdropPath": "/uzp513qTcHsAavlCJ58x5d73bzy.jpg",
-    "voteAverage": 8.347,
-    "title": "Made in Abyss"
+    "posterPath": "/ejzwSIch2VEoQL5pyUWfEJ8vh8R.jpg",
+    "backdropPath": "/d3yNn379emGP8xztqeOsB9oLNG2.jpg",
+    "voteAverage": 8.413,
+    "title": "Classroom of the Elite"
   },
   "72755": {
     "posterPath": "/t3yVaAlmCLBwbqTrKGcWHwuCmkh.jpg",
@@ -2479,22 +2479,22 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Yellowstone"
   },
   "75214": {
-    "posterPath": "/61EwFPqc0r1uJo6la49J55F8bQ8.jpg",
-    "backdropPath": "/2e2AEk7Jmn8CztM62hoUyEEWw0B.jpg",
-    "voteAverage": 8.506,
-    "title": "Violet Evergarden"
+    "posterPath": "/m6R8gI3brohD6izeVCXFmuGeV2m.jpg",
+    "backdropPath": "/tKh3pc5MEjCIGV7hSJX76qi8aGA.jpg",
+    "voteAverage": 8.505,
+    "title": "DARLING in the FRANXX"
   },
   "75640": {
-    "posterPath": "/qq3fjeMDFXDI8fG2Kml2cYep6ec.jpg",
-    "backdropPath": null,
-    "voteAverage": 6.5,
-    "title": "Light and Dark"
+    "posterPath": "/vC3acJ5WsMSKLyXgEAj4zrwgpkG.jpg",
+    "backdropPath": "/7JR7tmIcThPxReIhVvwKTwVQKcY.jpg",
+    "voteAverage": 7.9,
+    "title": "A Place Further than the Universe"
   },
   "75820": {
-    "posterPath": "/p7ljjykSsiyWstGVAwIkbdfPzRV.jpg",
-    "backdropPath": "/gQwa6X2nmTHkmDgAifU4wacNqp4.jpg",
-    "voteAverage": 8.4,
-    "title": "Mr. Sunshine"
+    "posterPath": "/1c5xBDBQQwa1bvX5fibAeymReGg.jpg",
+    "backdropPath": "/cm3lmKnEAYLs2eJmn4AcFIu18X4.jpg",
+    "voteAverage": 8.2,
+    "title": "Laid-Back Camp"
   },
   "76170": {
     "posterPath": "/t2wVAcoRlKvEIVSbiYDb8d0QqqS.jpg",
@@ -2569,10 +2569,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "You"
   },
   "78546": {
-    "posterPath": "/jsIENBuBV2R5vYgfT1bjMhQVJLU.jpg",
-    "backdropPath": "/icJXjByB6bqlF5tTlRNP9H13qFI.jpg",
-    "voteAverage": 8,
-    "title": "GOT7's Working Eat Holiday in Jeju"
+    "posterPath": "/Ab1QIcwCAQUgs8Z8pTJnVPkKS0m.jpg",
+    "backdropPath": "/rT7DcPq4Fee6uStrl4t9Jv4iOnj.jpg",
+    "voteAverage": 7.6,
+    "title": "Golden Kamuy"
   },
   "78945": {
     "posterPath": "/7RvBQOTZGhCoPvLiF3Ugp2Q94Ux.jpg",
@@ -2593,10 +2593,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "The Surprising History of Sex and Love"
   },
   "80968": {
-    "posterPath": "/aXwMx8OvRFMfI1RmkbJm6Bq1jVg.jpg",
-    "backdropPath": "/64jEzC7YeKEpnn1YwjCGRo9ZvOX.jpg",
-    "voteAverage": 7.925,
-    "title": "Narcos: Mexico"
+    "posterPath": "/ii1yrluzWisy1rygSKz8lJkAkil.jpg",
+    "backdropPath": "/prHii5ULE8k9onzC3lFcb9RiITl.jpg",
+    "voteAverage": 7.779,
+    "title": "Grand Blue Dreaming"
   },
   "80986": {
     "posterPath": "/JJxVsQPPiuLcArALotMHsCubeo.jpg",
@@ -2605,16 +2605,16 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "DC's Stargirl"
   },
   "81356": {
-    "posterPath": "/bc3bmTdnoKcRuO9xdQKgAbB7Y9Z.jpg",
-    "backdropPath": "/u23G9KZregWHs1use6ir1fX27gl.jpg",
-    "voteAverage": 8.186,
-    "title": "Sex Education"
+    "posterPath": "/fbqDG7GjodvaNecgv1q8kfSNPl5.jpg",
+    "backdropPath": "/8165gnzhyRbkKfm3WFBINdkDQBR.jpg",
+    "voteAverage": 8.512,
+    "title": "Rascal Does Not Dream of Bunny Girl Senpai"
   },
   "81961": {
-    "posterPath": "/MZNQmzs0FTdkUh3H6soD6p363O.jpg",
-    "backdropPath": "/r1j8wIEmcwJMRtgy3lF6JdeP4gV.jpg",
-    "voteAverage": 10,
-    "title": "Dil Mom Ka Diya"
+    "posterPath": "/9m8bFIXPg26taNrFSXGwEORVACD.jpg",
+    "backdropPath": "/wJi7fRmHw0wRMldUY28sSzXpp4G.jpg",
+    "voteAverage": 8.144,
+    "title": "Sword Art Online"
   },
   "82702": {
     "posterPath": "/d13Uj86LdbDLrfDoHR5aDOFYyJC.jpg",
@@ -2623,10 +2623,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "How to Train Your Dragon 2"
   },
   "82823": {
-    "posterPath": "/sb1HEYUoDG6g5g0DGYJL998DpXx.jpg",
-    "backdropPath": "/4kyaYNQ847uHi8oW3WHnJ951ARQ.jpg",
-    "voteAverage": 8.1,
-    "title": "Boarding School Juliet"
+    "posterPath": "/pzujcdPAoH361NObVrtbA7zACE7.jpg",
+    "backdropPath": "/eJOy7YWAHgOS3V477sdTsq4v9jp.jpg",
+    "voteAverage": 8.4,
+    "title": "That Time I Got Reincarnated as a Slime"
   },
   "82856": {
     "posterPath": "/sWgBv7LV2PRoQgkxwlibdGXKz1S.jpg",
@@ -2641,16 +2641,16 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Fast & Furious 6"
   },
   "83095": {
+    "posterPath": "/5khbC6AuNgnvnoDbjIMKCOhEtIc.jpg",
+    "backdropPath": "/dJ8yrSokdTMnhKJw06MllSfCegb.jpg",
+    "voteAverage": 8.525,
+    "title": "Kaguya-sama: Love Is War"
+  },
+  "83097": {
     "posterPath": "/yjq2n0agGJfmZQ9NpbYIhuBofcq.jpg",
     "backdropPath": "/de6iC707SwuMsE3y2fo5OHCOsvj.jpg",
     "voteAverage": 8.45,
     "title": "The Rising of the Shield Hero"
-  },
-  "83097": {
-    "posterPath": "/oBgRCpAbtMpk1v8wfdsIph7lPQE.jpg",
-    "backdropPath": "/u7Q2C10SQlhPoKm7ersFL5f991q.jpg",
-    "voteAverage": 8.258,
-    "title": "The Promised Neverland"
   },
   "83533": {
     "posterPath": "/bRBeSHfGHwkEpImlhxPmOcUsaeg.jpg",
@@ -2695,16 +2695,16 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Demon Slayer: Kimetsu no Yaiba"
   },
   "86031": {
-    "posterPath": "/xbZQ3fDl0y5mt0ARwfeyrgQ4JTw.jpg",
-    "backdropPath": "/lN13BPAEnc5iXmoxxBQHOZ1ScfZ.jpg",
-    "voteAverage": 8.5,
-    "title": "Dr. STONE"
+    "posterPath": "/96jrp8XIEPKC7xHhbkpWLD15oYW.jpg",
+    "backdropPath": "/xkNnQ3IGGRQcXnl1zTb5H6Vb3SP.jpg",
+    "voteAverage": 8.312,
+    "title": "Fire Force"
   },
   "86598": {
-    "posterPath": "/9ofrnp1aml6uRH9Jsx58aSHITug.jpg",
-    "backdropPath": "/qYseDf8NUGdSR6okEyQgn7UYZAs.jpg",
-    "voteAverage": 6.9,
-    "title": "The Case Against Adnan Syed"
+    "posterPath": "/9TGNcvMm91QXmnnCCYYqnYK0bK7.jpg",
+    "backdropPath": "/2vIjTPITEoHeetz1jU4UxyHL9tg.jpg",
+    "voteAverage": 8,
+    "title": "Fruits Basket"
   },
   "86831": {
     "posterPath": "/vL5BQvXH96cJzmNK5n7QliQxy90.jpg",
@@ -2731,10 +2731,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "The Queen's Gambit"
   },
   "87826": {
-    "posterPath": "/wUtoD67q4BnRUwikUbT6M38d5oj.jpg",
-    "backdropPath": "/zzAPTDTHi7wrP99iD6x940wLjPy.jpg",
-    "voteAverage": 6.647,
-    "title": "Selling Sunset"
+    "posterPath": "/4XjD4Hbyhnn9wakIehZJJ5rtqxn.jpg",
+    "backdropPath": "/s6ukZz0Mk7RkQDfC4PM7uOnhLlC.jpg",
+    "voteAverage": 7.9,
+    "title": "Fate/Grand Order Absolute Demonic Front: Babylonia"
   },
   "87827": {
     "posterPath": "/iLgRu4hhSr6V1uManX6ukDriiSc.jpg",
@@ -2821,10 +2821,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "She-Hulk: Attorney at Law"
   },
   "93259": {
-    "posterPath": "/qqXwBpHSvfN3m6Q7ramuE234FH9.jpg",
-    "backdropPath": "/szDsLQvI0bIuYBCQwPgn6rJ08gD.jpg",
-    "voteAverage": 8,
-    "title": "Inn of Kitchen"
+    "posterPath": "/aR06SJRDGqRmGQYXAXqeOkRZq7T.jpg",
+    "backdropPath": "/vRyC5WT7ytRflfEFFyRmGeZc0Cf.jpg",
+    "voteAverage": 7.045,
+    "title": "Blade Runner: Black Lotus"
   },
   "93351": {
     "posterPath": "/4aCVY8DsYbYBLihggMXCHWCegzl.jpg",
@@ -2887,10 +2887,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Itaewon Class"
   },
   "96580": {
-    "posterPath": "/5van3ktOTqWr5lcixh5aR8NlqqW.jpg",
-    "backdropPath": "/aCbOj4wc6vQUUVNKppssj2PYUy0.jpg",
-    "voteAverage": 7.8,
-    "title": "Resident Alien"
+    "posterPath": "/9QXO4C0AwAuBa15nuDLZU2MyktB.jpg",
+    "backdropPath": "/gcvJgJScIt0a5sRt8uLIkGM9IhI.jpg",
+    "voteAverage": 8.1,
+    "title": "Tower of God"
   },
   "96677": {
     "posterPath": "/h6Z2oogE4mJk2uffdtIlLhb0EHx.jpg",
@@ -2905,10 +2905,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Ted Lasso"
   },
   "97630": {
-    "posterPath": "/wNSdSSxowM3WIqmPJNg3RagYbwP.jpg",
-    "backdropPath": "/evPzxMacNWsjkUKQO4NXKe5Rl6a.jpg",
-    "voteAverage": 7,
-    "title": "Zero Dark Thirty"
+    "posterPath": "/d0s1xvykzl0kz7fP5S2ROYqphdz.jpg",
+    "backdropPath": "/q0PBB2RCrOAZrZjqJKhL3ibTV8b.jpg",
+    "voteAverage": 7.197,
+    "title": "Evangelion: 3.0 You Can (Not) Redo"
   },
   "97890": {
     "posterPath": "/8rbxvwGpPd9MWjdhAoSBj016cns.jpg",
@@ -3007,10 +3007,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "BURN THE WITCH"
   },
   "108978": {
-    "posterPath": "/f1VCQIG2iCyOookdgOzwtUpwWC0.jpg",
-    "backdropPath": "/pF0qkRsrHkdYadPWY9AMeFZfcwk.jpg",
-    "voteAverage": 8.127,
-    "title": "Reacher"
+    "posterPath": "/lA2jRBubr2OLOlbkJXuBXYqv4A9.jpg",
+    "backdropPath": "/fBWZQOPl5CuYxdXRb0uNVX8mgcG.jpg",
+    "voteAverage": 8.158,
+    "title": "To Your Eternity"
   },
   "109439": {
     "posterPath": "/vtxuPWkdllLNLVyGjKYa267ntuH.jpg",
@@ -3055,16 +3055,16 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "DAHMER - Monster: The Jeffrey Dahmer Story"
   },
   "114410": {
-    "posterPath": "/npdB6eFzizki0WaZ1OvKcJrWe97.jpg",
-    "backdropPath": "/fOUKSCbZzaoQKsO39enivHnWDid.jpg",
-    "voteAverage": 8.507,
-    "title": "Chainsaw Man"
+    "posterPath": "/agf5sETjlO35s3EDA7wwGliZ5UW.jpg",
+    "backdropPath": "/oz3LT9glLNWpSQACnWlIYoSZA5M.jpg",
+    "voteAverage": 7.851,
+    "title": "PLUTO"
   },
   "114472": {
-    "posterPath": "/3rINdUPSy9AklJg74jWHOyUXuZd.jpg",
-    "backdropPath": "/6mOK9j99OFlxGc3ird2jWUeUha9.jpg",
-    "voteAverage": 6.41,
-    "title": "Secret Invasion"
+    "posterPath": "/wWwTjKER5a8LRUGHrw86VU0gUy1.jpg",
+    "backdropPath": "/uPHXbrh9jlq2XgfjjTFlkJfgtOQ.jpg",
+    "voteAverage": 7.536,
+    "title": "RESIDENT EVIL: Infinite Darkness"
   },
   "114473": {
     "posterPath": "/wuUvhZ2WLqX1z0b1NXkapWoov9j.jpg",
@@ -3115,10 +3115,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Dawn of the Planet of the Apes"
   },
   "120089": {
-    "posterPath": "/7NAvPYPAu7MeHwP8E9sn81PqsRh.jpg",
-    "backdropPath": "/lysUnU6V0VfcthDbviuVlIqgHOR.jpg",
-    "voteAverage": 8.493,
-    "title": "SPY x FAMILY"
+    "posterPath": "/ztyo4gSDWuxV83png18W3Av2XNW.jpg",
+    "backdropPath": "/m7RQ7l2FnCTEnH58Zm8SQzJGYQH.jpg",
+    "voteAverage": 8.237,
+    "title": "ODDTAXI"
   },
   "120467": {
     "posterPath": "/eWdyYQreja6JGCzqHWXpWHDrrPo.jpg",
@@ -3127,10 +3127,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "The Grand Budapest Hotel"
   },
   "121448": {
-    "posterPath": "/ujMjMUi6z02uOfQEerEDC4rH6aG.jpg",
-    "backdropPath": "/1d23ENJQrn4TIKhnWF85Eb56Zk8.jpg",
-    "voteAverage": 8.05,
-    "title": "Ranking of Kings"
+    "posterPath": "/hCt2bLRGTCjHGqtV5FP3Img6w1h.jpg",
+    "backdropPath": "/w3agwUSMpJ4X9t1jGrDtqqRPjDQ.jpg",
+    "voteAverage": 8.022,
+    "title": "LINK CLICK"
   },
   "122079": {
     "posterPath": "/1z8fgEsGWGukG0s9Jc2lyGAUVoD.jpg",
@@ -3199,10 +3199,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Jurassic World"
   },
   "136283": {
-    "posterPath": "/uUM4LVlPgIrww07OoEKrGWlS1Ej.jpg",
-    "backdropPath": "/AjwoDj77HLlqcpwEGqsnvMXm5my.jpg",
-    "voteAverage": 8.46,
-    "title": "The Glory"
+    "posterPath": "/7JKYmtLydAwo9ZsEmAknZiO4U8g.jpg",
+    "backdropPath": "/htD5SJpPOvkmAowU80KrWnN59WO.jpg",
+    "voteAverage": 8.075,
+    "title": "The Eminence in Shadow"
   },
   "136315": {
     "posterPath": "/eKfVzzEazSIjJMrw9ADa2x8ksLz.jpg",
@@ -3259,10 +3259,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Prisoners"
   },
   "147441": {
-    "posterPath": "/uaDj37JtvLan9tihxZ18e6qL33b.jpg",
-    "backdropPath": "/hJ1jUw8irCiWwQk7BElxF92BrlK.jpg",
-    "voteAverage": 5.889,
-    "title": "Exodus: Gods and Kings"
+    "posterPath": "/dd0HwfxstffjRgbBcQvtw3uqS6O.jpg",
+    "backdropPath": "/cMXp028BZIdiA9OFfiK4gSYYtcr.jpg",
+    "voteAverage": 7.495,
+    "title": "One Piece Film: Z"
   },
   "150540": {
     "posterPath": "/2H1TmgdfNtsKlU9jKdeNyYL5y8T.jpg",
@@ -3277,10 +3277,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Her"
   },
   "153312": {
-    "posterPath": "/y13WOeZ2rz2Ezpws0RJ0I8sQpG4.jpg",
-    "backdropPath": "/mNHRGO1gFpR2CYZdANe72kcKq7G.jpg",
-    "voteAverage": 8.321,
-    "title": "Tulsa King"
+    "posterPath": "/fcKH1NQzoTXiYO1OrhaFFwTKhBp.jpg",
+    "backdropPath": "/seMRyWVwIVBWbC9xaMzDMZJ8fUH.jpg",
+    "voteAverage": 8.302,
+    "title": "BLUE LOCK"
   },
   "154825": {
     "posterPath": "/iLh7L8ZuvgdxFaM9sImyv2iKYLe.jpg",
@@ -3361,10 +3361,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Imo Tako Nankin"
   },
   "197067": {
-    "posterPath": "/zuNOQVI4rEaqwknrfQUVKtlKE2C.jpg",
-    "backdropPath": "/39owosjolYd3gKufgM9jMdSSk9t.jpg",
-    "voteAverage": 8.489,
-    "title": "Extraordinary Attorney Woo"
+    "posterPath": "/1V9I7SvZbYoMbSvdtnlkkq9SB1k.jpg",
+    "backdropPath": "/zlXW7Y5LvqTQBlhalMKc0gUrYYE.jpg",
+    "voteAverage": 8.215,
+    "title": "Hell's Paradise"
   },
   "198663": {
     "posterPath": "/ode14q7WtDugFDp78fo9lCsmay9.jpg",
@@ -3379,10 +3379,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "1923"
   },
   "200880": {
-    "posterPath": "/vls10R8QVuoO8QcyJZNr5MzhPir.jpg",
-    "backdropPath": "/fgFXqapvv6wnJ3LeQsricJMgHSg.jpg",
-    "voteAverage": 8,
-    "title": "벌거벗은 한국사"
+    "posterPath": "/Af4tZ3eKjKWXG4vfiQ8R1NJomAP.jpg",
+    "backdropPath": "/riRJGnbb18zVBEXpov8GJKnBczj.jpg",
+    "voteAverage": 8.445,
+    "title": "BOCCHI THE ROCK!"
   },
   "202250": {
     "posterPath": "/fiK3u7oQb2Nsi2kuR73RRyIIGDD.jpg",
@@ -3391,10 +3391,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Dirty Linen"
   },
   "202879": {
-    "posterPath": "/srQbJhLRKoAwRrNN5ga7webPHbC.jpg",
-    "backdropPath": "/fciU7RVyfcdsTeksTnBXGPmkKg2.jpg",
-    "voteAverage": 6.778,
-    "title": "Star Wars: Skeleton Crew"
+    "posterPath": "/v4sbn6IsJGAIZNHjdB4CprvS7zo.jpg",
+    "backdropPath": "/woH18JkZMYhMSWqtHkPA4F6Gd1z.jpg",
+    "voteAverage": 7.1,
+    "title": "Terminator Zero"
   },
   "202880": {
     "posterPath": "/4Nmb8R9fO9ezzTDZKE5hwkPhu7M.jpg",
@@ -3451,16 +3451,16 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Batman v Superman: Dawn of Justice"
   },
   "209867": {
-    "posterPath": "/dqZENchTd7lp5zht7BdlqM7RBhD.jpg",
-    "backdropPath": "/rBOnrVlck7BIlGeWVlzYiZeg4l2.jpg",
-    "voteAverage": 8.833,
-    "title": "Frieren: Beyond Journey's End"
+    "posterPath": "/9t3DYdGxK3i4WRzKvIZwJd4kBnr.jpg",
+    "backdropPath": "/xC5GyeIzLsSRizJE5LedGShNgBa.jpg",
+    "voteAverage": 8.374,
+    "title": "Delicious in Dungeon"
   },
   "209868": {
-    "posterPath": "/jxwqS2XwHlNJDFnxiLHjbQ2M2pg.jpg",
-    "backdropPath": null,
-    "voteAverage": 8,
-    "title": "UHD추석 특집 다큐 쇠제비갈매기의 귀향"
+    "posterPath": "/83yDUQVpdhv8ePy3nbTRzFaKYuQ.jpg",
+    "backdropPath": "/htGeuCcNhlBe8GTx3izKOsd8frw.jpg",
+    "voteAverage": 8.432,
+    "title": "Kaiju No. 8"
   },
   "210577": {
     "posterPath": "/ts996lKsxvjkO2yiYG0ht4qAicO.jpg",
@@ -3487,16 +3487,16 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Steins;Gate: The Movie - Load Region of Déjà Vu"
   },
   "219760": {
-    "posterPath": "/9mYeRoWguq5etbwJRdF8BXFKiF.jpg",
-    "backdropPath": "/m3m2wPu9Irw397jagBKFJrcobpx.jpg",
-    "voteAverage": 7.7,
-    "title": "The Terminal List: Dark Wolf"
+    "posterPath": "/4XJwo95ktJ7xupw1bCMuP91kyYr.jpg",
+    "backdropPath": "/1swj9HxDkjzsO3yHlSwRA38hMFN.jpg",
+    "voteAverage": 7.769,
+    "title": "Castlevania: Nocturne"
   },
   "221855": {
-    "posterPath": "/sJZcy8QsOPuRPiCfoCWVB3r9Ohg.jpg",
-    "backdropPath": "/gffVOVZ2Y9cmVIZ26Gt9ByMGCYH.jpg",
-    "voteAverage": 8.7,
-    "title": "The Apothecary Diaries"
+    "posterPath": "/nHROk2C6bv8LqtvyYd0tCMURbxC.jpg",
+    "backdropPath": "/q3eIJSxZO2zXig4Ni3oo8md6mWS.jpg",
+    "voteAverage": 7.93,
+    "title": "Scott Pilgrim Takes Off"
   },
   "224372": {
     "posterPath": "/k8yARbD9iYn2nRX2HvsopfKDN2r.jpg",
@@ -3529,10 +3529,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Lucy"
   },
   "241980": {
-    "posterPath": "/1DHNAWKohDhyo5Tgqlt8RJeLbAl.jpg",
-    "backdropPath": "/4K9N2vbbWyPUG3Ddq7UVpiitVHR.jpg",
-    "voteAverage": 8,
-    "title": "Deadly Women"
+    "posterPath": "/jQRG3lI42IaJNr23jFeO6FSXmoE.jpg",
+    "backdropPath": "/pSdmUGsfocf4gTyD5auC4Ccz25l.jpg",
+    "voteAverage": 7.779,
+    "title": "Code Geass: Rozé of the Recapture"
   },
   "244786": {
     "posterPath": "/7fn624j5lj3xTme2SgiLCeuedmO.jpg",
@@ -3991,10 +3991,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "A Silent Voice: The Movie"
   },
   "381288": {
-    "posterPath": "/ow2BSQGKJtZpH2zZY1rmX8eXKAi.jpg",
-    "backdropPath": "/9pkZesKMnblFfKxEhQx45YQ2kIe.jpg",
-    "voteAverage": 7.339,
-    "title": "Split"
+    "posterPath": "/9PgiOFTLZXP7emlwcIt0yRasJ9h.jpg",
+    "backdropPath": "/wMzToVniA09xWS0DXSRQiufVvpZ.jpg",
+    "voteAverage": 7.231,
+    "title": "One Piece Film: GOLD"
   },
   "383498": {
     "posterPath": "/gyfPKfFYcVW54MoqhYlwwDDIfJR.jpg",
@@ -4051,10 +4051,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "The Batman"
   },
   "417859": {
-    "posterPath": "/7a5Jzjr9TmffGy76y1SZhn3sCiz.jpg",
-    "backdropPath": "/c5MCkebYhFuhmi32x760HfcvLIO.jpg",
-    "voteAverage": 6.617,
-    "title": "Puss in Boots"
+    "posterPath": "/2szdEK0Mr0RG0nWGFVTseNQHbnP.jpg",
+    "backdropPath": "/yFZG86Zvdy6JuIlMW9eHxlVkct5.jpg",
+    "voteAverage": 7.715,
+    "title": "Sword Art Online the Movie: Ordinal Scale"
   },
   "419430": {
     "posterPath": "/tFXcEccSQMf3lfhfXKSU9iRBpa3.jpg",
@@ -4105,10 +4105,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Dune"
   },
   "441130": {
-    "posterPath": "/vqGiNbdc2sDwsnivMMYzwAoSSu6.jpg",
-    "backdropPath": "/3zTbERSBLh7waK9811RTKGAcG86.jpg",
-    "voteAverage": 8.159,
-    "title": "Wolfwalkers"
+    "posterPath": "/6nEtmBg07DA5BWjcrmD49rxHsVQ.jpg",
+    "backdropPath": "/xfZ2u86Tui0aTKcPYcKGStzxWZv.jpg",
+    "voteAverage": 7.447,
+    "title": "Fate/stay night: Heaven's Feel I. Presage Flower"
   },
   "447332": {
     "posterPath": "/nAU74GmpUk7t5iklEp3bufwDq4n.jpg",
@@ -4213,10 +4213,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Sound of Metal"
   },
   "503939": {
-    "posterPath": "/fTy2tu7HbWLQ3vjOvNgHOlW5SDl.jpg",
-    "backdropPath": null,
-    "voteAverage": 5.3,
-    "title": "In einer Nacht wie dieser"
+    "posterPath": "/6iO8TJCyLI4BiPYOvdwzPV2bhoV.jpg",
+    "backdropPath": "/xrg1pYVPK1yN0UREAzd1ywoVM6m.jpg",
+    "voteAverage": 7.278,
+    "title": "Dragon Ball Z: Broly - The Legendary Super Saiyan"
   },
   "504253": {
     "posterPath": "/qpV8kvRfAntV7D4aOOsLIz7OdPc.jpg",
@@ -4249,10 +4249,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Red Notice"
   },
   "512895": {
-    "posterPath": "/8wBEye516IKul9sW7JKGcFXVGfV.jpg",
-    "backdropPath": "/nHNNKoqQOIWODk5mMyW8CvDisem.jpg",
-    "voteAverage": 7.1,
-    "title": "Lady and the Tramp"
+    "posterPath": "/ghD2HJyAk6EYVHrzBhddNDJ73Go.jpg",
+    "backdropPath": "/q62ZISQcYEQdiQkGCb20VpPljJO.jpg",
+    "voteAverage": 7.2,
+    "title": "Code Geass: Lelouch of the Re;surrection"
   },
   "515001": {
     "posterPath": "/1mqL7VG4Ix8wmxwypmCA1HTHBky.jpg",
@@ -4339,10 +4339,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Blue Beetle"
   },
   "566076": {
-    "posterPath": "/vEzkxuE2sJcmHYjXQHM8xvR9ICH.jpg",
-    "backdropPath": "/k1gni8AVfAGNmZmv7vVHAFbNRkO.jpg",
-    "voteAverage": 6.5,
-    "title": "The United States vs. Billie Holiday"
+    "posterPath": "/4E2lyUGLEr3yH4q6kJxPkQUhX7n.jpg",
+    "backdropPath": "/8hGXaUSSoTt8GGwWPWAaj78reAl.jpg",
+    "voteAverage": 7.8,
+    "title": "One Piece: Stampede"
   },
   "566525": {
     "posterPath": "/9f2Q0U3IOsLgrI2HkvldwSABZy5.jpg",
@@ -4525,10 +4525,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Kingdom of the Planet of the Apes"
   },
   "653851": {
-    "posterPath": "/26yQPXymbWeCLKwcmyL8dRjAzth.jpg",
-    "backdropPath": "/tY36rkGlREg5m9CaguckR8jZCye.jpg",
-    "voteAverage": 7.046,
-    "title": "Devotion"
+    "posterPath": "/4GKye5dR4uJyYbcyTveSue1gATD.jpg",
+    "backdropPath": "/75nSb1fbWooipwcSU5bUttiOriI.jpg",
+    "voteAverage": 7.383,
+    "title": "The Boy and the Heron"
   },
   "654974": {
     "posterPath": "/fP3VvqUjEBjawxZHL4sYCq2ZdJD.jpg",
@@ -4579,10 +4579,10 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Drive My Car"
   },
   "760920": {
-    "posterPath": "/an77kIGXYQrJtwzdQN6HeG1PTz5.jpg",
-    "backdropPath": null,
-    "voteAverage": 8,
-    "title": "cumcumcumcumcum everybody"
+    "posterPath": "/yD9RhgIVydQNBK7OLEbCWYcWMUd.jpg",
+    "backdropPath": "/qKVOTKPPtvoXd75L1HOSBPLtKWS.jpg",
+    "voteAverage": 7.862,
+    "title": "Sword Art Online the Movie - Progressive - Aria of a Starless Night"
   },
   "766507": {
     "posterPath": "/2FKjLRt7oK1bRRIrxgWmthbBdFh.jpg",
@@ -4759,16 +4759,16 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Wild Eyed and Wicked"
   },
   "1200000": {
-    "posterPath": "/fConT7ydjxQlHAQGxXRkNMsdvqT.jpg",
-    "backdropPath": "/dKwEFjuPs3tniCWVW12J9un99Zv.jpg",
-    "voteAverage": 10,
-    "title": "Our Journey To Al Aqsa"
+    "posterPath": "/wgwldDDlTDDMrluOMkpSA8lyKjv.jpg",
+    "backdropPath": "/yPJyXYfDrlD7bEjAtTAQ8nqmRIf.jpg",
+    "voteAverage": 8.7,
+    "title": "Attack on Titan: THE LAST ATTACK"
   },
   "1214480": {
-    "posterPath": "/besdcg2Vd5PfLnY2Gcd4DFgw6tx.jpg",
-    "backdropPath": "/bFmhkK8Z60pEpQnRRhYTxf5AsDb.jpg",
-    "voteAverage": 8,
-    "title": "Muhammad Al Salem A Christmas Night"
+    "posterPath": "/1B38Y9KEkxImsZdTAAMKkABNGQE.jpg",
+    "backdropPath": "/tUbwMOYP4cuGL1sQ0edz5943rBY.jpg",
+    "voteAverage": 7.284,
+    "title": "My Hero Academia: You're Next"
   },
   "1234821": {
     "posterPath": "/1RICxzeoNCAO5NpcRMIgg1XT6fm.jpg",
@@ -4777,15 +4777,819 @@ export const curatedPosters: Record<string, PosterMeta> = {
     "title": "Jurassic World Rebirth"
   },
   "1241982": {
-    "posterPath": "/aLVkiINlIeCkcZIzb7XHzPYgO6L.jpg",
-    "backdropPath": "/vYqt6kb4lcF8wwqsMMaULkP9OEn.jpg",
-    "voteAverage": 6.997,
-    "title": "Moana 2"
+    "posterPath": "/4f2EcNkp1Mvp9wE5w7HKxcmACWg.jpg",
+    "backdropPath": "/2okfik8YwzSfdETpT5cUClSiGFO.jpg",
+    "voteAverage": 8.188,
+    "title": "Look Back"
   },
   "1297597": {
     "posterPath": "/gRMalasZEzsZi4w2VFuYusfSfqf.jpg",
     "backdropPath": "/1fkuBPid72KGS6WmtkEXMftZtkE.jpg",
     "voteAverage": 7.176,
     "title": "Peaky Blinders: The Immortal Man"
+  },
+  "1063": {
+    "posterPath": "/lYpHeSm7BcUxAbBx1ucuEH7oGAe.jpg",
+    "backdropPath": "/aZRGh7ccNAdqQWhHypvlT9UuXjZ.jpg",
+    "voteAverage": 8.3,
+    "title": "Samurai Champloo"
+  },
+  "1095": {
+    "posterPath": "/nJlfPscbODh5gV1yTGSPqYOO7rl.jpg",
+    "backdropPath": "/2rvFW70UeOMCTXGmYHij1bwHCiu.jpg",
+    "voteAverage": 8.229,
+    "title": "Ghost in the Shell: Stand Alone Complex"
+  },
+  "12140": {
+    "posterPath": "/1ZJRbLDVr90KLtKdmTT4WZhT26E.jpg",
+    "backdropPath": "/8AGLGUYg9UqcDWXtAH0t7InsBd.jpg",
+    "voteAverage": 7.368,
+    "title": "Ghost in the Shell 2: Innocence"
+  },
+  "12598": {
+    "posterPath": "/oZvUMGTASnjdl9Dfq8OOl85qCML.jpg",
+    "backdropPath": "/9Sz85jzgFAt2NUWV6e9AfJUSRkM.jpg",
+    "voteAverage": 8.001,
+    "title": "Black Lagoon"
+  },
+  "14003": {
+    "posterPath": "/kdovrjrKighUFEh9ZRQul0Evx6L.jpg",
+    "backdropPath": "/gFzBLipMi8pBn3KkoL4WSgkIUu9.jpg",
+    "voteAverage": 7.329,
+    "title": "Fullmetal Alchemist the Movie: Conqueror of Shamballa"
+  },
+  "15137": {
+    "posterPath": "/pETU4GurpeEjBOM8oytMH0yNBHx.jpg",
+    "backdropPath": "/ktzhr2m6y98PtwOdfOtTA0X232m.jpg",
+    "voteAverage": 7.6,
+    "title": "Evangelion: 1.0 You Are (Not) Alone"
+  },
+  "21729": {
+    "posterPath": "/sG0Z0yWJmzr7UW6183cmz5DAjqm.jpg",
+    "backdropPath": "/la3G4VRIVcryxNmxU1YYTZcy9fL.jpg",
+    "voteAverage": 8.191,
+    "title": "Gurren Lagann"
+  },
+  "22843": {
+    "posterPath": "/7VLYN2CfJpB6PrcuzDKKqdGSUi6.jpg",
+    "backdropPath": "/pzsVGcufDdBLmvagKyLFKaeA4O5.jpg",
+    "voteAverage": 7.812,
+    "title": "Evangelion: 2.0 You Can (Not) Advance"
+  },
+  "24835": {
+    "posterPath": "/jPBMYp4ddXkGJDSxxmaKBjzv2r3.jpg",
+    "backdropPath": "/vB7HwJNhlRA9tPViK32bK0hVCmb.jpg",
+    "voteAverage": 8.3,
+    "title": "Clannad"
+  },
+  "26453": {
+    "posterPath": "/lwLFZFB3S2PeOLtWksaWerF6B4D.jpg",
+    "backdropPath": "/lnHGyyaize0ayICrkBZWiBaFHa5.jpg",
+    "voteAverage": 8.076,
+    "title": "TRIGUN"
+  },
+  "26707": {
+    "posterPath": "/qy5enaLa2Iy8zJAnXC1UNA1Ssjc.jpg",
+    "backdropPath": "/ce2s97LwKSsB7MYBHK53OCUbDWo.jpg",
+    "voteAverage": 7.503,
+    "title": "Spice and Wolf"
+  },
+  "26867": {
+    "posterPath": "/1EdA21TRBXJU5aBP4EHkOMF2tNx.jpg",
+    "backdropPath": "/8ysRHGV3URjOJT7u7NkZiFjvObk.jpg",
+    "voteAverage": 8.075,
+    "title": "Mushi-Shi"
+  },
+  "27660": {
+    "posterPath": "/j6amUPH88lc7cJf54MKZCf4a9NA.jpg",
+    "backdropPath": "/fWZu2vaHJg7M6iwqeFPO3rMHTi7.jpg",
+    "voteAverage": 8.587,
+    "title": "Legend of the Galactic Heroes"
+  },
+  "28136": {
+    "posterPath": "/lQ4p6OF9KjagTfs8otZt0VTe3Al.jpg",
+    "backdropPath": "/xogL7RDFo7c21nrGDabYT9FFzTH.jpg",
+    "voteAverage": 8.519,
+    "title": "Rurouni Kenshin"
+  },
+  "30669": {
+    "posterPath": "/5OnjguJwkujo3R23w95EEX8eAEN.jpg",
+    "backdropPath": "/uNM5dbnPJXJJs1eggepRWjSvdIR.jpg",
+    "voteAverage": 8.476,
+    "title": "Yu Yu Hakusho"
+  },
+  "30981": {
+    "posterPath": "/n5XNKXnoXpoXyfiCtXHOf8q8PFM.jpg",
+    "backdropPath": "/6T19aRp9zLMghZo1dTEwoNyreNZ.jpg",
+    "voteAverage": 8.519,
+    "title": "Monster"
+  },
+  "34121": {
+    "posterPath": "/jC4xEYiaGbgZkQSy1hOHbXhKh5D.jpg",
+    "backdropPath": "/1KQYzDvPhe6XDycqmL4jb7QO51d.jpg",
+    "voteAverage": 7.759,
+    "title": "Baccano!"
+  },
+  "34433": {
+    "posterPath": "/6iO8TJCyLI4BiPYOvdwzPV2bhoV.jpg",
+    "backdropPath": "/xrg1pYVPK1yN0UREAzd1ywoVM6m.jpg",
+    "voteAverage": 7.278,
+    "title": "Dragon Ball Z: Broly - The Legendary Super Saiyan"
+  },
+  "34791": {
+    "posterPath": "/rQt8X4kjBxah0laGwUVJISf1086.jpg",
+    "backdropPath": "/9345bFQXPCyIJLQemkpI5zFJCOp.jpg",
+    "voteAverage": 8.177,
+    "title": "Claymore"
+  },
+  "35610": {
+    "posterPath": "/rQHTNaynedeKurm0sNOsbAZg2oe.jpg",
+    "backdropPath": "/mVE1ULmLaYhCkBQPt3JC5xZC6T6.jpg",
+    "voteAverage": 8.565,
+    "title": "InuYasha"
+  },
+  "35935": {
+    "posterPath": "/xctRBSZzvoHDHz38ZZUGxRYetvG.jpg",
+    "backdropPath": "/99Y64VK0KwyRWfaW6VdpDfPKNMo.jpg",
+    "voteAverage": 8.5,
+    "title": "Berserk"
+  },
+  "37305": {
+    "posterPath": "/8ROoGBnHBscVIIomFl7DjlGidYk.jpg",
+    "backdropPath": "/yOkNYWCOWLh3HFtUlo3QT1g5pHG.jpg",
+    "voteAverage": 7.781,
+    "title": "Soul Eater"
+  },
+  "38464": {
+    "posterPath": "/kpNoqNmElzGUEcEoZyfFwvYXMsR.jpg",
+    "backdropPath": "/wJzHFl5mq6JFbD6equTleJuzlnk.jpg",
+    "voteAverage": 7.8,
+    "title": "Blue Exorcist"
+  },
+  "39218": {
+    "posterPath": "/9Leopb4OB9j9FkP5JNHRZZlPPdg.jpg",
+    "backdropPath": "/uyGH4YtKi7iSyAxKWLFdQWc7oXT.jpg",
+    "voteAverage": 8.06,
+    "title": "Puella Magi Madoka Magica"
+  },
+  "39434": {
+    "posterPath": "/2tgOAvOttp7rak3r2U5vIAaeyDt.jpg",
+    "backdropPath": "/kyoFwkQH1l4QHfULW0CEdD2VPkE.jpg",
+    "voteAverage": 8.18,
+    "title": "Anohana: The Flower We Saw That Day"
+  },
+  "41498": {
+    "posterPath": "/z9S39hH4IOX9Hmtn3zho3Wdqem8.jpg",
+    "backdropPath": "/1oaRUHv1zX4mZNX1zq4NcHIg50m.jpg",
+    "voteAverage": 7.432,
+    "title": "One Piece Film: Strong World"
+  },
+  "42253": {
+    "posterPath": "/70hf2538UAf7mzzNgvqTlWq6PDf.jpg",
+    "backdropPath": "/pYa81GUfKspR81chpcyVuTDqPCC.jpg",
+    "voteAverage": 8.014,
+    "title": "K-ON!"
+  },
+  "42410": {
+    "posterPath": "/rOVSpNPFr62tFKeFuHgPdOXQx3E.jpg",
+    "backdropPath": "/kH9iK6krt0VBwAv5xbsYyhn8AW5.jpg",
+    "voteAverage": 7.657,
+    "title": "Durarara!!"
+  },
+  "42509": {
+    "posterPath": "/96R4bV7dB8ramaWceNKsxvJgCUd.jpg",
+    "backdropPath": "/36Ech63X2KU8JUXIBAo167kIC2k.jpg",
+    "voteAverage": 8.5,
+    "title": "Steins;Gate"
+  },
+  "42573": {
+    "posterPath": "/nmmOKeydeeO4TKucpvyMA2o6gdD.jpg",
+    "backdropPath": "/eklM8HZeGKB5KMKRqkuff0yW0Oq.jpg",
+    "voteAverage": 8.667,
+    "title": "Slam Dunk"
+  },
+  "42589": {
+    "posterPath": "/h3YyESKtOy7Rrv7zymyF9kfpz7T.jpg",
+    "backdropPath": "/lL0rMeVqiOyVwmft6oPKQKbDYr6.jpg",
+    "voteAverage": 8.28,
+    "title": "Another"
+  },
+  "42671": {
+    "posterPath": "/mYakikF9MYpiRRQKnXQD6ubRHwr.jpg",
+    "backdropPath": "/1g7fMpp0c5tOlHoLMABx6LI7gMu.jpg",
+    "voteAverage": 8.292,
+    "title": "Elfen Lied"
+  },
+  "42916": {
+    "posterPath": "/2Z52nZaAQt1P7XJtu8fNlMXgdps.jpg",
+    "backdropPath": "/82hAXKATyuldbt4PxSNnHHy2BVO.jpg",
+    "voteAverage": 8.182,
+    "title": "Toradora!"
+  },
+  "42942": {
+    "posterPath": "/ld5fQq1PltjjLbWVww6KBV79DLt.jpg",
+    "backdropPath": "/4zeG5WpY0vp62OyRZMOoPouGuME.jpg",
+    "voteAverage": 7.883,
+    "title": "Angel Beats!"
+  },
+  "43017": {
+    "posterPath": "/cgcvNzLUQUjkur8zfhHwcadwzVz.jpg",
+    "backdropPath": "/pOhJoBPgw0GmwAO3O3YueZCJW2A.jpg",
+    "voteAverage": 8.415,
+    "title": "Great Teacher Onizuka"
+  },
+  "43335": {
+    "posterPath": "/5ZFUEOULaVml7pQuXxhpR2SmVUw.jpg",
+    "backdropPath": "/2UG177tWHy7xRmMKWJHB7nAUmKd.jpg",
+    "voteAverage": 8.722,
+    "title": "Fullmetal Alchemist: Brotherhood"
+  },
+  "43865": {
+    "posterPath": "/uWnP6qTcc4imPJ9ZHaXlPQlcYnB.jpg",
+    "backdropPath": "/4z8u57awz954GRuK7W86HlhyeeM.jpg",
+    "voteAverage": 7.757,
+    "title": "Psycho-Pass"
+  },
+  "45783": {
+    "posterPath": "/qi8dlAgQEeahpEn1AOb5BJEOcVB.jpg",
+    "backdropPath": "/fOyOP702oDeGyM2H4I8mQ5pdKne.jpg",
+    "voteAverage": 8.395,
+    "title": "Kuroko's Basketball"
+  },
+  "45845": {
+    "posterPath": "/chUbHBiMX7buj8TzOEIjHHPCJfF.jpg",
+    "backdropPath": "/l6UO4qEHwUdjPyavbP6yGA06cS3.jpg",
+    "voteAverage": 8.012,
+    "title": "Fate/Zero"
+  },
+  "46195": {
+    "posterPath": "/zCEjjb1NH3LLsWeZx47wOeqkezf.jpg",
+    "backdropPath": "/cHII6sQ91q8H5EMONKCwCQMauCP.jpg",
+    "voteAverage": 8.1,
+    "title": "Monogatari"
+  },
+  "55931": {
+    "posterPath": "/eDjIG2hAeMU5cxLrd6oiQqdqoZt.jpg",
+    "backdropPath": "/7a4WHNllmX5ZGR0MfYJDPhV69eM.jpg",
+    "voteAverage": 7.214,
+    "title": "The Animatrix"
+  },
+  "57041": {
+    "posterPath": "/f7vK8pzZIqhyA8sYmBpWmp9Ae7.jpg",
+    "backdropPath": "/3gVl0IvJMbhOnAvH9V0Q1Y1HnXE.jpg",
+    "voteAverage": 8.2,
+    "title": "Gintama"
+  },
+  "60728": {
+    "posterPath": "/4F1WtP3dFIwLPOfa3u29VEVnNkf.jpg",
+    "backdropPath": "/yECUoiSTtm3MV6BRc5WV1bh6xS7.jpg",
+    "voteAverage": 8.147,
+    "title": "Kill la Kill"
+  },
+  "60808": {
+    "posterPath": "/7l8nKzWZrhlGAWUubbw4UJaRlLH.jpg",
+    "backdropPath": "/7nq4Nu5kaggdGGYxzxGMxdI6aNJ.jpg",
+    "voteAverage": 8.005,
+    "title": "No Game No Life"
+  },
+  "61223": {
+    "posterPath": "/rMpvMbSlPbm5QYfFem9fx2Jnttq.jpg",
+    "backdropPath": "/3XAGgklKkJhv5M9m5NkfhBYb7l8.jpg",
+    "voteAverage": 8.225,
+    "title": "Akame ga Kill!"
+  },
+  "61386": {
+    "posterPath": "/7pL2wGmy92v31ceYvCVIg4ilwLr.jpg",
+    "backdropPath": "/n5J23cWQW4FUWhifL530qEkstFY.jpg",
+    "voteAverage": 8.2,
+    "title": "Noragami"
+  },
+  "61421": {
+    "posterPath": "/qa4an6FYwTXAeiOk5zHyZsJ4CNx.jpg",
+    "backdropPath": "/lt5rC0GcXVmHEjXzRruNIdbca8B.jpg",
+    "voteAverage": 7.726,
+    "title": "Terror in Resonance"
+  },
+  "61709": {
+    "posterPath": "/ojsPI8fNwcecKLhVC4rB4ZZhFMc.jpg",
+    "backdropPath": "/oz5zbMBKCUsb7hsbjdxvK8yagPD.jpg",
+    "voteAverage": 7.487,
+    "title": "Dragon Ball Z Kai"
+  },
+  "61752": {
+    "posterPath": "/evZtiZzMX9VFoM1zzvRUmPoLPBg.jpg",
+    "backdropPath": "/PZEdudP5M4FBz5cPoQ4rHCejLj.jpg",
+    "voteAverage": 8.431,
+    "title": "Hellsing Ultimate"
+  },
+  "61901": {
+    "posterPath": "/q95PaZEpjfNzmz3c0TFFAG6lc7S.jpg",
+    "backdropPath": "/k6GynBEvx2u8v2tUOMh9hHJ4myd.jpg",
+    "voteAverage": 7.968,
+    "title": "Death Parade"
+  },
+  "62110": {
+    "posterPath": "/qf0l0nQ2t06Es3cSXflqx6l6vsJ.jpg",
+    "backdropPath": "/dOCpqck500K9JmdEIOye6Ivmoip.jpg",
+    "voteAverage": 8.382,
+    "title": "Assassination Classroom"
+  },
+  "64196": {
+    "posterPath": "/K8ZUjxaj9F0t3AwJDz8ypzBynM.jpg",
+    "backdropPath": "/q5WJxYTXNNJdEHxFCqd3S8pO4VA.jpg",
+    "voteAverage": 8.4,
+    "title": "Overlord"
+  },
+  "64710": {
+    "posterPath": "/7pL2wGmy92v31ceYvCVIg4ilwLr.jpg",
+    "backdropPath": "/n5J23cWQW4FUWhifL530qEkstFY.jpg",
+    "voteAverage": 8.2,
+    "title": "Noragami"
+  },
+  "65249": {
+    "posterPath": "/EljUwZJhpuYfVuSfqY8Pt1xxpH.jpg",
+    "backdropPath": "/rRGnjRCHdDl3m3oCVSvo5z2E5c5.jpg",
+    "voteAverage": 8.5,
+    "title": "ERASED"
+  },
+  "65329": {
+    "posterPath": "/qoAig2n9LkukqnizytaBtOSwif7.jpg",
+    "backdropPath": "/kmUuJ4BHkX1cQKnFBJ2vv22bmmS.jpg",
+    "voteAverage": 8.089,
+    "title": "Hyouka"
+  },
+  "65336": {
+    "posterPath": "/sokReNdjEwG2TkdUzJcVnD6sChT.jpg",
+    "backdropPath": "/mLzJpP9YRexGbvgiqunirAM5HAA.jpg",
+    "voteAverage": 8,
+    "title": "March Comes In Like a Lion"
+  },
+  "65676": {
+    "posterPath": "/sb5MNoeZGHX21qvtwhmizUsJJqq.jpg",
+    "backdropPath": "/5VL7HC4aeLhepAaGxaQBUBWgIGo.jpg",
+    "voteAverage": 8.216,
+    "title": "My Teen Romantic Comedy SNAFU"
+  },
+  "65844": {
+    "posterPath": "/oRaOeQlwktbGSd2T31FYAcgHZlh.jpg",
+    "backdropPath": "/rvZJxD36tKoglL8fXoMMWKGQfM.jpg",
+    "voteAverage": 8.537,
+    "title": "KONOSUBA - God's blessing on this wonderful world!"
+  },
+  "65931": {
+    "posterPath": "/6AQmGhkYwAqW2OevjXbsh7tZnNO.jpg",
+    "backdropPath": "/79lc4Rocfnn9RIv1YlHC0jeBsqf.jpg",
+    "voteAverage": 8.236,
+    "title": "Bungo Stray Dogs"
+  },
+  "66862": {
+    "posterPath": "/5zPrZYZRg2xSxoU8541ROdK1oVj.jpg",
+    "backdropPath": "/22YtPgohea5ADkePsnISEU34U99.jpg",
+    "voteAverage": 8,
+    "title": "Descending Stories"
+  },
+  "67043": {
+    "posterPath": "/zrSxmvaHLvr6nqUOQ3R0uPl12v4.jpg",
+    "backdropPath": "/iiHQiu3Kg8TFzVCiugQT0SGPEU.jpg",
+    "voteAverage": 7.599,
+    "title": "91 Days"
+  },
+  "67075": {
+    "posterPath": "/vR7hwaGQ0ySRoq1WobiNRaPs4WO.jpg",
+    "backdropPath": "/kP5duNJEbTfXpBs6CITsaZ88pQi.jpg",
+    "voteAverage": 8.484,
+    "title": "Mob Psycho 100"
+  },
+  "67676": {
+    "posterPath": "/tpym31HVeQgenaubvCxkMF3kFHy.jpg",
+    "backdropPath": "/hI76O9slOz3vPkhQWWQoN36WyhG.jpg",
+    "voteAverage": 8.256,
+    "title": "The Disastrous Life of Saiki K."
+  },
+  "69500": {
+    "posterPath": "/6iIoK9LEM92hBEZD3aVQVCWeaRC.jpg",
+    "backdropPath": "/xHjRfQIRlxug491JrKiEYl9vHM1.jpg",
+    "voteAverage": 8.2,
+    "title": "Natsume's Book of Friends"
+  },
+  "72304": {
+    "posterPath": "/aQvABf8fwwHSdYbMk1Ir3NnvcSp.jpg",
+    "backdropPath": "/nfZLQSZZNS2tRz0yp1xN5RJGpCu.jpg",
+    "voteAverage": 7.413,
+    "title": "Fate/Apocrypha"
+  },
+  "72517": {
+    "posterPath": "/ejzwSIch2VEoQL5pyUWfEJ8vh8R.jpg",
+    "backdropPath": "/d3yNn379emGP8xztqeOsB9oLNG2.jpg",
+    "voteAverage": 8.413,
+    "title": "Classroom of the Elite"
+  },
+  "72625": {
+    "posterPath": "/ltZ40Yg42Ll8zPJPjKrDVV6qHy4.jpg",
+    "backdropPath": "/7JfWDEriIznWhjsHD2JcaXXG0IM.jpg",
+    "voteAverage": 4.7,
+    "title": "Seven Deadly Sins"
+  },
+  "75629": {
+    "posterPath": "/d0s1xvykzl0kz7fP5S2ROYqphdz.jpg",
+    "backdropPath": "/q0PBB2RCrOAZrZjqJKhL3ibTV8b.jpg",
+    "voteAverage": 7.197,
+    "title": "Evangelion: 3.0 You Can (Not) Redo"
+  },
+  "76059": {
+    "posterPath": "/vC3acJ5WsMSKLyXgEAj4zrwgpkG.jpg",
+    "backdropPath": "/7JR7tmIcThPxReIhVvwKTwVQKcY.jpg",
+    "voteAverage": 7.9,
+    "title": "A Place Further than the Universe"
+  },
+  "76075": {
+    "posterPath": "/1c5xBDBQQwa1bvX5fibAeymReGg.jpg",
+    "backdropPath": "/cm3lmKnEAYLs2eJmn4AcFIu18X4.jpg",
+    "voteAverage": 8.2,
+    "title": "Laid-Back Camp"
+  },
+  "76121": {
+    "posterPath": "/m6R8gI3brohD6izeVCXFmuGeV2m.jpg",
+    "backdropPath": "/tKh3pc5MEjCIGV7hSJX76qi8aGA.jpg",
+    "voteAverage": 8.505,
+    "title": "DARLING in the FRANXX"
+  },
+  "76757": {
+    "posterPath": "/Ab1QIcwCAQUgs8Z8pTJnVPkKS0m.jpg",
+    "backdropPath": "/rT7DcPq4Fee6uStrl4t9Jv4iOnj.jpg",
+    "voteAverage": 7.6,
+    "title": "Golden Kamuy"
+  },
+  "78102": {
+    "posterPath": "/4ztfZujsNN0c66OkE4ZKFQ0ZQTf.jpg",
+    "backdropPath": "/bSOHmFB4RnUoB6zcNiJmXOaoOXk.jpg",
+    "voteAverage": 8.105,
+    "title": "Steins;Gate 0"
+  },
+  "79166": {
+    "posterPath": "/ii1yrluzWisy1rygSKz8lJkAkil.jpg",
+    "backdropPath": "/prHii5ULE8k9onzC3lFcb9RiITl.jpg",
+    "voteAverage": 7.779,
+    "title": "Grand Blue Dreaming"
+  },
+  "80518": {
+    "posterPath": "/7RvBQOTZGhCoPvLiF3Ugp2Q94Ux.jpg",
+    "backdropPath": "/jW5YmMRjSCQRPZJ9r5Hf62bX604.jpg",
+    "voteAverage": 6.845,
+    "title": "Fullmetal Alchemist: The Sacred Star of Milos"
+  },
+  "80564": {
+    "posterPath": "/d2TW5Rtd0uCasHlQygsDfWCROl2.jpg",
+    "backdropPath": "/kzxoIVHMSwOq7Pry11vSq4ujLwz.jpg",
+    "voteAverage": 8.552,
+    "title": "Banana Fish"
+  },
+  "82684": {
+    "posterPath": "/pzujcdPAoH361NObVrtbA7zACE7.jpg",
+    "backdropPath": "/eJOy7YWAHgOS3V477sdTsq4v9jp.jpg",
+    "voteAverage": 8.4,
+    "title": "That Time I Got Reincarnated as a Slime"
+  },
+  "82739": {
+    "posterPath": "/fbqDG7GjodvaNecgv1q8kfSNPl5.jpg",
+    "backdropPath": "/8165gnzhyRbkKfm3WFBINdkDQBR.jpg",
+    "voteAverage": 8.512,
+    "title": "Rascal Does Not Dream of Bunny Girl Senpai"
+  },
+  "83100": {
+    "posterPath": "/mLSJO9lj2RMHdzHJMNMoksmwlbv.jpg",
+    "backdropPath": "/lLjIOxGIVnUVBHQFCBYzo7OAMHt.jpg",
+    "voteAverage": 8.5,
+    "title": "Dororo"
+  },
+  "83121": {
+    "posterPath": "/5khbC6AuNgnvnoDbjIMKCOhEtIc.jpg",
+    "backdropPath": "/dJ8yrSokdTMnhKJw06MllSfCegb.jpg",
+    "voteAverage": 8.525,
+    "title": "Kaguya-sama: Love Is War"
+  },
+  "84553": {
+    "posterPath": "/aR06SJRDGqRmGQYXAXqeOkRZq7T.jpg",
+    "backdropPath": "/vRyC5WT7ytRflfEFFyRmGeZc0Cf.jpg",
+    "voteAverage": 7.045,
+    "title": "Blade Runner: Black Lotus"
+  },
+  "85991": {
+    "posterPath": "/9TGNcvMm91QXmnnCCYYqnYK0bK7.jpg",
+    "backdropPath": "/2vIjTPITEoHeetz1jU4UxyHL9tg.jpg",
+    "voteAverage": 8,
+    "title": "Fruits Basket"
+  },
+  "88046": {
+    "posterPath": "/96jrp8XIEPKC7xHhbkpWLD15oYW.jpg",
+    "backdropPath": "/xkNnQ3IGGRQcXnl1zTb5H6Vb3SP.jpg",
+    "voteAverage": 8.312,
+    "title": "Fire Force"
+  },
+  "88803": {
+    "posterPath": "/vUHlpA5c1NXkds59reY3HMb4Abs.jpg",
+    "backdropPath": "/sPN7Ylc7swmyukJeQBNcRAl9usS.jpg",
+    "voteAverage": 8.505,
+    "title": "Vinland Saga"
+  },
+  "90293": {
+    "posterPath": "/tPK8BER0Pyq68IGKHrTemGlxBV4.jpg",
+    "backdropPath": "/2L4ob76e1tp6fgMXgMD2BC2hSUT.jpg",
+    "voteAverage": 6.475,
+    "title": "Ghost in the Shell: SAC_2045"
+  },
+  "90677": {
+    "posterPath": "/4XjD4Hbyhnn9wakIehZJJ5rtqxn.jpg",
+    "backdropPath": "/s6ukZz0Mk7RkQDfC4PM7uOnhLlC.jpg",
+    "voteAverage": 7.9,
+    "title": "Fate/Grand Order Absolute Demonic Front: Babylonia"
+  },
+  "91997": {
+    "posterPath": "/agf5sETjlO35s3EDA7wwGliZ5UW.jpg",
+    "backdropPath": "/oz3LT9glLNWpSQACnWlIYoSZA5M.jpg",
+    "voteAverage": 7.851,
+    "title": "PLUTO"
+  },
+  "94664": {
+    "posterPath": "/lDS7WuWrq6i1XC1AaKlf9qvJBVi.jpg",
+    "backdropPath": "/pfgndj46RLPVJRWkUSCJBgLJ93w.jpg",
+    "voteAverage": 8.443,
+    "title": "Mushoku Tensei: Jobless Reincarnation"
+  },
+  "97525": {
+    "posterPath": "/lA2jRBubr2OLOlbkJXuBXYqv4A9.jpg",
+    "backdropPath": "/fBWZQOPl5CuYxdXRb0uNVX8mgcG.jpg",
+    "voteAverage": 8.158,
+    "title": "To Your Eternity"
+  },
+  "97860": {
+    "posterPath": "/9QXO4C0AwAuBa15nuDLZU2MyktB.jpg",
+    "backdropPath": "/gcvJgJScIt0a5sRt8uLIkGM9IhI.jpg",
+    "voteAverage": 8.1,
+    "title": "Tower of God"
+  },
+  "100565": {
+    "posterPath": "/1RAD6bMQayJPoO8ry4vJy3GwCYt.jpg",
+    "backdropPath": "/lSlL2CAPSDJ9gf2MZX0x2u2inKX.jpg",
+    "voteAverage": 8.121,
+    "title": "86 EIGHTY-SIX"
+  },
+  "110070": {
+    "posterPath": "/iSOKGl5KIeOCAtigUDCfFZe2cOi.jpg",
+    "backdropPath": "/ldUbhEbyI28M6PiAkL0hZ2o8bOT.jpg",
+    "voteAverage": 8.504,
+    "title": "Horimiya"
+  },
+  "110642": {
+    "posterPath": "/wWwTjKER5a8LRUGHrw86VU0gUy1.jpg",
+    "backdropPath": "/uPHXbrh9jlq2XgfjjTFlkJfgtOQ.jpg",
+    "voteAverage": 7.536,
+    "title": "RESIDENT EVIL: Infinite Darkness"
+  },
+  "110911": {
+    "posterPath": "/eNq68NjT1KOdorphIqYeZF0BM9b.jpg",
+    "backdropPath": "/7R7BxbHz4RMId5YHEA3NqgZWXde.jpg",
+    "voteAverage": 7.444,
+    "title": "BURN THE WITCH"
+  },
+  "112613": {
+    "posterPath": "/ujMjMUi6z02uOfQEerEDC4rH6aG.jpg",
+    "backdropPath": "/1d23ENJQrn4TIKhnWF85Eb56Zk8.jpg",
+    "voteAverage": 8.05,
+    "title": "Ranking of Kings"
+  },
+  "116725": {
+    "posterPath": "/xRakd62ihUP19NBgWyJzjO26NxE.jpg",
+    "backdropPath": "/fOlKY2rpDnoxcWU6a0Z4dpRA61d.jpg",
+    "voteAverage": 8,
+    "title": "Vivy -Fluorite Eye's Song-"
+  },
+  "116727": {
+    "posterPath": "/ztyo4gSDWuxV83png18W3Av2XNW.jpg",
+    "backdropPath": "/m7RQ7l2FnCTEnH58Zm8SQzJGYQH.jpg",
+    "voteAverage": 8.237,
+    "title": "ODDTAXI"
+  },
+  "117465": {
+    "posterPath": "/1V9I7SvZbYoMbSvdtnlkkq9SB1k.jpg",
+    "backdropPath": "/zlXW7Y5LvqTQBlhalMKc0gUrYYE.jpg",
+    "voteAverage": 8.215,
+    "title": "Hell's Paradise"
+  },
+  "117933": {
+    "posterPath": "/m9e7chRW8Q8Go1Dv00RCUHbMoNe.jpg",
+    "backdropPath": "/p2eZlGwd8OjkWpwD2hSoBiIlHBZ.jpg",
+    "voteAverage": 8.2,
+    "title": "Summer Time Rendering"
+  },
+  "119100": {
+    "posterPath": "/Af4tZ3eKjKWXG4vfiQ8R1NJomAP.jpg",
+    "backdropPath": "/riRJGnbb18zVBEXpov8GJKnBczj.jpg",
+    "voteAverage": 8.445,
+    "title": "BOCCHI THE ROCK!"
+  },
+  "119495": {
+    "posterPath": "/7JKYmtLydAwo9ZsEmAknZiO4U8g.jpg",
+    "backdropPath": "/htD5SJpPOvkmAowU80KrWnN59WO.jpg",
+    "voteAverage": 8.075,
+    "title": "The Eminence in Shadow"
+  },
+  "123542": {
+    "posterPath": "/hCt2bLRGTCjHGqtV5FP3Img6w1h.jpg",
+    "backdropPath": "/w3agwUSMpJ4X9t1jGrDtqqRPjDQ.jpg",
+    "voteAverage": 8.022,
+    "title": "LINK CLICK"
+  },
+  "123548": {
+    "posterPath": "/4XJwo95ktJ7xupw1bCMuP91kyYr.jpg",
+    "backdropPath": "/1swj9HxDkjzsO3yHlSwRA38hMFN.jpg",
+    "voteAverage": 7.769,
+    "title": "Castlevania: Nocturne"
+  },
+  "131041": {
+    "posterPath": "/fcKH1NQzoTXiYO1OrhaFFwTKhBp.jpg",
+    "backdropPath": "/seMRyWVwIVBWbC9xaMzDMZJ8fUH.jpg",
+    "voteAverage": 8.302,
+    "title": "BLUE LOCK"
+  },
+  "155292": {
+    "posterPath": "/nHROk2C6bv8LqtvyYd0tCMURbxC.jpg",
+    "backdropPath": "/q3eIJSxZO2zXig4Ni3oo8md6mWS.jpg",
+    "voteAverage": 7.93,
+    "title": "Scott Pilgrim Takes Off"
+  },
+  "176983": {
+    "posterPath": "/dd0HwfxstffjRgbBcQvtw3uqS6O.jpg",
+    "backdropPath": "/cMXp028BZIdiA9OFfiK4gSYYtcr.jpg",
+    "voteAverage": 7.495,
+    "title": "One Piece Film: Z"
+  },
+  "204832": {
+    "posterPath": "/hfSh6ISwUvtvihITPMK6TPOWarK.jpg",
+    "backdropPath": "/p1swd15DRtCnNj20U904dbXeVsi.jpg",
+    "voteAverage": 8.269,
+    "title": "MASHLE: MAGIC AND MUSCLES"
+  },
+  "207468": {
+    "posterPath": "/83yDUQVpdhv8ePy3nbTRzFaKYuQ.jpg",
+    "backdropPath": "/htGeuCcNhlBe8GTx3izKOsd8frw.jpg",
+    "voteAverage": 8.432,
+    "title": "Kaiju No. 8"
+  },
+  "207784": {
+    "posterPath": "/9t3DYdGxK3i4WRzKvIZwJd4kBnr.jpg",
+    "backdropPath": "/xC5GyeIzLsSRizJE5LedGShNgBa.jpg",
+    "voteAverage": 8.374,
+    "title": "Delicious in Dungeon"
+  },
+  "220542": {
+    "posterPath": "/sJZcy8QsOPuRPiCfoCWVB3r9Ohg.jpg",
+    "backdropPath": "/gffVOVZ2Y9cmVIZ26Gt9ByMGCYH.jpg",
+    "voteAverage": 8.7,
+    "title": "The Apothecary Diaries"
+  },
+  "225745": {
+    "posterPath": "/bXhogkZCR0aOQ077rfMULYbDmtH.jpg",
+    "backdropPath": "/nFKxirrjjSTbz2rryfJvvG5MLkV.jpg",
+    "voteAverage": 7.6,
+    "title": "Steins;Gate: The Movie - Load Region of Déjà Vu"
+  },
+  "236994": {
+    "posterPath": "/lMULbSFZNXUC87MqOZQ4SSV9DXI.jpg",
+    "backdropPath": "/oUmWLyeko3kYdUr8DBLIsxwcugl.jpg",
+    "voteAverage": 8.2,
+    "title": "Dragon Ball DAIMA"
+  },
+  "239287": {
+    "posterPath": "/v4sbn6IsJGAIZNHjdB4CprvS7zo.jpg",
+    "backdropPath": "/woH18JkZMYhMSWqtHkPA4F6Gd1z.jpg",
+    "voteAverage": 7.1,
+    "title": "Terminator Zero"
+  },
+  "240411": {
+    "posterPath": "/6qfZAOEUFIrbUH3JvePclx1nXzz.jpg",
+    "backdropPath": "/uNTrRKIOyKYISthoeizghtXPEOK.jpg",
+    "voteAverage": 8.519,
+    "title": "Dan Da Dan"
+  },
+  "241709": {
+    "posterPath": "/tcBHXNxz62RaAiDRbkm6DEwiXbJ.jpg",
+    "backdropPath": "/3sE6bs8YsxJEtwVFokAt5TezPl7.jpg",
+    "voteAverage": 8,
+    "title": "THE ONE PIECE"
+  },
+  "242000": {
+    "posterPath": "/6qfZAOEUFIrbUH3JvePclx1nXzz.jpg",
+    "backdropPath": "/uNTrRKIOyKYISthoeizghtXPEOK.jpg",
+    "voteAverage": 8.519,
+    "title": "Dan Da Dan"
+  },
+  "255107": {
+    "posterPath": "/jQRG3lI42IaJNr23jFeO6FSXmoE.jpg",
+    "backdropPath": "/pSdmUGsfocf4gTyD5auC4Ccz25l.jpg",
+    "voteAverage": 7.779,
+    "title": "Code Geass: Rozé of the Recapture"
+  },
+  "283984": {
+    "posterPath": "/6nEtmBg07DA5BWjcrmD49rxHsVQ.jpg",
+    "backdropPath": "/xfZ2u86Tui0aTKcPYcKGStzxWZv.jpg",
+    "voteAverage": 7.447,
+    "title": "Fate/stay night: Heaven's Feel I. Presage Flower"
+  },
+  "312359": {
+    "posterPath": "/AojgldgsOlzZV8ahyOzaiAjJWvV.jpg",
+    "backdropPath": "/8phLVFEXOe02JgFmH9ldn3j4tXW.jpg",
+    "voteAverage": 9.613,
+    "title": "Dragon Ball Super: Beerus"
+  },
+  "313304": {
+    "posterPath": "/rfSzXC476Qr1K8JL7oj6jpSrWce.jpg",
+    "backdropPath": "/lnbzlEHSgGTNGgQNnfOvlE3cDz3.jpg",
+    "voteAverage": 6,
+    "title": "Code Geass: Akito the Exiled"
+  },
+  "326979": {
+    "posterPath": "/deeJUvjGSXtRyECJHMO903zvSPP.jpg",
+    "backdropPath": "/tuFgC0PqzU1muAWQlBz7LjTW6nk.jpg",
+    "voteAverage": 8,
+    "title": "Golden Boy"
+  },
+  "338397": {
+    "posterPath": "/z8Gn9AcWEVHpqgOxgCtgjiSteSQ.jpg",
+    "backdropPath": "/85MXH20B2i3iBpr0kuICqMSFlWn.jpg",
+    "voteAverage": 8,
+    "title": "Hajime no ippo manga"
+  },
+  "374205": {
+    "posterPath": "/9PgiOFTLZXP7emlwcIt0yRasJ9h.jpg",
+    "backdropPath": "/wMzToVniA09xWS0DXSRQiufVvpZ.jpg",
+    "voteAverage": 7.231,
+    "title": "One Piece Film: GOLD"
+  },
+  "413594": {
+    "posterPath": "/2szdEK0Mr0RG0nWGFVTseNQHbnP.jpg",
+    "backdropPath": "/yFZG86Zvdy6JuIlMW9eHxlVkct5.jpg",
+    "voteAverage": 7.715,
+    "title": "Sword Art Online the Movie: Ordinal Scale"
+  },
+  "508883": {
+    "posterPath": "/4GKye5dR4uJyYbcyTveSue1gATD.jpg",
+    "backdropPath": "/75nSb1fbWooipwcSU5bUttiOriI.jpg",
+    "voteAverage": 7.383,
+    "title": "The Boy and the Heron"
+  },
+  "553837": {
+    "posterPath": "/ghD2HJyAk6EYVHrzBhddNDJ73Go.jpg",
+    "backdropPath": "/q62ZISQcYEQdiQkGCb20VpPljJO.jpg",
+    "voteAverage": 7.2,
+    "title": "Code Geass: Lelouch of the Re;surrection"
+  },
+  "568012": {
+    "posterPath": "/4E2lyUGLEr3yH4q6kJxPkQUhX7n.jpg",
+    "backdropPath": "/8hGXaUSSoTt8GGwWPWAaj78reAl.jpg",
+    "voteAverage": 7.8,
+    "title": "One Piece: Stampede"
+  },
+  "761898": {
+    "posterPath": "/yD9RhgIVydQNBK7OLEbCWYcWMUd.jpg",
+    "backdropPath": "/qKVOTKPPtvoXd75L1HOSBPLtKWS.jpg",
+    "voteAverage": 7.862,
+    "title": "Sword Art Online the Movie - Progressive - Aria of a Starless Night"
+  },
+  "1159311": {
+    "posterPath": "/1B38Y9KEkxImsZdTAAMKkABNGQE.jpg",
+    "backdropPath": "/tUbwMOYP4cuGL1sQ0edz5943rBY.jpg",
+    "voteAverage": 7.284,
+    "title": "My Hero Academia: You're Next"
+  },
+  "1244492": {
+    "posterPath": "/4f2EcNkp1Mvp9wE5w7HKxcmACWg.jpg",
+    "backdropPath": "/2okfik8YwzSfdETpT5cUClSiGFO.jpg",
+    "voteAverage": 8.188,
+    "title": "Look Back"
+  },
+  "1300000": {
+    "posterPath": "/fWVSwgjpT2D78VUh6X8UBd2rorW.jpg",
+    "backdropPath": "/1RgPyOhN4DRs225BGTlHJqCudII.jpg",
+    "voteAverage": 8.8,
+    "title": "Demon Slayer: Kimetsu no Yaiba Infinity Castle"
+  },
+  "1311031": {
+    "posterPath": "/fWVSwgjpT2D78VUh6X8UBd2rorW.jpg",
+    "backdropPath": "/1RgPyOhN4DRs225BGTlHJqCudII.jpg",
+    "voteAverage": 8.8,
+    "title": "Demon Slayer: Kimetsu no Yaiba Infinity Castle"
+  },
+  "1333100": {
+    "posterPath": "/wgwldDDlTDDMrluOMkpSA8lyKjv.jpg",
+    "backdropPath": "/yPJyXYfDrlD7bEjAtTAQ8nqmRIf.jpg",
+    "voteAverage": 8.7,
+    "title": "Attack on Titan: THE LAST ATTACK"
+  },
+  "503314": {
+    "posterPath": "/uMEgkyiPznZP5AiMSWAk2jsj5gC.jpg",
+    "backdropPath": "/6OTRuxpwUUGbmCX3MKP25dOmo59.jpg",
+    "voteAverage": 7.974,
+    "title": "Dragon Ball Super: Broly"
   }
 };

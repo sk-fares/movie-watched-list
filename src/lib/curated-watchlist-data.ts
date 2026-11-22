@@ -1237,7 +1237,7 @@ export const MOVIE_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/9TGHDvWrqKBpuDxDAn52hkUOICv.jpg"
       },
       {
-        "tmdbId": 10729,
+        "tmdbId": 55931,
         "title": "The Animatrix",
         "year": "2003",
         "sequence": 3,
@@ -6645,7 +6645,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/4jV9lT4b2hX6y7U8w1m5k0q3a9.jpg"
       },
       {
-        "tmdbId": 35933,
+        "tmdbId": 61709,
         "title": "Dragon Ball Z Kai",
         "year": "2009",
         "sequence": 4,
@@ -6655,7 +6655,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/q4L8D8eT4o3k9W6b4u2X7y6j0m.jpg"
       },
       {
-        "tmdbId": 62710,
+        "tmdbId": 62715,
         "title": "Dragon Ball Super",
         "year": "2015",
         "sequence": 5,
@@ -6665,7 +6665,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/2bXGZLkuq61asKveaHkYxI8817.jpg"
       },
       {
-        "tmdbId": 503939,
+        "tmdbId": 503314,
         "title": "Dragon Ball Super: Broly",
         "year": "2018",
         "sequence": 6,
@@ -6685,7 +6685,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/rugyJQUZbHp109zjvvdYp9kCcaN.jpg"
       },
       {
-        "tmdbId": 236894,
+        "tmdbId": 236994,
         "title": "Dragon Ball Daima",
         "year": "2024",
         "sequence": 8,
@@ -6775,7 +6775,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/cMD9Ygz11zjJzAvisURytt92Lwi.jpg"
       },
       {
-        "tmdbId": 37958,
+        "tmdbId": 41498,
         "title": "One Piece Film: Strong World",
         "year": "2009",
         "sequence": 2,
@@ -6785,7 +6785,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/2b3F3X1W8J4K7L5y9U6a2v0m1q.jpg"
       },
       {
-        "tmdbId": 147441,
+        "tmdbId": 176983,
         "title": "One Piece Film: Z",
         "year": "2012",
         "sequence": 3,
@@ -6795,7 +6795,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/7t0lC15F3iA6fG7jX8L4y3M1q9.jpg"
       },
       {
-        "tmdbId": 381288,
+        "tmdbId": 374205,
         "title": "One Piece Film: Gold",
         "year": "2016",
         "sequence": 4,
@@ -6805,7 +6805,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/4jV9lT4b2hX6y7U8w1m5k0q3a9.jpg"
       },
       {
-        "tmdbId": 566076,
+        "tmdbId": 568012,
         "title": "One Piece: Stampede",
         "year": "2019",
         "sequence": 5,
@@ -6825,7 +6825,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/ogDXu5N1H2sWk6n78018hX7P70e.jpg"
       },
       {
-        "tmdbId": 242000,
+        "tmdbId": 241709,
         "title": "The One Piece (Remake)",
         "year": "2025",
         "sequence": 7,
@@ -6855,7 +6855,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/2EewmxXe72ogmsNyQEnk2vPjVwq.jpg"
       },
       {
-        "tmdbId": 107455,
+        "tmdbId": 110911,
         "title": "Burn the Witch",
         "year": "2020",
         "sequence": 2,
@@ -6865,7 +6865,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/AkJQvtR09zjvvdYp9kCcaNclb21.jpg"
       },
       {
-        "tmdbId": 209867,
+        "tmdbId": 30984,
         "title": "Bleach: Thousand-Year Blood War",
         "year": "2022",
         "sequence": 3,
@@ -6895,7 +6895,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/hTP1DtLGFamjfu8WqjnuQdP1n4i.jpg"
       },
       {
-        "tmdbId": 61386,
+        "tmdbId": 1429,
         "title": "Attack on Titan: No Regrets (Levi OVA)",
         "year": "2014",
         "sequence": 2,
@@ -6905,7 +6905,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/7t0lC15F3iA6fG7jX8L4y3M1q9.jpg"
       },
       {
-        "tmdbId": 78546,
+        "tmdbId": 1429,
         "title": "Attack on Titan: Lost Girls",
         "year": "2017",
         "sequence": 3,
@@ -6915,7 +6915,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/4jV9lT4b2hX6y7U8w1m5k0q3a9.jpg"
       },
       {
-        "tmdbId": 1200000,
+        "tmdbId": 1333100,
         "title": "Attack on Titan: The Last Attack",
         "year": "2024",
         "sequence": 4,
@@ -6985,7 +6985,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/xUfRZu2mi8jH69QCG4PyKpmdgit.jpg"
       },
       {
-        "tmdbId": 1300000,
+        "tmdbId": 1311031,
         "title": "Infinity Castle Trilogy",
         "year": "2025",
         "sequence": 6,
@@ -7055,7 +7055,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/5ZFUEOULaVml7p19blR062SpmgI.jpg"
       },
       {
-        "tmdbId": 43335,
+        "tmdbId": 31911,
         "title": "Fullmetal Alchemist (2003)",
         "year": "2003",
         "sequence": 2,
@@ -7065,7 +7065,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/2b3F3X1W8J4K7L5y9U6a2v0m1q.jpg"
       },
       {
-        "tmdbId": 19875,
+        "tmdbId": 14003,
         "title": "Fullmetal Alchemist: Conqueror of Shamballa",
         "year": "2005",
         "sequence": 3,
@@ -7075,7 +7075,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/7t0lC15F3iA6fG7jX8L4y3M1q9.jpg"
       },
       {
-        "tmdbId": 78945,
+        "tmdbId": 80518,
         "title": "The Sacred Star of Milos",
         "year": "2011",
         "sequence": 4,
@@ -7115,7 +7115,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/2b3F3X1W8J4K7L5y9U6a2v0m1q.jpg"
       },
       {
-        "tmdbId": 15301,
+        "tmdbId": 15137,
         "title": "Evangelion: 1.0 You Are (Not) Alone",
         "year": "2007",
         "sequence": 3,
@@ -7125,7 +7125,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/7t0lC15F3iA6fG7jX8L4y3M1q9.jpg"
       },
       {
-        "tmdbId": 24264,
+        "tmdbId": 22843,
         "title": "Evangelion: 2.0 You Can (Not) Advance",
         "year": "2009",
         "sequence": 4,
@@ -7135,7 +7135,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/4jV9lT4b2hX6y7U8w1m5k0q3a9.jpg"
       },
       {
-        "tmdbId": 97630,
+        "tmdbId": 75629,
         "title": "Evangelion: 3.0 You Can (Not) Redo",
         "year": "2012",
         "sequence": 5,
@@ -7165,7 +7165,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
     "posterPath": "/AkJQvtR09zjvvdYp9kCcaNclb21.jpg",
     "items": [
       {
-        "tmdbId": 39535,
+        "tmdbId": 45845,
         "title": "Fate/Zero",
         "year": "2011",
         "sequence": 1,
@@ -7185,7 +7185,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/2b3F3X1W8J4K7L5y9U6a2v0m1q.jpg"
       },
       {
-        "tmdbId": 441130,
+        "tmdbId": 283984,
         "title": "Fate/stay night: Heaven's Feel I. presage flower",
         "year": "2017",
         "sequence": 3,
@@ -7195,7 +7195,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/7t0lC15F3iA6fG7jX8L4y3M1q9.jpg"
       },
       {
-        "tmdbId": 72636,
+        "tmdbId": 72304,
         "title": "Fate/Apocrypha",
         "year": "2017",
         "sequence": 4,
@@ -7205,7 +7205,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/4jV9lT4b2hX6y7U8w1m5k0q3a9.jpg"
       },
       {
-        "tmdbId": 87826,
+        "tmdbId": 90677,
         "title": "Fate/Grand Order",
         "year": "2019",
         "sequence": 5,
@@ -7225,7 +7225,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
     "posterPath": "/53b9uXk4R1k2L6u5y2X9F1k4c.jpg",
     "items": [
       {
-        "tmdbId": 35624,
+        "tmdbId": 42509,
         "title": "Steins;Gate",
         "year": "2011",
         "sequence": 1,
@@ -7235,7 +7235,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/53b9uXk4R1k2L6u5y2X9F1k4c.jpg"
       },
       {
-        "tmdbId": 219468,
+        "tmdbId": 225745,
         "title": "Steins;Gate: The Movie – Load Region of Déjà Vu",
         "year": "2013",
         "sequence": 2,
@@ -7245,7 +7245,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/2b3F3X1W8J4K7L5y9U6a2v0m1q.jpg"
       },
       {
-        "tmdbId": 77987,
+        "tmdbId": 78102,
         "title": "Steins;Gate 0",
         "year": "2018",
         "sequence": 3,
@@ -7275,7 +7275,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/n4296g866vY9kCcaNclb217vAEN.jpg"
       },
       {
-        "tmdbId": 63510,
+        "tmdbId": 313304,
         "title": "Code Geass: Akito the Exiled",
         "year": "2012",
         "sequence": 2,
@@ -7285,7 +7285,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/2b3F3X1W8J4K7L5y9U6a2v0m1q.jpg"
       },
       {
-        "tmdbId": 512895,
+        "tmdbId": 553837,
         "title": "Code Geass: Lelouch of the Re;surrection",
         "year": "2019",
         "sequence": 3,
@@ -7295,7 +7295,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/7t0lC15F3iA6fG7jX8L4y3M1q9.jpg"
       },
       {
-        "tmdbId": 241980,
+        "tmdbId": 255107,
         "title": "Code Geass: Rozé of the Recapture",
         "year": "2024",
         "sequence": 4,
@@ -7325,7 +7325,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/k9W6b4u2X7y6j0m1q8K2L6u5y2X.jpg"
       },
       {
-        "tmdbId": 31776,
+        "tmdbId": 1095,
         "title": "Ghost in the Shell: Stand Alone Complex",
         "year": "2002",
         "sequence": 2,
@@ -7335,7 +7335,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/2b3F3X1W8J4K7L5y9U6a2v0m1q.jpg"
       },
       {
-        "tmdbId": 11956,
+        "tmdbId": 12140,
         "title": "Ghost in the Shell 2: Innocence",
         "year": "2004",
         "sequence": 3,
@@ -7345,7 +7345,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/7t0lC15F3iA6fG7jX8L4y3M1q9.jpg"
       },
       {
-        "tmdbId": 96580,
+        "tmdbId": 90293,
         "title": "Ghost in the Shell: SAC_2045",
         "year": "2020",
         "sequence": 4,
@@ -7375,7 +7375,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/2b3F3X1W8J4K7L5y9U6a2v0m1q.jpg"
       },
       {
-        "tmdbId": 417859,
+        "tmdbId": 413594,
         "title": "Sword Art Online: Ordinal Scale",
         "year": "2017",
         "sequence": 2,
@@ -7385,7 +7385,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/7t0lC15F3iA6fG7jX8L4y3M1q9.jpg"
       },
       {
-        "tmdbId": 81961,
+        "tmdbId": 45782,
         "title": "Sword Art Online: Alicization",
         "year": "2018",
         "sequence": 3,
@@ -7395,7 +7395,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/4jV9lT4b2hX6y7U8w1m5k0q3a9.jpg"
       },
       {
-        "tmdbId": 760920,
+        "tmdbId": 761898,
         "title": "Sword Art Online Progressive: Aria of a Starless Night",
         "year": "2021",
         "sequence": 4,
@@ -7455,7 +7455,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/4jV9lT4b2hX6y7U8w1m5k0q3a9.jpg"
       },
       {
-        "tmdbId": 1214480,
+        "tmdbId": 1159311,
         "title": "My Hero Academia: You're Next",
         "year": "2024",
         "sequence": 5,
@@ -7555,7 +7555,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/vI67k3waqVXSnvR09zjvvdYp9k.jpg"
       },
       {
-        "tmdbId": 653851,
+        "tmdbId": 508883,
         "title": "The Boy and the Heron",
         "year": "2023",
         "sequence": 9,
@@ -7605,7 +7605,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/3bgtU2x3a4k9J31qX7P70eE31L0.jpg"
       },
       {
-        "tmdbId": 219760,
+        "tmdbId": 123548,
         "title": "Castlevania: Nocturne",
         "year": "2023",
         "sequence": 4,
@@ -7615,7 +7615,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/7t0lC15F3iA6fG7jX8L4y3M1q9.jpg"
       },
       {
-        "tmdbId": 10729,
+        "tmdbId": 55931,
         "title": "The Animatrix",
         "year": "2003",
         "sequence": 5,
@@ -7625,7 +7625,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/2wH0923a4k9J31qX7P70eE31L0.jpg"
       },
       {
-        "tmdbId": 93259,
+        "tmdbId": 84553,
         "title": "Blade Runner: Black Lotus",
         "year": "2021",
         "sequence": 6,
@@ -7635,7 +7635,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/2b3F3X1W8J4K7L5y9U6a2v0m1q.jpg"
       },
       {
-        "tmdbId": 114472,
+        "tmdbId": 110642,
         "title": "Resident Evil: Infinite Darkness",
         "year": "2021",
         "sequence": 7,
@@ -7645,7 +7645,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/4jV9lT4b2hX6y7U8w1m5k0q3a9.jpg"
       },
       {
-        "tmdbId": 114410,
+        "tmdbId": 91997,
         "title": "Pluto",
         "year": "2023",
         "sequence": 8,
@@ -7655,7 +7655,7 @@ export const ANIME_FRANCHISES: CuratedUniverse[] = [
         "posterPath": "/q4L8D8eT4o3k9W6b4u2X7y6j0m.jpg"
       },
       {
-        "tmdbId": 202879,
+        "tmdbId": 239287,
         "title": "Terminator Zero",
         "year": "2024",
         "sequence": 9,
@@ -7734,8 +7734,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 8,
-    "tmdbId": 62710,
-    "title": "Dragon Ball Super",
+    "tmdbId": 62715,
+        "title": "Dragon Ball Super",
     "year": "2015",
     "voteAverage": 8.1,
     "type": "tv",
@@ -7788,8 +7788,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 14,
-    "tmdbId": 209867,
-    "title": "Bleach: Thousand-Year Blood War",
+    "tmdbId": 30984,
+        "title": "Bleach: Thousand-Year Blood War",
     "year": "2022",
     "voteAverage": 8.8,
     "type": "tv",
@@ -7797,8 +7797,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 15,
-    "tmdbId": 35624,
-    "title": "Steins;Gate",
+    "tmdbId": 42509,
+        "title": "Steins;Gate",
     "year": "2011",
     "voteAverage": 8.8,
     "type": "tv",
@@ -7833,8 +7833,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 19,
-    "tmdbId": 19,
-    "title": "Monster",
+    "tmdbId": 30981,
+        "title": "Monster",
     "year": "2004",
     "voteAverage": 8.7,
     "type": "tv",
@@ -7842,8 +7842,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 20,
-    "tmdbId": 83097,
-    "title": "Vinland Saga",
+    "tmdbId": 88803,
+        "title": "Vinland Saga",
     "year": "2019",
     "voteAverage": 8.6,
     "type": "tv",
@@ -7851,8 +7851,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 21,
-    "tmdbId": 67070,
-    "title": "Mob Psycho 100",
+    "tmdbId": 67075,
+        "title": "Mob Psycho 100",
     "year": "2016",
     "voteAverage": 8.6,
     "type": "tv",
@@ -8004,8 +8004,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 38,
-    "tmdbId": 61408,
-    "title": "Akame ga Kill!",
+    "tmdbId": 61223,
+        "title": "Akame ga Kill!",
     "year": "2014",
     "voteAverage": 8,
     "type": "tv",
@@ -8022,8 +8022,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 40,
-    "tmdbId": 46187,
-    "title": "Psycho-Pass",
+    "tmdbId": 43865,
+        "title": "Psycho-Pass",
     "year": "2012",
     "voteAverage": 8.2,
     "type": "tv",
@@ -8031,8 +8031,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 41,
-    "tmdbId": 65335,
-    "title": "Erased",
+    "tmdbId": 65249,
+        "title": "Erased",
     "year": "2016",
     "voteAverage": 8.4,
     "type": "tv",
@@ -8040,8 +8040,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 42,
-    "tmdbId": 83095,
-    "title": "The Promised Neverland",
+    "tmdbId": 83097,
+        "title": "The Promised Neverland",
     "year": "2019",
     "voteAverage": 8.4,
     "type": "tv",
@@ -8058,8 +8058,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 44,
-    "tmdbId": 65495,
-    "title": "Konosuba: God's Blessing on This Wonderful World!",
+    "tmdbId": 65844,
+        "title": "Konosuba: God's Blessing on This Wonderful World!",
     "year": "2016",
     "voteAverage": 8.3,
     "type": "tv",
@@ -8067,8 +8067,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 45,
-    "tmdbId": 82823,
-    "title": "That Time I Got Reincarnated as a Slime",
+    "tmdbId": 82684,
+        "title": "That Time I Got Reincarnated as a Slime",
     "year": "2018",
     "voteAverage": 8.3,
     "type": "tv",
@@ -8076,8 +8076,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 46,
-    "tmdbId": 63639,
-    "title": "Overlord",
+    "tmdbId": 64196,
+        "title": "Overlord",
     "year": "2015",
     "voteAverage": 8.1,
     "type": "tv",
@@ -8085,8 +8085,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 47,
-    "tmdbId": 96580,
-    "title": "Mushoku Tensei: Jobless Reincarnation",
+    "tmdbId": 94664,
+        "title": "Mushoku Tensei: Jobless Reincarnation",
     "year": "2021",
     "voteAverage": 8.4,
     "type": "tv",
@@ -8094,8 +8094,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 48,
-    "tmdbId": 83097,
-    "title": "The Rising of the Shield Hero",
+    "tmdbId": 83095,
+        "title": "The Rising of the Shield Hero",
     "year": "2019",
     "voteAverage": 8,
     "type": "tv",
@@ -8103,8 +8103,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 49,
-    "tmdbId": 61378,
-    "title": "No Game No Life",
+    "tmdbId": 60808,
+        "title": "No Game No Life",
     "year": "2014",
     "voteAverage": 8.1,
     "type": "tv",
@@ -8121,8 +8121,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 51,
-    "tmdbId": 62715,
-    "title": "Assassination Classroom",
+    "tmdbId": 62110,
+        "title": "Assassination Classroom",
     "year": "2015",
     "voteAverage": 8.4,
     "type": "tv",
@@ -8130,8 +8130,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 52,
-    "tmdbId": 30984,
-    "title": "Gintama",
+    "tmdbId": 57041,
+        "title": "Gintama",
     "year": "2006",
     "voteAverage": 8.7,
     "type": "tv",
@@ -8139,8 +8139,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 53,
-    "tmdbId": 30991,
-    "title": "Samurai Champloo",
+    "tmdbId": 1063,
+        "title": "Samurai Champloo",
     "year": "2004",
     "voteAverage": 8.5,
     "type": "tv",
@@ -8148,8 +8148,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 54,
-    "tmdbId": 33880,
-    "title": "Berserk (1997)",
+    "tmdbId": 35935,
+        "title": "Berserk (1997)",
     "year": "1997",
     "voteAverage": 8.6,
     "type": "tv",
@@ -8157,8 +8157,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 55,
-    "tmdbId": 30990,
-    "title": "Legend of the Galactic Heroes",
+    "tmdbId": 27660,
+        "title": "Legend of the Galactic Heroes",
     "year": "1988",
     "voteAverage": 8.8,
     "type": "tv",
@@ -8166,8 +8166,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 56,
-    "tmdbId": 30983,
-    "title": "Gurren Lagann",
+    "tmdbId": 21729,
+        "title": "Gurren Lagann",
     "year": "2007",
     "voteAverage": 8.5,
     "type": "tv",
@@ -8184,8 +8184,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 58,
-    "tmdbId": 36361,
-    "title": "Clannad: After Story",
+    "tmdbId": 24835,
+        "title": "Clannad: After Story",
     "year": "2008",
     "voteAverage": 8.8,
     "type": "tv",
@@ -8202,8 +8202,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 60,
-    "tmdbId": 83095,
-    "title": "Kaguya-sama: Love Is War",
+    "tmdbId": 83121,
+        "title": "Kaguya-sama: Love Is War",
     "year": "2019",
     "voteAverage": 8.6,
     "type": "tv",
@@ -8211,8 +8211,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 61,
-    "tmdbId": 108978,
-    "title": "Horimiya",
+    "tmdbId": 110070,
+        "title": "Horimiya",
     "year": "2021",
     "voteAverage": 8.4,
     "type": "tv",
@@ -8220,8 +8220,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 62,
-    "tmdbId": 42646,
-    "title": "Toradora!",
+    "tmdbId": 42916,
+        "title": "Toradora!",
     "year": "2008",
     "voteAverage": 8.3,
     "type": "tv",
@@ -8229,8 +8229,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 63,
-    "tmdbId": 86598,
-    "title": "Fruits Basket (2019)",
+    "tmdbId": 85991,
+        "title": "Fruits Basket (2019)",
     "year": "2019",
     "voteAverage": 8.7,
     "type": "tv",
@@ -8238,8 +8238,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 64,
-    "tmdbId": 46648,
-    "title": "Oregairu (My Teen Romantic Comedy SNAFU)",
+    "tmdbId": 65676,
+        "title": "Oregairu (My Teen Romantic Comedy SNAFU)",
     "year": "2013",
     "voteAverage": 8.3,
     "type": "tv",
@@ -8247,8 +8247,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 65,
-    "tmdbId": 81356,
-    "title": "Rascal Does Not Dream of Bunny Girl Senpai",
+    "tmdbId": 82739,
+        "title": "Rascal Does Not Dream of Bunny Girl Senpai",
     "year": "2018",
     "voteAverage": 8.4,
     "type": "tv",
@@ -8256,8 +8256,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 66,
-    "tmdbId": 30985,
-    "title": "Monogatari Series (Bakemonogatari)",
+    "tmdbId": 46195,
+        "title": "Monogatari Series (Bakemonogatari)",
     "year": "2009",
     "voteAverage": 8.3,
     "type": "tv",
@@ -8265,8 +8265,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 67,
-    "tmdbId": 39535,
-    "title": "Fate/Zero",
+    "tmdbId": 45845,
+        "title": "Fate/Zero",
     "year": "2011",
     "voteAverage": 8.3,
     "type": "tv",
@@ -8283,8 +8283,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 69,
-    "tmdbId": 38472,
-    "title": "Madoka Magica",
+    "tmdbId": 39218,
+        "title": "Madoka Magica",
     "year": "2011",
     "voteAverage": 8.4,
     "type": "tv",
@@ -8301,8 +8301,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 71,
-    "tmdbId": 45789,
-    "title": "Mushishi",
+    "tmdbId": 26867,
+        "title": "Mushishi",
     "year": "2005",
     "voteAverage": 8.7,
     "type": "tv",
@@ -8310,8 +8310,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 72,
-    "tmdbId": 45790,
-    "title": "Natsume's Book of Friends",
+    "tmdbId": 69500,
+        "title": "Natsume's Book of Friends",
     "year": "2008",
     "voteAverage": 8.6,
     "type": "tv",
@@ -8319,8 +8319,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 73,
-    "tmdbId": 67915,
-    "title": "March Comes in Like a Lion",
+    "tmdbId": 65336,
+        "title": "March Comes in Like a Lion",
     "year": "2016",
     "voteAverage": 8.7,
     "type": "tv",
@@ -8328,8 +8328,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 74,
-    "tmdbId": 64790,
-    "title": "Showa Genroku Rakugo Shinju",
+    "tmdbId": 66862,
+        "title": "Showa Genroku Rakugo Shinju",
     "year": "2016",
     "voteAverage": 8.6,
     "type": "tv",
@@ -8337,8 +8337,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 75,
-    "tmdbId": 75640,
-    "title": "A Place Further Than the Universe",
+    "tmdbId": 76059,
+        "title": "A Place Further Than the Universe",
     "year": "2018",
     "voteAverage": 8.6,
     "type": "tv",
@@ -8346,8 +8346,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 76,
-    "tmdbId": 200880,
-    "title": "Bocchi the Rock!",
+    "tmdbId": 119100,
+        "title": "Bocchi the Rock!",
     "year": "2022",
     "voteAverage": 8.8,
     "type": "tv",
@@ -8355,8 +8355,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 77,
-    "tmdbId": 30988,
-    "title": "K-On!",
+    "tmdbId": 42253,
+        "title": "K-On!",
     "year": "2009",
     "voteAverage": 8.1,
     "type": "tv",
@@ -8364,8 +8364,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 78,
-    "tmdbId": 44217,
-    "title": "Hyouka",
+    "tmdbId": 65329,
+        "title": "Hyouka",
     "year": "2012",
     "voteAverage": 8.2,
     "type": "tv",
@@ -8373,8 +8373,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 80,
-    "tmdbId": 67178,
-    "title": "The Disastrous Life of Saiki K.",
+    "tmdbId": 67676,
+        "title": "The Disastrous Life of Saiki K.",
     "year": "2016",
     "voteAverage": 8.5,
     "type": "tv",
@@ -8382,8 +8382,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 81,
-    "tmdbId": 80968,
-    "title": "Grand Blue",
+    "tmdbId": 79166,
+        "title": "Grand Blue",
     "year": "2018",
     "voteAverage": 8.3,
     "type": "tv",
@@ -8391,8 +8391,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 87,
-    "tmdbId": 75820,
-    "title": "Laid-Back Camp (Yuru Camp)",
+    "tmdbId": 76075,
+        "title": "Laid-Back Camp (Yuru Camp)",
     "year": "2018",
     "voteAverage": 8.4,
     "type": "tv",
@@ -8400,8 +8400,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 90,
-    "tmdbId": 36360,
-    "title": "Spice and Wolf",
+    "tmdbId": 26707,
+        "title": "Spice and Wolf",
     "year": "2008",
     "voteAverage": 8.2,
     "type": "tv",
@@ -8409,8 +8409,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 91,
-    "tmdbId": 221855,
-    "title": "The Apothecary Diaries",
+    "tmdbId": 220542,
+        "title": "The Apothecary Diaries",
     "year": "2023",
     "voteAverage": 8.8,
     "type": "tv",
@@ -8436,8 +8436,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 94,
-    "tmdbId": 114410,
-    "title": "Pluto",
+    "tmdbId": 91997,
+        "title": "Pluto",
     "year": "2023",
     "voteAverage": 8.4,
     "type": "tv",
@@ -8445,8 +8445,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 95,
-    "tmdbId": 136283,
-    "title": "Summer Time Rendering",
+    "tmdbId": 117933,
+        "title": "Summer Time Rendering",
     "year": "2022",
     "voteAverage": 8.4,
     "type": "tv",
@@ -8454,8 +8454,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 96,
-    "tmdbId": 120089,
-    "title": "Vivy: Fluorite Eye's Song",
+    "tmdbId": 116725,
+        "title": "Vivy: Fluorite Eye's Song",
     "year": "2021",
     "voteAverage": 8.3,
     "type": "tv",
@@ -8463,8 +8463,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 97,
-    "tmdbId": 30987,
-    "title": "Angel Beats!",
+    "tmdbId": 42942,
+        "title": "Angel Beats!",
     "year": "2010",
     "voteAverage": 8.2,
     "type": "tv",
@@ -8472,8 +8472,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 98,
-    "tmdbId": 38472,
-    "title": "Anohana: The Flower We Saw That Day",
+    "tmdbId": 39434,
+        "title": "Anohana: The Flower We Saw That Day",
     "year": "2011",
     "voteAverage": 8.4,
     "type": "tv",
@@ -8499,8 +8499,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 103,
-    "tmdbId": 61408,
-    "title": "Seven Deadly Sins (Nanatsu no Taizai)",
+    "tmdbId": 72625,
+        "title": "Seven Deadly Sins (Nanatsu no Taizai)",
     "year": "2014",
     "voteAverage": 8,
     "type": "tv",
@@ -8508,8 +8508,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 104,
-    "tmdbId": 38472,
-    "title": "Blue Exorcist",
+    "tmdbId": 38464,
+        "title": "Blue Exorcist",
     "year": "2011",
     "voteAverage": 8,
     "type": "tv",
@@ -8517,8 +8517,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 105,
-    "tmdbId": 30986,
-    "title": "Soul Eater",
+    "tmdbId": 37305,
+        "title": "Soul Eater",
     "year": "2008",
     "voteAverage": 8.1,
     "type": "tv",
@@ -8526,8 +8526,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 106,
-    "tmdbId": 86031,
-    "title": "Fire Force",
+    "tmdbId": 88046,
+        "title": "Fire Force",
     "year": "2019",
     "voteAverage": 8.1,
     "type": "tv",
@@ -8535,8 +8535,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 109,
-    "tmdbId": 61386,
-    "title": "Noragami",
+    "tmdbId": 64710,
+        "title": "Noragami",
     "year": "2014",
     "voteAverage": 8.3,
     "type": "tv",
@@ -8544,8 +8544,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 110,
-    "tmdbId": 65942,
-    "title": "Bungou Stray Dogs",
+    "tmdbId": 65931,
+        "title": "Bungou Stray Dogs",
     "year": "2016",
     "voteAverage": 8.4,
     "type": "tv",
@@ -8553,8 +8553,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 111,
-    "tmdbId": 30989,
-    "title": "Durarara!!",
+    "tmdbId": 42410,
+        "title": "Durarara!!",
     "year": "2010",
     "voteAverage": 8.1,
     "type": "tv",
@@ -8562,8 +8562,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 112,
-    "tmdbId": 30992,
-    "title": "Baccano!",
+    "tmdbId": 34121,
+        "title": "Baccano!",
     "year": "2007",
     "voteAverage": 8.3,
     "type": "tv",
@@ -8571,8 +8571,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 114,
-    "tmdbId": 30985,
-    "title": "Black Lagoon",
+    "tmdbId": 12598,
+        "title": "Black Lagoon",
     "year": "2006",
     "voteAverage": 8.2,
     "type": "tv",
@@ -8580,8 +8580,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 115,
-    "tmdbId": 30987,
-    "title": "Hellsing Ultimate",
+    "tmdbId": 61752,
+        "title": "Hellsing Ultimate",
     "year": "2006",
     "voteAverage": 8.4,
     "type": "tv",
@@ -8589,8 +8589,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 116,
-    "tmdbId": 30988,
-    "title": "Trigun",
+    "tmdbId": 26453,
+        "title": "Trigun",
     "year": "1998",
     "voteAverage": 8.2,
     "type": "tv",
@@ -8598,8 +8598,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 118,
-    "tmdbId": 30989,
-    "title": "Rurouni Kenshin",
+    "tmdbId": 28136,
+        "title": "Rurouni Kenshin",
     "year": "1996",
     "voteAverage": 8.3,
     "type": "tv",
@@ -8607,8 +8607,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 119,
-    "tmdbId": 30990,
-    "title": "Inuyasha",
+    "tmdbId": 35610,
+        "title": "Inuyasha",
     "year": "2000",
     "voteAverage": 8.3,
     "type": "tv",
@@ -8616,8 +8616,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 120,
-    "tmdbId": 30991,
-    "title": "Yu Yu Hakusho",
+    "tmdbId": 30669,
+        "title": "Yu Yu Hakusho",
     "year": "1992",
     "voteAverage": 8.6,
     "type": "tv",
@@ -8625,8 +8625,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 126,
-    "tmdbId": 108978,
-    "title": "86 Eighty-Six",
+    "tmdbId": 100565,
+        "title": "86 Eighty-Six",
     "year": "2021",
     "voteAverage": 8.5,
     "type": "tv",
@@ -8634,8 +8634,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 127,
-    "tmdbId": 75214,
-    "title": "Darling in the FranXX",
+    "tmdbId": 76121,
+        "title": "Darling in the FranXX",
     "year": "2018",
     "voteAverage": 8,
     "type": "tv",
@@ -8643,8 +8643,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 128,
-    "tmdbId": 61374,
-    "title": "Kill la Kill",
+    "tmdbId": 60728,
+        "title": "Kill la Kill",
     "year": "2013",
     "voteAverage": 8.1,
     "type": "tv",
@@ -8652,8 +8652,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 134,
-    "tmdbId": 31776,
-    "title": "Ghost in the Shell: Stand Alone Complex",
+    "tmdbId": 1095,
+        "title": "Ghost in the Shell: Stand Alone Complex",
     "year": "2002",
     "voteAverage": 8.4,
     "type": "tv",
@@ -8697,8 +8697,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 146,
-    "tmdbId": 120089,
-    "title": "Odd Taxi",
+    "tmdbId": 116727,
+        "title": "Odd Taxi",
     "year": "2021",
     "voteAverage": 8.7,
     "type": "tv",
@@ -8706,8 +8706,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 147,
-    "tmdbId": 121448,
-    "title": "Ranking of Kings (Ousama Ranking)",
+    "tmdbId": 112613,
+        "title": "Ranking of Kings (Ousama Ranking)",
     "year": "2021",
     "voteAverage": 8.5,
     "type": "tv",
@@ -8715,8 +8715,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 148,
-    "tmdbId": 108978,
-    "title": "To Your Eternity",
+    "tmdbId": 97525,
+        "title": "To Your Eternity",
     "year": "2021",
     "voteAverage": 8.4,
     "type": "tv",
@@ -8724,8 +8724,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 150,
-    "tmdbId": 209867,
-    "title": "Dungeon Meshi (Delicious in Dungeon)",
+    "tmdbId": 207784,
+        "title": "Dungeon Meshi (Delicious in Dungeon)",
     "year": "2024",
     "voteAverage": 8.5,
     "type": "tv",
@@ -8733,8 +8733,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 151,
-    "tmdbId": 242000,
-    "title": "Dandadan",
+    "tmdbId": 240411,
+        "title": "Dandadan",
     "year": "2024",
     "voteAverage": 8.7,
     "type": "tv",
@@ -8742,8 +8742,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 152,
-    "tmdbId": 209868,
-    "title": "Kaiju No. 8",
+    "tmdbId": 207468,
+        "title": "Kaiju No. 8",
     "year": "2024",
     "voteAverage": 8.5,
     "type": "tv",
@@ -8751,8 +8751,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 153,
-    "tmdbId": 202879,
-    "title": "Mashle: Magic and Muscles",
+    "tmdbId": 204832,
+        "title": "Mashle: Magic and Muscles",
     "year": "2023",
     "voteAverage": 8.2,
     "type": "tv",
@@ -8760,8 +8760,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 154,
-    "tmdbId": 197067,
-    "title": "Hell's Paradise (Jigokuraku)",
+    "tmdbId": 117465,
+        "title": "Hell's Paradise (Jigokuraku)",
     "year": "2023",
     "voteAverage": 8.3,
     "type": "tv",
@@ -8778,8 +8778,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 158,
-    "tmdbId": 136283,
-    "title": "The Eminence in Shadow",
+    "tmdbId": 119495,
+        "title": "The Eminence in Shadow",
     "year": "2022",
     "voteAverage": 8.2,
     "type": "tv",
@@ -8787,8 +8787,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 159,
-    "tmdbId": 72636,
-    "title": "Classroom of the Elite",
+    "tmdbId": 72517,
+        "title": "Classroom of the Elite",
     "year": "2017",
     "voteAverage": 8.3,
     "type": "tv",
@@ -8796,8 +8796,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 160,
-    "tmdbId": 96580,
-    "title": "Tower of God",
+    "tmdbId": 97860,
+        "title": "Tower of God",
     "year": "2020",
     "voteAverage": 8.2,
     "type": "tv",
@@ -8805,8 +8805,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 163,
-    "tmdbId": 121448,
-    "title": "Link Click (Shiguang Dailiren)",
+    "tmdbId": 123542,
+        "title": "Link Click (Shiguang Dailiren)",
     "year": "2021",
     "voteAverage": 8.8,
     "type": "tv",
@@ -8814,8 +8814,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 166,
-    "tmdbId": 30987,
-    "title": "Great Teacher Onizuka (GTO)",
+    "tmdbId": 43017,
+        "title": "Great Teacher Onizuka (GTO)",
     "year": "1999",
     "voteAverage": 8.7,
     "type": "tv",
@@ -8823,8 +8823,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 167,
-    "tmdbId": 30988,
-    "title": "Golden Boy",
+    "tmdbId": 326979,
+        "title": "Golden Boy",
     "year": "1995",
     "voteAverage": 8.2,
     "type": "tv",
@@ -8832,8 +8832,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 168,
-    "tmdbId": 30989,
-    "title": "Slam Dunk",
+    "tmdbId": 42573,
+        "title": "Slam Dunk",
     "year": "1993",
     "voteAverage": 8.7,
     "type": "tv",
@@ -8841,8 +8841,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 169,
-    "tmdbId": 30990,
-    "title": "Hajime no Ippo",
+    "tmdbId": 338397,
+        "title": "Hajime no Ippo",
     "year": "2000",
     "voteAverage": 8.8,
     "type": "tv",
@@ -8850,8 +8850,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 170,
-    "tmdbId": 44217,
-    "title": "Kuroko's Basketball",
+    "tmdbId": 45783,
+        "title": "Kuroko's Basketball",
     "year": "2012",
     "voteAverage": 8.4,
     "type": "tv",
@@ -8859,8 +8859,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 171,
-    "tmdbId": 153312,
-    "title": "Blue Lock",
+    "tmdbId": 131041,
+        "title": "Blue Lock",
     "year": "2022",
     "voteAverage": 8.4,
     "type": "tv",
@@ -8868,8 +8868,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 181,
-    "tmdbId": 78546,
-    "title": "Banana Fish",
+    "tmdbId": 80564,
+        "title": "Banana Fish",
     "year": "2018",
     "voteAverage": 8.6,
     "type": "tv",
@@ -8877,8 +8877,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 182,
-    "tmdbId": 67178,
-    "title": "91 Days",
+    "tmdbId": 67043,
+        "title": "91 Days",
     "year": "2016",
     "voteAverage": 8,
     "type": "tv",
@@ -8886,8 +8886,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 183,
-    "tmdbId": 61408,
-    "title": "Terror in Resonance",
+    "tmdbId": 61421,
+        "title": "Terror in Resonance",
     "year": "2014",
     "voteAverage": 8.1,
     "type": "tv",
@@ -8895,8 +8895,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 184,
-    "tmdbId": 61994,
-    "title": "Death Parade",
+    "tmdbId": 61901,
+        "title": "Death Parade",
     "year": "2015",
     "voteAverage": 8.1,
     "type": "tv",
@@ -8904,8 +8904,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 185,
-    "tmdbId": 42646,
-    "title": "Another",
+    "tmdbId": 42589,
+        "title": "Another",
     "year": "2012",
     "voteAverage": 8,
     "type": "tv",
@@ -8913,8 +8913,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 188,
-    "tmdbId": 30985,
-    "title": "Elfen Lied",
+    "tmdbId": 42671,
+        "title": "Elfen Lied",
     "year": "2004",
     "voteAverage": 8,
     "type": "tv",
@@ -8922,8 +8922,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 189,
-    "tmdbId": 30986,
-    "title": "Claymore",
+    "tmdbId": 34791,
+        "title": "Claymore",
     "year": "2007",
     "voteAverage": 8.1,
     "type": "tv",
@@ -8931,8 +8931,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 190,
-    "tmdbId": 85937,
-    "title": "Dororo",
+    "tmdbId": 83100,
+        "title": "Dororo",
     "year": "2019",
     "voteAverage": 8.4,
     "type": "tv",
@@ -8940,8 +8940,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 191,
-    "tmdbId": 78546,
-    "title": "Golden Kamuy",
+    "tmdbId": 76757,
+        "title": "Golden Kamuy",
     "year": "2018",
     "voteAverage": 8.2,
     "type": "tv",
@@ -8967,8 +8967,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 205,
-    "tmdbId": 1241982,
-    "title": "Look Back",
+    "tmdbId": 1244492,
+        "title": "Look Back",
     "year": "2024",
     "voteAverage": 8.6,
     "type": "movie",
@@ -8976,8 +8976,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 206,
-    "tmdbId": 202879,
-    "title": "Terminator Zero",
+    "tmdbId": 239287,
+        "title": "Terminator Zero",
     "year": "2024",
     "voteAverage": 7.8,
     "type": "tv",
@@ -8985,8 +8985,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 207,
-    "tmdbId": 10729,
-    "title": "The Animatrix",
+    "tmdbId": 55931,
+        "title": "The Animatrix",
     "year": "2003",
     "voteAverage": 7.3,
     "type": "movie",
@@ -8994,8 +8994,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 208,
-    "tmdbId": 93259,
-    "title": "Blade Runner: Black Lotus",
+    "tmdbId": 84553,
+        "title": "Blade Runner: Black Lotus",
     "year": "2021",
     "voteAverage": 6.8,
     "type": "tv",
@@ -9003,8 +9003,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 209,
-    "tmdbId": 221855,
-    "title": "Scott Pilgrim Takes Off",
+    "tmdbId": 155292,
+        "title": "Scott Pilgrim Takes Off",
     "year": "2023",
     "voteAverage": 8,
     "type": "tv",
@@ -9012,8 +9012,8 @@ export const MASTER_ANIME_CHECKLIST = [
   },
   {
     "rank": 210,
-    "tmdbId": 236894,
-    "title": "Dragon Ball Daima",
+    "tmdbId": 236994,
+        "title": "Dragon Ball Daima",
     "year": "2024",
     "voteAverage": 8.2,
     "type": "tv",
