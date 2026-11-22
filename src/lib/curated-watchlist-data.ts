@@ -3,6 +3,22 @@
 // Complete Trakt Watchlist • Sequels, Prequels & Spin-Offs • Hollywood Movies, Web Series & Anime
 // =====================================================================
 
+import { curatedPosters } from "./curated-posters";
+
+export function getRealPoster(tmdbId?: number | null, fallback?: string | null): string | null {
+  if (!tmdbId) return fallback || null;
+  const meta = curatedPosters[String(tmdbId)];
+  if (meta?.posterPath) return meta.posterPath;
+  return fallback || null;
+}
+
+export function getRealBackdrop(tmdbId?: number | null, fallback?: string | null): string | null {
+  if (!tmdbId) return fallback || null;
+  const meta = curatedPosters[String(tmdbId)];
+  if (meta?.backdropPath) return meta.backdropPath;
+  return fallback || null;
+}
+
 export interface CuratedItem {
   id: number;
   title: string;
@@ -16,6 +32,7 @@ export interface CuratedItem {
   vote_count: number;
   popularity: number;
   poster_path: string | null;
+  posterPath?: string | null;
   backdrop_path?: string | null;
   overview: string;
   genre_ids: number[];
@@ -9300,8 +9317,13 @@ export function enrichWithUniverseInfo(item: any): any {
   }
 
   if (match) {
+    const realPoster = getRealPoster(tmdbId, item.poster_path || item.posterPath);
+    const realBackdrop = getRealBackdrop(tmdbId, item.backdrop_path || item.backdropPath);
     return {
       ...item,
+      poster_path: realPoster || item.poster_path,
+      posterPath: realPoster || item.posterPath,
+      backdrop_path: realBackdrop || item.backdrop_path,
       universeId: match.universe.id,
       universeName: match.universe.name,
       universeSeq: match.item.sequence,
@@ -9314,8 +9336,17 @@ export function enrichWithUniverseInfo(item: any): any {
         sequence: i.sequence,
         role: i.role,
         media_type: i.media_type || (match!.universe.category === "series" ? "tv" : "movie"),
-        posterPath: i.posterPath,
+        posterPath: getRealPoster(i.tmdbId, i.posterPath) || undefined,
       })),
+    };
+  }
+
+  const realPoster = getRealPoster(tmdbId, item.poster_path || item.posterPath);
+  if (realPoster) {
+    return {
+      ...item,
+      poster_path: realPoster,
+      posterPath: realPoster,
     };
   }
 
@@ -9381,6 +9412,9 @@ function buildMasterMovies(): CuratedItem[] {
           pop += 8;
         }
 
+        const realPoster = getRealPoster(part.tmdbId, part.posterPath);
+        const realBackdrop = getRealBackdrop(part.tmdbId);
+
         list.push({
           id: part.tmdbId,
           title: part.title,
@@ -9391,7 +9425,9 @@ function buildMasterMovies(): CuratedItem[] {
           vote_average: 8.0,
           vote_count: 5000,
           popularity: pop,
-          poster_path: part.posterPath || null,
+          poster_path: realPoster,
+          posterPath: realPoster,
+          backdrop_path: realBackdrop,
           overview: `Part of the ${franchise.name}. ${franchise.overview}`,
           genre_ids: [28, 12],
           universeId: franchise.id,
@@ -9406,7 +9442,7 @@ function buildMasterMovies(): CuratedItem[] {
             sequence: i.sequence,
             role: i.role,
             media_type: i.media_type || "movie",
-            posterPath: i.posterPath,
+            posterPath: getRealPoster(i.tmdbId, i.posterPath) || undefined,
           })),
         });
       }
@@ -9424,6 +9460,9 @@ function buildMasterMovies(): CuratedItem[] {
       else if (movie.rank <= 80) pop = 125 - ((movie.rank - 40) * 0.5);
       else pop = 100 - ((movie.rank - 80) * 0.25);
 
+      const realPoster = getRealPoster(movie.tmdbId, movie.posterPath);
+      const realBackdrop = getRealBackdrop(movie.tmdbId);
+
       list.push({
         id: movie.tmdbId,
         title: movie.title,
@@ -9434,7 +9473,9 @@ function buildMasterMovies(): CuratedItem[] {
         vote_average: movie.voteAverage || 8.0,
         vote_count: 8000,
         popularity: pop,
-        poster_path: movie.posterPath || null,
+        poster_path: realPoster,
+        posterPath: realPoster,
+        backdrop_path: realBackdrop,
         overview: `Rank #${movie.rank} in Master Watchlist essential Hollywood cinema compendium.`,
         genre_ids: [18, 53],
         rank: movie.rank,
@@ -9448,7 +9489,7 @@ function buildMasterMovies(): CuratedItem[] {
           sequence: i.sequence,
           role: i.role,
           media_type: i.media_type || "movie",
-          posterPath: i.posterPath,
+          posterPath: getRealPoster(i.tmdbId, i.posterPath) || undefined,
         })),
       });
     }
@@ -9508,6 +9549,9 @@ function buildMasterSeries(): CuratedItem[] {
           pop += 8;
         }
 
+        const realPoster = getRealPoster(part.tmdbId, part.posterPath);
+        const realBackdrop = getRealBackdrop(part.tmdbId);
+
         list.push({
           id: part.tmdbId,
           title: part.title,
@@ -9519,7 +9563,9 @@ function buildMasterSeries(): CuratedItem[] {
           vote_average: 8.5,
           vote_count: 5000,
           popularity: pop,
-          poster_path: part.posterPath || null,
+          poster_path: realPoster,
+          posterPath: realPoster,
+          backdrop_path: realBackdrop,
           overview: `Part of the ${universe.name}. ${universe.overview}`,
           genre_ids: [18, 80],
           universeId: universe.id,
@@ -9534,7 +9580,7 @@ function buildMasterSeries(): CuratedItem[] {
             sequence: i.sequence,
             role: i.role,
             media_type: i.media_type || "tv",
-            posterPath: i.posterPath,
+            posterPath: getRealPoster(i.tmdbId, i.posterPath) || undefined,
           })),
         });
       }
@@ -9552,6 +9598,9 @@ function buildMasterSeries(): CuratedItem[] {
       else if (show.rank <= 80) pop = 125 - ((show.rank - 40) * 0.5);
       else pop = 100 - ((show.rank - 80) * 0.25);
 
+      const realPoster = getRealPoster(show.tmdbId, show.posterPath);
+      const realBackdrop = getRealBackdrop(show.tmdbId);
+
       list.push({
         id: show.tmdbId,
         title: show.title,
@@ -9563,7 +9612,9 @@ function buildMasterSeries(): CuratedItem[] {
         vote_average: show.voteAverage || 8.4,
         vote_count: 6000,
         popularity: pop,
-        poster_path: show.posterPath || null,
+        poster_path: realPoster,
+        posterPath: realPoster,
+        backdrop_path: realBackdrop,
         overview: `Rank #${show.rank} in Master Watchlist essential global streaming hits compendium.`,
         genre_ids: [18, 10759],
         rank: show.rank,
@@ -9577,7 +9628,7 @@ function buildMasterSeries(): CuratedItem[] {
           sequence: i.sequence,
           role: i.role,
           media_type: i.media_type || "tv",
-          posterPath: i.posterPath,
+          posterPath: getRealPoster(i.tmdbId, i.posterPath) || undefined,
         })),
       });
     }
@@ -9631,6 +9682,9 @@ function buildMasterAnime(): CuratedItem[] {
           pop += 8;
         }
 
+        const realPoster = getRealPoster(part.tmdbId, part.posterPath);
+        const realBackdrop = getRealBackdrop(part.tmdbId);
+
         list.push({
           id: part.tmdbId,
           title: part.title,
@@ -9643,7 +9697,9 @@ function buildMasterAnime(): CuratedItem[] {
           vote_average: 8.6,
           vote_count: 4000,
           popularity: pop,
-          poster_path: part.posterPath || null,
+          poster_path: realPoster,
+          posterPath: realPoster,
+          backdrop_path: realBackdrop,
           overview: `Part of ${franchise.name}. ${franchise.overview}`,
           genre_ids: [16, 10759],
           universeId: franchise.id,
@@ -9658,7 +9714,7 @@ function buildMasterAnime(): CuratedItem[] {
             sequence: i.sequence,
             role: i.role,
             media_type: i.media_type || "tv",
-            posterPath: i.posterPath,
+            posterPath: getRealPoster(i.tmdbId, i.posterPath) || undefined,
           })),
         });
       }
@@ -9677,6 +9733,9 @@ function buildMasterAnime(): CuratedItem[] {
       else if (anime.rank <= 80) pop = 125 - ((anime.rank - 40) * 0.5);
       else pop = 100 - ((anime.rank - 80) * 0.25);
 
+      const realPoster = getRealPoster(anime.tmdbId, anime.posterPath);
+      const realBackdrop = getRealBackdrop(anime.tmdbId);
+
       list.push({
         id: anime.tmdbId,
         title: anime.title,
@@ -9689,7 +9748,9 @@ function buildMasterAnime(): CuratedItem[] {
         vote_average: anime.voteAverage || 8.5,
         vote_count: 5000,
         popularity: pop,
-        poster_path: anime.posterPath || null,
+        poster_path: realPoster,
+        posterPath: realPoster,
+        backdrop_path: realBackdrop,
         overview: `Rank #${anime.rank} in Master Watchlist anime compendium.`,
         genre_ids: [16, 14],
         rank: anime.rank,
@@ -9703,7 +9764,7 @@ function buildMasterAnime(): CuratedItem[] {
           sequence: i.sequence,
           role: i.role,
           media_type: i.media_type || (isMovie ? "movie" : "tv"),
-          posterPath: i.posterPath,
+          posterPath: getRealPoster(i.tmdbId, i.posterPath) || undefined,
         })),
       });
     }
@@ -9717,6 +9778,8 @@ function buildMasterAnime(): CuratedItem[] {
       if (['Avatar: The Last Airbender', 'Arcane', 'Rick and Morty', 'Invincible', 'Batman: The Animated Series'].includes(show.title)) {
         pop = 170;
       }
+      const realPoster = getRealPoster(show.tmdbId, show.posterPath);
+      const realBackdrop = getRealBackdrop(show.tmdbId);
       list.push({
         id: show.tmdbId,
         title: show.title,
@@ -9728,7 +9791,9 @@ function buildMasterAnime(): CuratedItem[] {
         vote_average: show.voteAverage || 8.5,
         vote_count: 4000,
         popularity: pop,
-        poster_path: show.posterPath || null,
+        poster_path: realPoster,
+        posterPath: realPoster,
+        backdrop_path: realBackdrop,
         overview: "Acclaimed Western & Global Animated Masterpiece from Master Watchlist.",
         genre_ids: [16, 10759],
       });
@@ -9742,6 +9807,8 @@ function buildMasterAnime(): CuratedItem[] {
       if (['Spider-Man: Into the Spider-Verse', 'Spider-Man: Across the Spider-Verse', 'The Lion King', 'Toy Story', 'WALL-E', 'Spirited Away'].includes(movie.title)) {
         pop = 172;
       }
+      const realPoster = getRealPoster(movie.tmdbId, movie.posterPath);
+      const realBackdrop = getRealBackdrop(movie.tmdbId);
       list.push({
         id: movie.tmdbId,
         title: movie.title,
@@ -9752,7 +9819,9 @@ function buildMasterAnime(): CuratedItem[] {
         vote_average: movie.voteAverage || 8.0,
         vote_count: 6000,
         popularity: pop,
-        poster_path: movie.posterPath || null,
+        poster_path: realPoster,
+        posterPath: realPoster,
+        backdrop_path: realBackdrop,
         overview: "Universal Box-Office & Oscar Acclaimed Animated Feature Film from Master Watchlist.",
         genre_ids: [16, 10751],
       });
