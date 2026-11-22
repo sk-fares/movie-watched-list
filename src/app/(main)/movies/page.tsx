@@ -73,7 +73,7 @@ function MoviesPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const tabParam = (searchParams.get("tab") as MovieTab) || "popular";
+  const tabParam = (searchParams.get("tab") as MovieTab) || "curated";
 
   // State
   const [activeTab, setActiveTab] = React.useState<MovieTab>(tabParam);
@@ -87,7 +87,7 @@ function MoviesPageContent() {
   // User watch status & preference
   const [watchedIds, setWatchedIds] = React.useState<Set<number>>(new Set());
   const [watchlistIds, setWatchlistIds] = React.useState<Set<number>>(new Set());
-  const [hideWatched, setHideWatched] = React.useState<boolean>(true);
+  const [hideWatched, setHideWatched] = React.useState<boolean>(false);
 
   const [movies, setMovies] = React.useState<any[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
@@ -145,7 +145,7 @@ function MoviesPageContent() {
         // When searching, query TMDB search directly
         url = `/api/tmdb/search?q=${encodeURIComponent(trimmedQuery)}&type=movie&page=${page}`;
       } else if (activeTab === "curated") {
-        url = `/api/curated?category=movie&page=${page}`;
+        url = `/api/curated?category=movie&page=${page}&sort_by=${sortBy}`;
         if (selectedGenreId > 0) url += `&genre=${selectedGenreId}`;
         if (selectedYear) url += `&year=${selectedYear}`;
       } else if (activeTab === "trending") {

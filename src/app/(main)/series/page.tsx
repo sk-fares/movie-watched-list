@@ -59,7 +59,7 @@ function SeriesPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const tabParam = (searchParams.get("tab") as SeriesTab) || "popular";
+  const tabParam = (searchParams.get("tab") as SeriesTab) || "curated";
 
   // State
   const [activeTab, setActiveTab] = React.useState<SeriesTab>(tabParam);
@@ -72,7 +72,7 @@ function SeriesPageContent() {
   // User watch status & preference
   const [watchedIds, setWatchedIds] = React.useState<Set<number>>(new Set());
   const [watchlistIds, setWatchlistIds] = React.useState<Set<number>>(new Set());
-  const [hideWatched, setHideWatched] = React.useState<boolean>(true);
+  const [hideWatched, setHideWatched] = React.useState<boolean>(false);
 
   const [seriesList, setSeriesList] = React.useState<any[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
@@ -129,7 +129,7 @@ function SeriesPageContent() {
       if (trimmedQuery) {
         url = `/api/tmdb/search?q=${encodeURIComponent(trimmedQuery)}&type=tv&page=${page}`;
       } else if (activeTab === "curated") {
-        url = `/api/curated?category=series&page=${page}`;
+        url = `/api/curated?category=series&page=${page}&sort_by=${sortBy}`;
         if (selectedGenreId > 0) url += `&genre=${selectedGenreId}`;
       } else if (activeTab === "trending") {
         url = `/api/tmdb/trending?type=tv&timeWindow=week&page=${page}`;

@@ -9327,11 +9327,60 @@ function buildMasterMovies(): CuratedItem[] {
   const list: CuratedItem[] = [];
   const seen = new Set<number>();
 
+  const topFranchises = [
+    'mcu',
+    'dc_universe',
+    'lord_of_the_rings',
+    'harry_potter',
+    'spider_man_sony',
+    'star_wars',
+    'john_wick',
+    'mission_impossible',
+    'pirates_of_the_caribbean',
+    'the_matrix',
+    'jurassic_park',
+    'fast_and_furious',
+    'avatar',
+    'dune_universe',
+    'gladiator',
+    'top_gun',
+    'james_bond_craig',
+    'x_men_deadpool',
+  ];
+
   // 1. Franchise parts in chronological order
-  for (const franchise of MOVIE_FRANCHISES) {
+  for (let fIdx = 0; fIdx < MOVIE_FRANCHISES.length; fIdx++) {
+    const franchise = MOVIE_FRANCHISES[fIdx];
+    const isTopTier = topFranchises.includes(franchise.id);
     for (const part of franchise.items) {
       if (part.tmdbId && !seen.has(part.tmdbId)) {
         seen.add(part.tmdbId);
+        let pop = isTopTier
+          ? 175 - (part.sequence * 1.5) - (fIdx * 0.4)
+          : 120 - (part.sequence * 1) - (fIdx * 0.3);
+        if (
+          part.sequence === 1 ||
+          [
+            'The Avengers',
+            'The Dark Knight',
+            'The Dark Knight Rises',
+            'Batman Begins',
+            'Avengers: Endgame',
+            'Avengers: Infinity War',
+            'Spider-Man: No Way Home',
+            'The Empire Strikes Back',
+            'The Return of the King',
+            'The Fellowship of the Ring',
+            'The Two Towers',
+            'Dune: Part Two',
+            'Top Gun: Maverick',
+            'Gladiator II',
+            'Deadpool & Wolverine',
+          ].includes(part.title)
+        ) {
+          pop += 8;
+        }
+
         list.push({
           id: part.tmdbId,
           title: part.title,
@@ -9341,7 +9390,7 @@ function buildMasterMovies(): CuratedItem[] {
           release_date: part.year ? `${part.year}-01-01` : undefined,
           vote_average: 8.0,
           vote_count: 5000,
-          popularity: 100 - list.length * 0.1,
+          popularity: pop,
           poster_path: part.posterPath || null,
           overview: `Part of the ${franchise.name}. ${franchise.overview}`,
           genre_ids: [28, 12],
@@ -9369,6 +9418,12 @@ function buildMasterMovies(): CuratedItem[] {
     if (movie.tmdbId && !seen.has(movie.tmdbId)) {
       seen.add(movie.tmdbId);
       const universeMatch = getUniverseForItem(movie.tmdbId, movie.title);
+      let pop = 100;
+      if (movie.rank <= 15) pop = 175 - (movie.rank * 1.2);
+      else if (movie.rank <= 40) pop = 150 - ((movie.rank - 15) * 0.8);
+      else if (movie.rank <= 80) pop = 125 - ((movie.rank - 40) * 0.5);
+      else pop = 100 - ((movie.rank - 80) * 0.25);
+
       list.push({
         id: movie.tmdbId,
         title: movie.title,
@@ -9378,7 +9433,7 @@ function buildMasterMovies(): CuratedItem[] {
         release_date: movie.year ? `${movie.year}-01-01` : undefined,
         vote_average: movie.voteAverage || 8.0,
         vote_count: 8000,
-        popularity: 120 - movie.rank * 0.2,
+        popularity: pop,
         poster_path: movie.posterPath || null,
         overview: `Rank #${movie.rank} in Master Watchlist essential Hollywood cinema compendium.`,
         genre_ids: [18, 53],
@@ -9407,11 +9462,52 @@ function buildMasterSeries(): CuratedItem[] {
   const list: CuratedItem[] = [];
   const seen = new Set<number>();
 
+  const topSeriesUniverses = [
+    'breaking_bad_universe',
+    'game_of_thrones_universe',
+    'the_boys_universe',
+    'mcu_television',
+    'stranger_things_universe',
+    'peaky_blinders_universe',
+    'walking_dead_universe',
+    'squid_game_universe',
+    'sopranos_universe',
+    'narcos_universe',
+    'post_apocalyptic_gaming',
+    'dark_baran_bo_odar',
+  ];
+
   // 1. Series Universes & spin-offs
-  for (const universe of SERIES_UNIVERSES) {
+  for (let uIdx = 0; uIdx < SERIES_UNIVERSES.length; uIdx++) {
+    const universe = SERIES_UNIVERSES[uIdx];
+    const isTopTier = topSeriesUniverses.includes(universe.id);
     for (const part of universe.items) {
       if (part.tmdbId && !seen.has(part.tmdbId)) {
         seen.add(part.tmdbId);
+        let pop = isTopTier
+          ? 175 - (part.sequence * 1.5) - (uIdx * 0.4)
+          : 120 - (part.sequence * 1) - (uIdx * 0.3);
+        if (
+          part.sequence === 1 ||
+          [
+            'Breaking Bad',
+            'Game of Thrones',
+            'Better Call Saul',
+            'House of the Dragon',
+            'The Mandalorian',
+            'Daredevil',
+            'Loki',
+            'The Walking Dead',
+            'Yellowstone',
+            'The Boys',
+            'The Sopranos',
+            'Stranger Things',
+            'Peaky Blinders',
+          ].includes(part.title)
+        ) {
+          pop += 8;
+        }
+
         list.push({
           id: part.tmdbId,
           title: part.title,
@@ -9422,7 +9518,7 @@ function buildMasterSeries(): CuratedItem[] {
           first_air_date: part.year ? `${part.year}-01-01` : undefined,
           vote_average: 8.5,
           vote_count: 5000,
-          popularity: 100 - list.length * 0.1,
+          popularity: pop,
           poster_path: part.posterPath || null,
           overview: `Part of the ${universe.name}. ${universe.overview}`,
           genre_ids: [18, 80],
@@ -9450,6 +9546,12 @@ function buildMasterSeries(): CuratedItem[] {
     if (show.tmdbId && !seen.has(show.tmdbId)) {
       seen.add(show.tmdbId);
       const universeMatch = getUniverseForItem(show.tmdbId, show.title);
+      let pop = 100;
+      if (show.rank <= 15) pop = 175 - (show.rank * 1.2);
+      else if (show.rank <= 40) pop = 150 - ((show.rank - 15) * 0.8);
+      else if (show.rank <= 80) pop = 125 - ((show.rank - 40) * 0.5);
+      else pop = 100 - ((show.rank - 80) * 0.25);
+
       list.push({
         id: show.tmdbId,
         title: show.title,
@@ -9460,7 +9562,7 @@ function buildMasterSeries(): CuratedItem[] {
         first_air_date: show.year ? `${show.year}-01-01` : undefined,
         vote_average: show.voteAverage || 8.4,
         vote_count: 6000,
-        popularity: 120 - show.rank * 0.2,
+        popularity: pop,
         poster_path: show.posterPath || null,
         overview: `Rank #${show.rank} in Master Watchlist essential global streaming hits compendium.`,
         genre_ids: [18, 10759],
@@ -9489,11 +9591,46 @@ function buildMasterAnime(): CuratedItem[] {
   const list: CuratedItem[] = [];
   const seen = new Set<number>();
 
+  const topAnimeFranchises = [
+    'dragon_ball_saga',
+    'naruto_boruto_universe',
+    'one_piece_universe',
+    'bleach_universe',
+    'attack_on_titan_universe',
+    'demon_slayer_universe',
+    'jujutsu_kaisen_universe',
+    'fullmetal_alchemist_universe',
+    'evangelion_universe',
+    'shinkai_ghibli',
+    'my_hero_academia',
+  ];
+
   // 1. Anime Franchises & Sagas
-  for (const franchise of ANIME_FRANCHISES) {
+  for (let fIdx = 0; fIdx < ANIME_FRANCHISES.length; fIdx++) {
+    const franchise = ANIME_FRANCHISES[fIdx];
+    const isTopTier = topAnimeFranchises.includes(franchise.id);
     for (const part of franchise.items) {
       if (part.tmdbId && !seen.has(part.tmdbId)) {
         seen.add(part.tmdbId);
+        let pop = isTopTier
+          ? 175 - (part.sequence * 1.5) - (fIdx * 0.4)
+          : 120 - (part.sequence * 1) - (fIdx * 0.3);
+        if (
+          part.sequence === 1 ||
+          [
+            'Dragon Ball Z',
+            'Naruto Shippuden',
+            'Bleach: Thousand-Year Blood War',
+            'Attack on Titan',
+            'Demon Slayer: Kimetsu no Yaiba',
+            'Jujutsu Kaisen',
+            'Spirited Away',
+            'Your Name.',
+          ].includes(part.title)
+        ) {
+          pop += 8;
+        }
+
         list.push({
           id: part.tmdbId,
           title: part.title,
@@ -9505,7 +9642,7 @@ function buildMasterAnime(): CuratedItem[] {
           first_air_date: part.media_type !== "movie" && part.year ? `${part.year}-01-01` : undefined,
           vote_average: 8.6,
           vote_count: 4000,
-          popularity: 100 - list.length * 0.1,
+          popularity: pop,
           poster_path: part.posterPath || null,
           overview: `Part of ${franchise.name}. ${franchise.overview}`,
           genre_ids: [16, 10759],
@@ -9534,6 +9671,12 @@ function buildMasterAnime(): CuratedItem[] {
       seen.add(anime.tmdbId);
       const universeMatch = getUniverseForItem(anime.tmdbId, anime.title);
       const isMovie = anime.type === "movie";
+      let pop = 100;
+      if (anime.rank <= 15) pop = 175 - (anime.rank * 1.2);
+      else if (anime.rank <= 40) pop = 150 - ((anime.rank - 15) * 0.8);
+      else if (anime.rank <= 80) pop = 125 - ((anime.rank - 40) * 0.5);
+      else pop = 100 - ((anime.rank - 80) * 0.25);
+
       list.push({
         id: anime.tmdbId,
         title: anime.title,
@@ -9545,7 +9688,7 @@ function buildMasterAnime(): CuratedItem[] {
         first_air_date: !isMovie && anime.year ? `${anime.year}-01-01` : undefined,
         vote_average: anime.voteAverage || 8.5,
         vote_count: 5000,
-        popularity: 110 - anime.rank * 0.2,
+        popularity: pop,
         poster_path: anime.posterPath || null,
         overview: `Rank #${anime.rank} in Master Watchlist anime compendium.`,
         genre_ids: [16, 14],
@@ -9570,6 +9713,10 @@ function buildMasterAnime(): CuratedItem[] {
   for (const show of WESTERN_ANIMATED_SERIES) {
     if (show.tmdbId && !seen.has(show.tmdbId)) {
       seen.add(show.tmdbId);
+      let pop = 140;
+      if (['Avatar: The Last Airbender', 'Arcane', 'Rick and Morty', 'Invincible', 'Batman: The Animated Series'].includes(show.title)) {
+        pop = 170;
+      }
       list.push({
         id: show.tmdbId,
         title: show.title,
@@ -9580,7 +9727,7 @@ function buildMasterAnime(): CuratedItem[] {
         first_air_date: show.year ? `${show.year}-01-01` : undefined,
         vote_average: show.voteAverage || 8.5,
         vote_count: 4000,
-        popularity: 90,
+        popularity: pop,
         poster_path: show.posterPath || null,
         overview: "Acclaimed Western & Global Animated Masterpiece from Master Watchlist.",
         genre_ids: [16, 10759],
@@ -9591,6 +9738,10 @@ function buildMasterAnime(): CuratedItem[] {
   for (const movie of WESTERN_ANIMATED_MOVIES) {
     if (movie.tmdbId && !seen.has(movie.tmdbId)) {
       seen.add(movie.tmdbId);
+      let pop = 140;
+      if (['Spider-Man: Into the Spider-Verse', 'Spider-Man: Across the Spider-Verse', 'The Lion King', 'Toy Story', 'WALL-E', 'Spirited Away'].includes(movie.title)) {
+        pop = 172;
+      }
       list.push({
         id: movie.tmdbId,
         title: movie.title,
@@ -9600,7 +9751,7 @@ function buildMasterAnime(): CuratedItem[] {
         release_date: movie.year ? `${movie.year}-01-01` : undefined,
         vote_average: movie.voteAverage || 8.0,
         vote_count: 6000,
-        popularity: 95,
+        popularity: pop,
         poster_path: movie.posterPath || null,
         overview: "Universal Box-Office & Oscar Acclaimed Animated Feature Film from Master Watchlist.",
         genre_ids: [16, 10751],

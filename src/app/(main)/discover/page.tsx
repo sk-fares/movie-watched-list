@@ -596,7 +596,7 @@ export default function DiscoverPage() {
               </div>
 
               <Link
-                href="/movies?tab=popular"
+                href="/movies"
                 className="text-xs text-purple-400 hover:text-purple-300 flex items-center gap-1 font-semibold group"
               >
                 <span>Browse All Movies</span>
@@ -664,7 +664,7 @@ export default function DiscoverPage() {
               </div>
 
               <Link
-                href="/series?tab=popular"
+                href="/series"
                 className="text-xs text-purple-400 hover:text-purple-300 flex items-center gap-1 font-semibold group"
               >
                 <span>Browse All Series</span>

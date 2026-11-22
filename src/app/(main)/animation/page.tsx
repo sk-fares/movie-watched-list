@@ -59,7 +59,7 @@ function AnimationPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const tabParam = (searchParams.get("tab") as AnimationTab) || "anime_series";
+  const tabParam = (searchParams.get("tab") as AnimationTab) || "master_watchlist";
 
   // State
   const [activeTab, setActiveTab] = React.useState<AnimationTab>(tabParam);
@@ -72,7 +72,7 @@ function AnimationPageContent() {
   // User watch status & preference
   const [watchedIds, setWatchedIds] = React.useState<Set<number>>(new Set());
   const [watchlistIds, setWatchlistIds] = React.useState<Set<number>>(new Set());
-  const [hideWatched, setHideWatched] = React.useState<boolean>(true);
+  const [hideWatched, setHideWatched] = React.useState<boolean>(false);
 
   const [itemsList, setItemsList] = React.useState<any[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
@@ -164,7 +164,7 @@ function AnimationPageContent() {
         }
       } else if (activeTab === "master_watchlist") {
         // Master Watchlist: Japanese Anime, Sagas & Global Animation Compendium
-        let url = `/api/curated?category=anime&page=${page}`;
+        let url = `/api/curated?category=anime&page=${page}&sort_by=${sortBy}`;
         if (selectedGenreId > 0) {
           url += `&genre=${selectedGenreId}`;
         }
